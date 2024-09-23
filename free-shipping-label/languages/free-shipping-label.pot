@@ -1,0 +1,868 @@
+# Copyright (C) 2024 Devnet
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: Free Shipping Label 3.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/free-shipping-label\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-07-11T09:35:20+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: free-shipping-label\n"
+
+#. Plugin Name of the plugin
+msgid "Free Shipping Label"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://devnet.hr/free-shipping-label/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Increase order revenue in WooCommerce store by showing your customers just how close they are to your free shipping threshold."
+msgstr ""
+
+#. Author of the plugin
+msgid "Devnet"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://devnet.hr"
+msgstr ""
+
+#: admin/fsl-admin.php:110
+msgid "Settings"
+msgstr ""
+
+#: admin/fsl-options.php:23
+#: admin/fsl-options.php:36
+msgid "Placeholders: "
+msgstr ""
+
+#: admin/fsl-options.php:48
+msgid "After free shipping threshold is reached"
+msgstr ""
+
+#: admin/fsl-options.php:54
+msgid "Show message"
+msgstr ""
+
+#: admin/fsl-options.php:60
+msgid "Show full progress bar"
+msgstr ""
+
+#: admin/fsl-options.php:66
+msgid "Text"
+msgstr ""
+
+#: admin/fsl-options.php:79
+msgid "Title"
+msgstr ""
+
+#: admin/fsl-options.php:86
+msgid "Description"
+msgstr ""
+
+#: admin/fsl-options.php:93
+msgid "Message after threshold is reached"
+msgstr ""
+
+#: admin/fsl-options.php:101
+msgid "Design"
+msgstr ""
+
+#: admin/fsl-options.php:107
+msgid "Progress bar inner color"
+msgstr ""
+
+#: admin/fsl-options.php:113
+msgid "Progress bar background color"
+msgstr ""
+
+#: admin/fsl-options.php:119
+msgid "Progress bar border color"
+msgstr ""
+
+#: admin/fsl-options.php:125
+msgid "Progress bar height"
+msgstr ""
+
+#: admin/fsl-options.php:126
+msgid "Height in pixels (px)"
+msgstr ""
+
+#: admin/fsl-options.php:127
+msgid "height in px"
+msgstr ""
+
+#: admin/fsl-options.php:137
+msgid "Disable animation"
+msgstr ""
+
+#: admin/fsl-options.php:143
+msgid "Disabled animations"
+msgstr ""
+
+#: admin/fsl-options.php:145
+msgid "All"
+msgstr ""
+
+#: admin/fsl-options.php:146
+msgid "Moving strips "
+msgstr ""
+
+#: admin/fsl-options.php:147
+msgid "Shine "
+msgstr ""
+
+#: admin/fsl-options.php:154
+#: admin/fsl-options.php:1018
+msgid "Hide border shadow"
+msgstr ""
+
+#: admin/fsl-options.php:160
+msgid "Bar type"
+msgstr ""
+
+#: admin/fsl-options.php:162
+msgid "Linear"
+msgstr ""
+
+#: admin/fsl-options.php:163
+msgid "Circular "
+msgstr ""
+
+#: admin/fsl-options.php:170
+msgid "Threshold Indicator Icon"
+msgstr ""
+
+#: admin/fsl-options.php:176
+msgid "Indicator Icon size"
+msgstr ""
+
+#: admin/fsl-options.php:186
+msgid "Indicator Icon background color"
+msgstr ""
+
+#: admin/fsl-options.php:192
+msgid "Circle size"
+msgstr ""
+
+#: admin/fsl-options.php:193
+msgid "width and height in pixels"
+msgstr ""
+
+#: admin/fsl-options.php:194
+msgid "width and height in px"
+msgstr ""
+
+#: admin/fsl-options.php:205
+msgid "Inside circle"
+msgstr ""
+
+#: admin/fsl-options.php:207
+#: admin/fsl-options.php:751
+#: admin/fsl-options.php:843
+msgid "Nothing"
+msgstr ""
+
+#: admin/fsl-options.php:208
+msgid "Title "
+msgstr ""
+
+#: admin/fsl-options.php:209
+msgid "Description "
+msgstr ""
+
+#: admin/fsl-options.php:210
+msgid "Icon "
+msgstr ""
+
+#: admin/fsl-options.php:217
+msgid "Select icon"
+msgstr ""
+
+#: admin/fsl-options.php:224
+msgid "Icon color"
+msgstr ""
+
+#: admin/fsl-options.php:230
+msgid "Circle background color"
+msgstr ""
+
+#: admin/fsl-options.php:236
+#: admin/fsl-options.php:1004
+msgid "Text color"
+msgstr ""
+
+#: admin/fsl-options.php:242
+msgid "Box background color"
+msgstr ""
+
+#: admin/fsl-options.php:248
+msgid "Box maximal width"
+msgstr ""
+
+#: admin/fsl-options.php:249
+msgid "max width in pixels, set 0 for full width"
+msgstr ""
+
+#: admin/fsl-options.php:250
+msgid "max width in px"
+msgstr ""
+
+#: admin/fsl-options.php:260
+msgid "Box alignment"
+msgstr ""
+
+#: admin/fsl-options.php:262
+#: admin/fsl-options.php:318
+msgid "center"
+msgstr ""
+
+#: admin/fsl-options.php:263
+#: admin/fsl-options.php:319
+msgid "Left"
+msgstr ""
+
+#: admin/fsl-options.php:264
+#: admin/fsl-options.php:320
+msgid "right"
+msgstr ""
+
+#: admin/fsl-options.php:271
+msgid "Center text"
+msgstr ""
+
+#: admin/fsl-options.php:277
+msgid "Bar border radius"
+msgstr ""
+
+#: admin/fsl-options.php:278
+msgid "Lower values create sharper corners. Set to 0 for a boxed shape."
+msgstr ""
+
+#: admin/fsl-options.php:288
+msgid "Remove bar stripes"
+msgstr ""
+
+#: admin/fsl-options.php:307
+msgid "Circular"
+msgstr ""
+
+#: admin/fsl-options.php:343
+msgid "Initial shipping zone"
+msgstr ""
+
+#: admin/fsl-options.php:344
+msgid "This zone's free shipping threshold will be used only if customer didn't already enter address."
+msgstr ""
+
+#: admin/fsl-options.php:351
+msgid "Enable custom threshold"
+msgstr ""
+
+#: admin/fsl-options.php:352
+msgid "This will ignore free shipping threshold in WooCommerce settings."
+msgstr ""
+
+#: admin/fsl-options.php:358
+msgid "Custom threshold - global"
+msgstr ""
+
+#: admin/fsl-options.php:359
+msgid "Set a Global Custom Threshold for manual control in situations where automatic detection isn't possible, ensuring accurate calculations for free shipping across all zones."
+msgstr ""
+
+#: admin/fsl-options.php:360
+msgid "Amount"
+msgstr ""
+
+#: admin/fsl-options.php:369
+msgid "Custom threshold per zone and shipping method"
+msgstr ""
+
+#: admin/fsl-options.php:370
+msgid "Configure individual free shipping thresholds for each zone and its methods. Note that these settings take priority over the global threshold, providing specific criteria for shipping calculations within designated zones."
+msgstr ""
+
+#: admin/fsl-options.php:377
+msgid "Visibility"
+msgstr ""
+
+#: admin/fsl-options.php:378
+msgid "Show only for logged in users."
+msgstr ""
+
+#: admin/fsl-options.php:384
+msgid "Hide shipping rates when free shipping is available?"
+msgstr ""
+
+#: admin/fsl-options.php:387
+msgid "No"
+msgstr ""
+
+#: admin/fsl-options.php:388
+msgid "Hide all other shipping methods and only show \"Free Shipping\""
+msgstr ""
+
+#: admin/fsl-options.php:389
+msgid "Hide all other shipping methods and only show \"Free Shipping\" and \"Local Pickup\""
+msgstr ""
+
+#: admin/fsl-options.php:396
+msgid "Multilingual"
+msgstr ""
+
+#: admin/fsl-options.php:397
+msgid "Use your own translated strings."
+msgstr ""
+
+#: admin/fsl-options.php:403
+msgid "Delete plugin data on deactivation"
+msgstr ""
+
+#: admin/fsl-options.php:436
+msgid "Enable Progress Bar"
+msgstr ""
+
+#: admin/fsl-options.php:442
+msgid "Enable on Local Pickup"
+msgstr ""
+
+#: admin/fsl-options.php:443
+msgid "Show bar if Local Pickup is selected."
+msgstr ""
+
+#: admin/fsl-options.php:449
+msgid "Allow zero shipping cost"
+msgstr ""
+
+#: admin/fsl-options.php:452
+msgid "Free shipping is indicated by a shipping cost of zero. Enable this setting if a third-party shipping plugin is used and the progress bar appears despite selecting free shipping."
+msgstr ""
+
+#: admin/fsl-options.php:453
+msgid "Refer to the "
+msgstr ""
+
+#: admin/fsl-options.php:454
+#: admin/fsl-options.php:962
+#: admin/fsl-settings.php:157
+#: admin/fsl-settings.php:172
+#: admin/fsl-settings.php:187
+msgid "documentation"
+msgstr ""
+
+#: admin/fsl-options.php:455
+#: admin/fsl-options.php:963
+msgid "for more information."
+msgstr ""
+
+#: admin/fsl-options.php:462
+msgid "Positions"
+msgstr ""
+
+#: admin/fsl-options.php:468
+msgid "Display on the cart page"
+msgstr ""
+
+#: admin/fsl-options.php:475
+msgid "Cart position"
+msgstr ""
+
+#: admin/fsl-options.php:477
+#: admin/fsl-options.php:578
+msgid "Before cart total"
+msgstr ""
+
+#: admin/fsl-options.php:478
+#: admin/fsl-options.php:579
+msgid "Before button"
+msgstr ""
+
+#: admin/fsl-options.php:479
+#: admin/fsl-options.php:580
+msgid "After button"
+msgstr ""
+
+#: admin/fsl-options.php:480
+#: admin/fsl-options.php:581
+msgid "Before cart"
+msgstr ""
+
+#: admin/fsl-options.php:481
+#: admin/fsl-options.php:582
+msgid "After cart"
+msgstr ""
+
+#: admin/fsl-options.php:488
+msgid "Display on the checkout page"
+msgstr ""
+
+#: admin/fsl-options.php:494
+msgid "Checkout position"
+msgstr ""
+
+#: admin/fsl-options.php:496
+#: admin/fsl-options.php:565
+msgid "Before checkout form"
+msgstr ""
+
+#: admin/fsl-options.php:497
+#: admin/fsl-options.php:566
+msgid "After checkout form"
+msgstr ""
+
+#: admin/fsl-options.php:498
+#: admin/fsl-options.php:567
+msgid "Before order review"
+msgstr ""
+
+#: admin/fsl-options.php:499
+#: admin/fsl-options.php:568
+msgid "Before submit button"
+msgstr ""
+
+#: admin/fsl-options.php:500
+#: admin/fsl-options.php:569
+msgid "After submit button"
+msgstr ""
+
+#: admin/fsl-options.php:501
+#: admin/fsl-options.php:570
+msgid "Before payment"
+msgstr ""
+
+#: admin/fsl-options.php:508
+msgid "Display in the mini cart widget"
+msgstr ""
+
+#: admin/fsl-options.php:509
+msgid "Note: This option may not work if the mini-cart/side-cart lacks specific WooCommerce hook required for proper functionality, especially if customized by your theme or a third-party plugin."
+msgstr ""
+
+#: admin/fsl-options.php:515
+msgid "Shortcode"
+msgstr ""
+
+#: admin/fsl-options.php:606
+msgid "Enable Notice Bar"
+msgstr ""
+
+#: admin/fsl-options.php:612
+#: admin/fsl-options.php:952
+msgid "Position"
+msgstr ""
+
+#: admin/fsl-options.php:615
+#: admin/fsl-options.php:954
+msgid "Top Left"
+msgstr ""
+
+#: admin/fsl-options.php:616
+#: admin/fsl-options.php:955
+msgid "Top Right"
+msgstr ""
+
+#: admin/fsl-options.php:617
+#: admin/fsl-options.php:956
+msgid "Bottom Left"
+msgstr ""
+
+#: admin/fsl-options.php:618
+#: admin/fsl-options.php:957
+msgid "Bottom Right"
+msgstr ""
+
+#: admin/fsl-options.php:625
+#: admin/fsl-options.php:633
+#: admin/fsl-options.php:970
+#: admin/fsl-options.php:978
+msgid "Margin: "
+msgstr ""
+
+#: admin/fsl-options.php:626
+#: admin/fsl-options.php:971
+msgid "Vertical margin"
+msgstr ""
+
+#: admin/fsl-options.php:634
+#: admin/fsl-options.php:979
+msgid "Horizontal margin"
+msgstr ""
+
+#: admin/fsl-options.php:641
+msgid "Hide automatically"
+msgstr ""
+
+#: admin/fsl-options.php:642
+msgid "After adding to cart the Notice Bar will be visible for 5 seconds."
+msgstr ""
+
+#: admin/fsl-options.php:648
+#: admin/fsl-options.php:788
+msgid "Inherit Progress Bar Settings"
+msgstr ""
+
+#: admin/fsl-options.php:649
+#: admin/fsl-options.php:789
+msgid "Turn off for additional customization."
+msgstr ""
+
+#: admin/fsl-options.php:712
+#: admin/fsl-options.php:1031
+msgid "Enable"
+msgstr ""
+
+#: admin/fsl-options.php:719
+msgid "Display"
+msgstr ""
+
+#: admin/fsl-options.php:721
+#: admin/fsl-options.php:832
+msgid "After free shipping reached"
+msgstr ""
+
+#: admin/fsl-options.php:722
+#: admin/fsl-options.php:833
+msgid "Extend free shipping progress bar"
+msgstr ""
+
+#: admin/fsl-options.php:723
+#: admin/fsl-options.php:834
+msgid "Only Gift Bar"
+msgstr ""
+
+#: admin/fsl-options.php:724
+#: admin/fsl-options.php:835
+msgid "Standalone"
+msgstr ""
+
+#: admin/fsl-options.php:731
+msgid "Threshold"
+msgstr ""
+
+#: admin/fsl-options.php:732
+msgid "Min. cart amount for qualifying for the free gift product"
+msgstr ""
+
+#: admin/fsl-options.php:740
+msgid "Gift product"
+msgstr ""
+
+#: admin/fsl-options.php:741
+msgid "Select the free gift product"
+msgstr ""
+
+#: admin/fsl-options.php:749
+msgid "After threshold reached"
+msgstr ""
+
+#: admin/fsl-options.php:752
+msgid "Automatically add to cart with price of 0"
+msgstr ""
+
+#: admin/fsl-options.php:753
+#: admin/fsl-options.php:845
+msgid "Add as order additional information"
+msgstr ""
+
+#: admin/fsl-options.php:755
+msgid "What should we do with the gift product after the threshold is reached?"
+msgstr ""
+
+#: admin/fsl-options.php:761
+msgid "Label"
+msgstr ""
+
+#: admin/fsl-options.php:774
+msgid "Display Mode"
+msgstr ""
+
+#: admin/fsl-options.php:776
+#: admin/fsl-options.php:853
+msgid "Vertical list"
+msgstr ""
+
+#: admin/fsl-options.php:777
+#: admin/fsl-options.php:854
+msgid "Horizontal Labels"
+msgstr ""
+
+#: admin/fsl-options.php:778
+#: admin/fsl-options.php:855
+msgid "Horizontal Labels with description"
+msgstr ""
+
+#: admin/fsl-options.php:779
+#: admin/fsl-options.php:856
+msgid "Description Only Above"
+msgstr ""
+
+#: admin/fsl-options.php:780
+#: admin/fsl-options.php:857
+msgid "Description Only Beneath"
+msgstr ""
+
+#: admin/fsl-options.php:782
+msgid "Choose the layout style for displaying progress indicators and related text. Options include different arrangements for displaying free shipping and gift progress information."
+msgstr ""
+
+#: admin/fsl-options.php:844
+msgid "Automatically add to cart"
+msgstr ""
+
+#: admin/fsl-options.php:881
+msgid "Enable Product Label"
+msgstr ""
+
+#: admin/fsl-options.php:888
+msgid "Exclude"
+msgstr ""
+
+#: admin/fsl-options.php:889
+msgid "Select products or categories."
+msgstr ""
+
+#: admin/fsl-options.php:897
+msgid "Single product page"
+msgstr ""
+
+#: admin/fsl-options.php:903
+#: admin/fsl-options.php:931
+msgid "Enable for simple products"
+msgstr ""
+
+#: admin/fsl-options.php:910
+#: admin/fsl-options.php:938
+msgid "Enable for variable products"
+msgstr ""
+
+#: admin/fsl-options.php:911
+#: admin/fsl-options.php:939
+msgid "The label will only be displayed if the lowest variation price meets the requirements for free shipping."
+msgstr ""
+
+#: admin/fsl-options.php:917
+msgid "Enable for single variation"
+msgstr ""
+
+#: admin/fsl-options.php:918
+msgid "Customer needs to select a variation first."
+msgstr ""
+
+#: admin/fsl-options.php:924
+msgid "Listed products"
+msgstr ""
+
+#: admin/fsl-options.php:925
+msgid "Main shop page, category pages, archive pages, etc."
+msgstr ""
+
+#: admin/fsl-options.php:945
+msgid "Label over image"
+msgstr ""
+
+#: admin/fsl-options.php:946
+msgid "Show label over product image."
+msgstr ""
+
+#: admin/fsl-options.php:961
+msgid "Top positions align well with most themes, while bottom positions may display a label close to the button or price. Margins can be adjusted for further customization. Refer to the "
+msgstr ""
+
+#: admin/fsl-options.php:987
+msgid "Text Label"
+msgstr ""
+
+#: admin/fsl-options.php:993
+msgid "Label Text"
+msgstr ""
+
+#: admin/fsl-options.php:1011
+msgid "Background color"
+msgstr ""
+
+#: admin/fsl-options.php:1025
+msgid "Image Label"
+msgstr ""
+
+#: admin/fsl-options.php:1032
+msgid "If enabled, text label will be ignored."
+msgstr ""
+
+#: admin/fsl-options.php:1038
+msgid "Image"
+msgstr ""
+
+#: admin/fsl-options.php:1039
+msgid "Please select an image from the media library or paste the URL of an external image."
+msgstr ""
+
+#: admin/fsl-options.php:1045
+msgid "Width "
+msgstr ""
+
+#: admin/fsl-options.php:1046
+msgid "width in pixels (px)"
+msgstr ""
+
+#: admin/fsl-options.php:1048
+msgid "width in px"
+msgstr ""
+
+#: admin/fsl-options.php:1083
+msgid "-- None --"
+msgstr ""
+
+#: admin/fsl-settings.php:64
+msgid "General Settings"
+msgstr ""
+
+#: admin/fsl-settings.php:69
+msgid "Progress Bar"
+msgstr ""
+
+#: admin/fsl-settings.php:74
+msgid "Gift Bar"
+msgstr ""
+
+#: admin/fsl-settings.php:79
+msgid "Notice Bar"
+msgstr ""
+
+#: admin/fsl-settings.php:84
+msgid "Product Label"
+msgstr ""
+
+#: admin/fsl-settings.php:156
+msgid "To ensure a smooth setup process, we recommend reviewing the "
+msgstr ""
+
+#: admin/fsl-settings.php:158
+msgid "for more detailed information on the available options and how to use them. Should you have any further questions or need assistance, please don't hesitate to reach out to our support team."
+msgstr ""
+
+#: admin/fsl-settings.php:171
+msgid "To display the Gift Bar, make sure the Progress Bar is enabled. Take a moment to explore the"
+msgstr ""
+
+#: admin/fsl-settings.php:173
+msgid "for in-depth details."
+msgstr ""
+
+#: admin/fsl-settings.php:186
+msgid "In order for Notice Bar to work properly, your theme should support AJAX add-to-cart option. Meaning, there is no page reload after product is added to the cart. Check "
+msgstr ""
+
+#: admin/fsl-settings.php:188
+msgid "for more detailed information."
+msgstr ""
+
+#: admin/fsl-settings.php:208
+msgid ""
+"<strong>Attention:</strong> Visibility of Progress Bar and Label is Dependent on Customer Address Entry.<br>\n"
+"            The Progress Bar and Label will not be visible until the customer enters an address. This behavior is influenced by your WooCommerce settings. To resolve this, navigate to <strong>WooCommerce → Settings → Shipping → Shipping Options</strong>, and ensure that the option <strong>“Hide shipping costs until an address is entered”</strong> is unchecked."
+msgstr ""
+
+#: free-shipping-label.php:192
+msgid "The “Free Shipping Label” plugin cannot run without WooCommerce. Please install and activate WooCommerce plugin."
+msgstr ""
+
+#: includes/fsl-defaults.php:48
+msgid "Free delivery on orders over {free_shipping_amount}"
+msgstr ""
+
+#: includes/fsl-defaults.php:49
+msgid "Add at least {remaining} more to get free shipping!"
+msgstr ""
+
+#: includes/fsl-defaults.php:50
+msgid "You have free shipping!"
+msgstr ""
+
+#: includes/fsl-defaults.php:106
+#: public/bar/fsl-bar.php:732
+msgid "Free Gift"
+msgstr ""
+
+#: includes/fsl-defaults.php:107
+msgid "Free Gift on orders over {threshold}"
+msgstr ""
+
+#: includes/fsl-defaults.php:108
+msgid "Add at least {remaining} more to get a free gift!"
+msgstr ""
+
+#: includes/fsl-defaults.php:109
+msgid "You've earned a free gift!"
+msgstr ""
+
+#: includes/fsl-defaults.php:165
+msgid "Free shipping!"
+msgstr ""
+
+#: public/bar/fsl-bar.php:452
+msgid "Waiting for Free Shipping coupon"
+msgstr ""
+
+#: public/bar/fsl-bar.php:729
+msgid "Free Shipping"
+msgstr ""
+
+#: public/bar/fsl-gift-bar.php:352
+msgid "Free"
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block title"
+msgid "Progress Bar"
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block description"
+msgid "Show your customers just how close they are to free shipping."
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block keyword"
+msgid "free"
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block keyword"
+msgid "shipping"
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block keyword"
+msgid "label"
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block keyword"
+msgid "progress"
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block keyword"
+msgid "bar"
+msgstr ""
+
+#: block-editor/progress-bar/build/block.json
+#: block-editor/progress-bar/src/block.json
+msgctxt "block keyword"
+msgid "fsl"
+msgstr ""
