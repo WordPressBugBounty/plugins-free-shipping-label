@@ -243,8 +243,8 @@ class FSL_Bar {
             'reached'          => [],
             'threshold'        => $amount_for_free_shipping,
             'placeholder_args' => [
-                'remaining'            => $remaining,
-                'free_shipping_amount' => $amount_for_free_shipping,
+                'remaining' => $remaining,
+                'threshold' => $amount_for_free_shipping,
             ],
             'cart_subtotal'    => $cart_subtotal,
         ];
@@ -284,11 +284,16 @@ class FSL_Bar {
             $setup_data['modules']['free-shipping'] = $fs_data;
         }
         $setup_data = apply_filters( 'fsl_progress_bar_setup_data', $setup_data );
-        if ( count( $setup_data['modules'] ) > 1 ) {
-            // Lower threshold first.
-            usort( $setup_data['modules'], function ( $a, $b ) {
-                return $a['threshold'] - $b['threshold'];
+        $grouped_modules = $setup_data['modules']['group']['grouped_modules'] ?? [];
+        if ( count( $grouped_modules ) > 1 ) {
+            uasort( $grouped_modules, function ( $a, $b ) {
+                if ( isset( $a['threshold'] ) && isset( $b['threshold'] ) ) {
+                    return $a['threshold'] <=> $b['threshold'];
+                }
+                return 0;
+                // Default to 0 if thresholds are not set.
             } );
+            $setup_data['modules']['group']['grouped_modules'] = $grouped_modules;
         }
         echo '<div class="fsl-wrapper" data-updatable="' . esc_attr( $is_updatable ) . '">';
         foreach ( $setup_data['modules'] as $module => $module_data ) {

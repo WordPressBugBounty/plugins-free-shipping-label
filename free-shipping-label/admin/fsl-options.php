@@ -9,7 +9,7 @@ use Devnet\FSL\Includes\Icons;
  *
  */
 class Options {
-    private static function common_options( $name, $premium = false, $type = '' ) {
+    public static function common_options( $name, $premium = false, $type = '' ) {
         $is_disabled = ( $premium ? '__disabled' : '' );
         $desc_bar_placeholders = sprintf( '%s
             <input type="text" readonly="readonly" value="{free_shipping_amount}" />

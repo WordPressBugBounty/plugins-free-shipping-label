@@ -2,9 +2,9 @@
 
 /**
  * Plugin Name:          Free Shipping Label
- * Plugin URI:           https://devnet.hr/free-shipping-label/
+ * Plugin URI:           https://devnet.hr/plugins/free-shipping-label/
  * Description:          Increase order revenue in WooCommerce store by showing your customers just how close they are to your free shipping threshold.
- * Version:              3.1.1
+ * Version:              3.1.2
  * Author:               Devnet
  * Author URI:           https://devnet.hr
  * License:              GPL-2.0+
@@ -12,7 +12,7 @@
  * Text Domain:          free-shipping-label
  * Domain Path:          /languages
  * Requires Plugins:     woocommerce
- * WC tested up to:      9.1
+ * WC tested up to:      9.3
  *
  */
 use Devnet\FSL\Includes\Activator;
@@ -100,7 +100,7 @@ if ( function_exists( 'fsl_fs' ) ) {
         );
         fsl_fs()->add_action( 'after_uninstall', 'fsl_fs_uninstall_cleanup' );
     }
-    define( 'DEVNET_FSL_VERSION', '3.1.1' );
+    define( 'DEVNET_FSL_VERSION', '3.1.2' );
     define( 'DEVNET_FSL_NAME', 'free-shipping-label' );
     define( 'DEVNET_FSL_PATH', plugin_basename( __FILE__ ) );
     define( 'DEVNET_FSL_OPTIONS', [
@@ -159,7 +159,7 @@ if ( function_exists( 'fsl_fs' ) ) {
     }
 
     add_action( 'plugins_loaded', function () {
-        // Go ahead only if WooCommerce is activated
+        // Go ahead only if WooCommerce is activated.
         if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
             run_devnet_fsl();
         } else {

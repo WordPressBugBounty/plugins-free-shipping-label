@@ -280,14 +280,16 @@ class Helper {
      * @since    2.1.0
      */
     static function convert_placeholders( $input_string = '', $args = [] ) {
-        if ( isset( $args['remaining'] ) ) {
-            $input_string = str_replace( '{remaining}', wc_price( $args['remaining'] ), $input_string );
+        $remaining = $args['remaining'] ?? '';
+        $threshold = $args['threshold'] ?? '';
+        $free_shipping_amount = $args['free_shipping_amount'] ?? '';
+        if ( $remaining ) {
+            $input_string = str_replace( '{remaining}', wc_price( $remaining ), $input_string );
         }
-        if ( isset( $args['free_shipping_amount'] ) ) {
-            $input_string = str_replace( '{free_shipping_amount}', wc_price( $args['free_shipping_amount'] ), $input_string );
-        }
-        if ( isset( $args['threshold'] ) ) {
-            $input_string = str_replace( '{threshold}', wc_price( $args['threshold'] ), $input_string );
+        if ( $threshold ) {
+            $input_string = str_replace( ['{threshold}', '{free_shipping_amount}'], wc_price( $threshold ), $input_string );
+        } elseif ( $free_shipping_amount ) {
+            $input_string = str_replace( '{free_shipping_amount}', wc_price( $free_shipping_amount ), $input_string );
         }
         return $input_string;
     }

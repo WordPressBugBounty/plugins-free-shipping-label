@@ -3,7 +3,7 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 5.5
-Stable tag: 3.1.1
+Stable tag: 3.1.2
 Tested up to: 6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -149,6 +149,16 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.1.2 = 
+
+*2024-09-24*
+
+* Fix - Corrected sorting of grouped modules by threshold, preserving original keys
+* Fix - Removed subtle 1px top border shadow from the progress bar that created the appearance of padding above the inner bar
+* Update - Free Shipping text placeholder now supports both `{free_shipping_amount}` and `{threshold}` variables
+* Update - Freemius WordPress SDK to latest version
+* Performance – WC tested up to: 9.3
 
 = 3.1.1 = 
 
