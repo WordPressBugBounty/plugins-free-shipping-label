@@ -54,7 +54,7 @@ class Options {
             'info-bar-placeholders'    => [
                 'type'  => 'info',
                 'name'  => 'info-bar-placeholders' . $is_disabled,
-                'label' => esc_html__( '', 'free-shipping-label' ),
+                'label' => '',
                 'desc'  => $desc_bar_placeholders,
                 'class' => 'info subinfo',
             ],
@@ -304,7 +304,7 @@ class Options {
                 'desc'        => esc_html__( "Set a Global Custom Threshold for manual control in situations where automatic detection isn't possible, ensuring accurate calculations for free shipping across all zones.", 'free-shipping-label' ),
                 'placeholder' => esc_html__( 'Amount', 'free-shipping-label' ),
                 'min'         => 0,
-                'step'        => '1',
+                'step'        => 0.01,
                 'default'     => Defaults::general( 'custom_threshold' ),
             ],
             [
@@ -326,7 +326,7 @@ class Options {
                 'type'    => 'select',
                 'name'    => 'hide_shipping_rates',
                 'label'   => esc_html__( 'Hide shipping rates when free shipping is available?', 'free-shipping-label' ),
-                'desc'    => esc_html__( '', 'free-shipping-label' ),
+                'desc'    => '',
                 'options' => [
                     ''                  => esc_html__( 'No', 'free-shipping-label' ),
                     'hide_all'          => esc_html__( 'Hide all other shipping methods and only show "Free Shipping"', 'free-shipping-label' ),
@@ -355,6 +355,21 @@ class Options {
      * @since    1.0.0
      */
     public static function progress_bar() {
+        $minicart_optgroup = [];
+        // FunnelKit positions
+        if ( defined( 'FKCART_VERSION' ) ) {
+            $minicart_optgroup = [[
+                'label'    => esc_html__( '-- FunnelKit --', 'free-shipping-label' ),
+                'options'  => [
+                    '1' => esc_html__( 'After header', 'free-shipping-label' ),
+                    '2' => esc_html__( 'Before cart items', 'free-shipping-label' ),
+                    '3' => esc_html__( 'After cart items', 'free-shipping-label' ),
+                    '4' => esc_html__( 'Before button', 'free-shipping-label' ),
+                    '5' => esc_html__( 'After button', 'free-shipping-label' ),
+                ],
+                'disabled' => true,
+            ]];
+        }
         $progress_bar = [
             [
                 'type'    => 'checkbox',
@@ -435,6 +450,20 @@ class Options {
                 'default' => Defaults::bar( 'show_on_minicart' ),
             ],
             [
+                'type'     => 'select',
+                'name'     => 'minicart_position',
+                'label'    => esc_html__( 'Minicart position', 'free-shipping-label' ),
+                'options'  => [
+                    '_disabled_1'                                     => esc_html__( 'Before minicart', 'free-shipping-label' ),
+                    '_disabled_2'                                     => esc_html__( 'Before content', 'free-shipping-label' ),
+                    '_disabled_3'                                     => esc_html__( 'After content', 'free-shipping-label' ),
+                    'woocommerce_widget_shopping_cart_before_buttons' => esc_html__( 'Before buttons', 'free-shipping-label' ),
+                    '_disabled_4'                                     => esc_html__( 'After minicart', 'free-shipping-label' ),
+                ],
+                'optgroup' => $minicart_optgroup,
+                'default'  => Defaults::bar( 'cart_position' ),
+            ],
+            [
                 'type'  => 'text',
                 'name'  => 'shortcode_info__disabled',
                 'label' => esc_html__( 'Shortcode', 'free-shipping-label' ),
@@ -491,7 +520,7 @@ class Options {
                 'type'    => 'select',
                 'name'    => 'position__disabled',
                 'label'   => esc_html__( 'Position', 'free-shipping-label' ),
-                'desc'    => esc_html__( '', 'free-shipping-label' ),
+                'desc'    => '',
                 'options' => [
                     'top-left'     => esc_html__( 'Top Left', 'free-shipping-label' ),
                     'top-right'    => esc_html__( 'Top Right', 'free-shipping-label' ),
@@ -797,8 +826,8 @@ class Options {
                 'type'              => 'text',
                 'name'              => 'text',
                 'label'             => esc_html__( 'Label Text', 'free-shipping-label' ),
-                'desc'              => esc_html__( '', 'free-shipping-label' ),
-                'placeholder'       => esc_html__( '', 'free-shipping-label' ),
+                'desc'              => '',
+                'placeholder'       => '',
                 'max'               => 25,
                 'default'           => Defaults::label( 'text' ),
                 'sanitize_callback' => 'sanitize_text_field',
@@ -897,7 +926,7 @@ class Options {
                     'name'              => ( $is_pro ? $rate_id : '' ),
                     'label'             => $shipping_method->get_title(),
                     'min'               => 0,
-                    'step'              => '1',
+                    'step'              => 0.01,
                     'sanitize_callback' => 'absint',
                 ];
             }

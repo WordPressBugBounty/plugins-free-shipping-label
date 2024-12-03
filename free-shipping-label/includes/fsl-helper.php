@@ -232,7 +232,7 @@ class Helper {
                 }
             }
         }
-        echo json_encode( $return );
+        echo wp_json_encode( $return );
         wp_die();
     }
 

@@ -86,6 +86,7 @@ class FSL_Bar {
         $opt['name'] = 'progress_bar';
         $opt['show_fsl_title'] = true;
         $opt['show_fsl_description'] = true;
+        $opt['label'] = esc_html__( 'Free Shipping', 'free-shipping-label' );
         $bar_type = $opt['bar_type'] ?? Defaults::bar( 'bar_type' );
         if ( $bar_type === 'circular' ) {
             if ( $opt['inside_circle'] === 'title' ) {
@@ -182,6 +183,10 @@ class FSL_Bar {
         // Set module name
         $opt['module_name'] = 'free-shipping';
         $amount_for_free_shipping = Helper::get_free_shipping_min_amount();
+        // Replace comma with a dot
+        if ( is_string( $amount_for_free_shipping ) ) {
+            $amount_for_free_shipping = str_replace( ',', '.', $amount_for_free_shipping );
+        }
         if ( !$amount_for_free_shipping || !is_numeric( $amount_for_free_shipping ) ) {
             return;
         }
@@ -285,15 +290,18 @@ class FSL_Bar {
         }
         $setup_data = apply_filters( 'fsl_progress_bar_setup_data', $setup_data );
         $grouped_modules = $setup_data['modules']['group']['grouped_modules'] ?? [];
-        if ( count( $grouped_modules ) > 1 ) {
-            uasort( $grouped_modules, function ( $a, $b ) {
-                if ( isset( $a['threshold'] ) && isset( $b['threshold'] ) ) {
-                    return $a['threshold'] <=> $b['threshold'];
-                }
-                return 0;
-                // Default to 0 if thresholds are not set.
-            } );
+        $stand_alone_modules = $setup_data['modules'] ?? [];
+        // Sorting logic
+        $sortByThreshold = function ( $a, $b ) {
+            return ($a['threshold'] ?? 0) <=> ($b['threshold'] ?? 0);
+        };
+        // Sort grouped modules if available; otherwise, sort stand-alone modules
+        if ( !empty( $grouped_modules ) && count( $grouped_modules ) > 1 ) {
+            uasort( $grouped_modules, $sortByThreshold );
             $setup_data['modules']['group']['grouped_modules'] = $grouped_modules;
+        } elseif ( !empty( $stand_alone_modules ) && count( $stand_alone_modules ) > 1 ) {
+            uasort( $stand_alone_modules, $sortByThreshold );
+            $setup_data['modules'] = $stand_alone_modules;
         }
         echo '<div class="fsl-wrapper" data-updatable="' . esc_attr( $is_updatable ) . '">';
         foreach ( $setup_data['modules'] as $module => $module_data ) {
@@ -406,12 +414,16 @@ class FSL_Bar {
         $highest_threshold = ( !empty( $thresholds ) ? max( $thresholds ) : null );
         $show_full_progress_bar = false;
         foreach ( $grouped_modules as $module_name => $module ) {
+            if ( empty( $module ) ) {
+                continue;
+            }
             $options = $module['options'] ?? [];
             $placeholder_args = $module['placeholder_args'] ?? [];
             $threshold = $module['threshold'] ?? '';
             $reached = $module['reached']['qualified_message'] ?? '';
             $title = $options['title'] ?? '';
             $description = $options['description'] ?? '';
+            $label = $options['label'] ?? '';
             $show_qualified_message = $options['show_qualified_message'] ?? false;
             $indicator_icon = $options['indicator_icon'] ?? false;
             $reached_class = ( $reached ? 'fsl-reached' : '' );
@@ -437,13 +449,8 @@ class FSL_Bar {
                 $title = null;
                 $description = null;
                 if ( $layout === 'horizontal_1' || $layout === 'horizontal_2' ) {
-                    if ( $module_name === 'free-shipping' ) {
-                        $title = esc_html__( 'Free Shipping', 'free-shipping-label' );
-                    } elseif ( $module_name === 'gift-bar' ) {
-                        // TODO: call a method defined in a child class
-                        $title = esc_html__( 'Free Gift', 'free-shipping-label' );
-                        $show_qualified_message = true;
-                    }
+                    $title = $label;
+                    $show_qualified_message = true;
                 }
             }
             if ( $layout === 'list' ) {

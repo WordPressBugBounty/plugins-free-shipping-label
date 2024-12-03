@@ -5,8 +5,7 @@ namespace Devnet\FSL\Admin;
 /**
  * Settings API wrapper class.
  * 
- * @version    1.1.3
- *
+ * @updated    16.10.2024.
  */
 
 class Settings_API
@@ -132,6 +131,7 @@ class Settings_API
                     'section'           => $section,
                     'size'              => isset($option['size']) ? $option['size'] : null,
                     'options'           => isset($option['options']) ? $option['options'] : '',
+                    'optgroup'          => isset($option['optgroup']) ? $option['optgroup'] : [],
                     'std'               => isset($option['default']) ? $option['default'] : '',
                     'sanitize_callback' => isset($option['sanitize_callback']) ? $option['sanitize_callback'] : '',
                     'type'              => $type,
@@ -144,10 +144,14 @@ class Settings_API
                     'rows'              => isset($option['rows']) ? $option['rows'] : '',
                     'cols'              => isset($option['cols']) ? $option['cols'] : '',
                     'disabled'          => isset($option['disabled']) ? $option['disabled'] : '',
-                    'pro'               => isset($option['pro']) ? $option['pro'] : '',
+                    'pro_plan'          => isset($option['pro_plan']) ? $option['pro_plan'] : '',
                     'fields'             => isset($option['fields']) ? $option['fields'] : [],
                     'repeatable'        => isset($option['repeatable']) ? $option['repeatable'] : false,
                 ];
+
+                if ($args['pro_plan']) {
+                    $args['class'] .= ' ' . $args['pro_plan'];
+                }
 
                 add_settings_field("{$section}[{$name}]", $label, $callback, $section, $section, $args);
             }
@@ -252,7 +256,7 @@ class Settings_API
             esc_attr($disabled)
         );
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -281,6 +285,7 @@ class Settings_API
         $step         = empty($args['step']) ? '' : $args['step'];
         $has_unit_box = !empty($args['unit']) ? 'has-unit-box' : '';
 
+
         printf(
             '<input type="%1$s" class="%2$s-number %10$s" id="%3$s[%4$s]" name="%3$s[%4$s]" value="%5$s" placeholder="%6$s" min="%7$s" max="%8$s" step="%9$s" />',
 
@@ -300,7 +305,7 @@ class Settings_API
             echo '<div class="input-unit-box">' . esc_html($args['unit']) . '</div>';
         }
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -366,7 +371,7 @@ class Settings_API
             printf('<span class="desc">%1$s</span><br>', esc_html($label));
         }
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
         echo '</fieldset>';
     }
 
@@ -398,7 +403,7 @@ class Settings_API
             printf('%1$s</label><br>', esc_html($label));
         }
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
         echo '</fieldset>';
     }
 
@@ -430,7 +435,7 @@ class Settings_API
             printf('<span class="img">%1$s</span></label><br>', $label);
         }
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
         echo '</fieldset>';
     }
 
@@ -443,6 +448,7 @@ class Settings_API
     {
         $value = $this->get_option($args['id'], $args['section'], $args['std']);
         $size  = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
+        $optgroup = !empty($args['optgroup']) ? $args['optgroup'] : null;
 
         printf(
             '<select class="%1$s" name="%2$s[%3$s]" id="%2$s[%3$s]">',
@@ -464,8 +470,32 @@ class Settings_API
             );
         }
 
+        if ($optgroup) {
+            foreach ($optgroup as $group) {
+
+                $disabled = $group['disabled'] ?? '';
+                $is_disabled = filter_var($disabled, FILTER_VALIDATE_BOOLEAN) ? 'disabled' : '';
+
+                echo '<optgroup label="' . esc_attr($group['label']) . '" ' . esc_attr($is_disabled) . '>';
+
+                foreach ($group['options'] as $key => $label) {
+
+                    $is_disabled = strpos($key, '_disabled') === 0 ? 'disabled' : '';
+
+                    printf(
+                        '<option value="%s" %s %s>%s</option>',
+                        esc_attr($key),
+                        esc_attr($is_disabled),
+                        selected(esc_attr($value), esc_attr($key), false),
+                        esc_attr($label)
+                    );
+                }
+                echo '</optgroup>';
+            }
+        }
+
         printf('</select>');
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
 
@@ -514,7 +544,7 @@ class Settings_API
         }
 
         printf('</select>');
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -543,7 +573,7 @@ class Settings_API
             esc_textarea($value)
         );
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -554,7 +584,7 @@ class Settings_API
      */
     public function callback_html($args)
     {
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -583,7 +613,7 @@ class Settings_API
 
         echo '</div>';
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -596,7 +626,7 @@ class Settings_API
         $value = $this->get_option($args['id'], $args['section'], $args['std']);
         $size  = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
         $id    = $args['section'] . '[' . $args['id'] . ']';
-        $label = isset($args['options']['button_label']) ? $args['options']['button_label'] : esc_html__('Choose File', '');
+        $label = isset($args['options']['button_label']) ? $args['options']['button_label'] : 'Choose File';
 
         printf(
             '<input type="text" class="%1$s-text dvnt-f-url" id="%2$s[%3$s]" name="%2$s[%3$s]" value="%4$s"/>',
@@ -605,7 +635,7 @@ class Settings_API
             esc_attr($args['id']),
             esc_attr($value)
         );
-        echo '<input type="button" class="button dvnt-f-browse" value="' . $label . '" />';
+        echo '<input type="button" class="button dvnt-f-browse" value="' . esc_attr($label) . '" />';
 
         // to check if is an image.  
         if ($value && $maybe_image = getimagesize($value)) {
@@ -615,7 +645,7 @@ class Settings_API
             }
         }
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -636,7 +666,7 @@ class Settings_API
             esc_attr($value)
         );
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -658,7 +688,7 @@ class Settings_API
             esc_attr($args['std'])
         );
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -727,7 +757,7 @@ class Settings_API
 
             if ($repeatable) {
 
-                echo '<a href="#" class="dvnt-remove-group">' . esc_html__('Remove', '') . '</a>';
+                echo '<a href="#" class="dvnt-remove-group">Remove</a>';
             }
 
             echo '</div>';
@@ -740,7 +770,7 @@ class Settings_API
 
         echo '</div>';
 
-        echo $this->get_field_description($args);
+        printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**
@@ -757,7 +787,18 @@ class Settings_API
             'echo'     => 0
         ];
 
-        echo wp_dropdown_pages($dropdown_args);
+        $kses_args = [
+            'select' => [
+                'name'   => [],
+                'id'     => [],
+            ],
+            'option' => [
+                'class' => [],
+                'value' => [],
+            ],
+        ];
+
+        echo wp_kses(wp_dropdown_pages($dropdown_args), $kses_args);
     }
 
     /**

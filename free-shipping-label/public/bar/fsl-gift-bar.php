@@ -47,7 +47,9 @@ class Gift_Bar extends FSL_Bar {
             $display = 'only';
             $options = $this->get_progress_bar_options( $gift_opt );
         }
+        $options['label'] = $gift_opt['label'] ?? Defaults::gift_bar( 'label' );
         if ( $this->is_multilingual ) {
+            $options['label'] = Defaults::gift_bar( 'label' );
             $options['title'] = Defaults::gift_bar( 'title' );
             $options['description'] = Defaults::gift_bar( 'description' );
             $options['qualified_message'] = Defaults::gift_bar( 'qualified_message' );

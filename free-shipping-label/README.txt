@@ -3,8 +3,8 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 5.5
-Stable tag: 3.1.2
-Tested up to: 6.6
+Stable tag: 3.2.0
+Tested up to: 6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,9 +94,10 @@ If you like this plugin, feel free to leave a [review](https://wordpress.org/sup
 
 Here are some other plugins we have developed that you might find useful:
 
-1. [Product Price History](https://wordpress.org/plugins/product-price-history/) - Track product price history with customizable charts and graphs on your WooCommerce store. Show lowest price and increase customer trust.
-2. [Easy Subscribe](https://wordpress.org/plugins/easy-subscribe/) - Effortlessly integrate customizable subscription forms on your WordPress site with a simple shortcode.
-3. [BizNotes](https://wordpress.org/plugins/biznotes/) - Exclusive admin notes for seamless order management among multiple admins. Effortless collaboration, powered up.
+- [Product Price History](https://wordpress.org/plugins/product-price-history/) - Track product price history with customizable charts and graphs on your WooCommerce store. Show lowest price and increase customer trust.
+- [Easy Subscribe](https://wordpress.org/plugins/easy-subscribe/) - Effortlessly integrate customizable subscription forms on your WordPress site with a simple shortcode.
+- [Easy Booking Calendar](https://wordpress.org/plugins/easy-booking-calendar/) - Turn any product into a reservation-ready item. This plugin adds a customizable calendar to product pages, allowing customers to select date ranges for bookings.
+- [BizNotes](https://wordpress.org/plugins/biznotes/) - Exclusive admin notes for seamless order management among multiple admins. Effortless collaboration, powered up.
 
 
 == Installation ==
@@ -150,9 +151,23 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 == Changelog ==
 
+= 3.2.0 = 
+
+*2024-12-03*
+
+* Fix - Custom threshold decimal step 0.01
+* Fix - Progress bar not displaying due to free shipping threshold using a comma as the decimal separator
+* Fix - When displaying the free shipping and free gift progress bars, show the module with the lower threshold first
+* Fix - RTL direction when using icons
+* Update - Color picker
+* Update - Settings API
+* Update - Freemius WordPress SDK to latest version
+* Performance – WP tested up to: 6.7
+* Performance – WC tested up to: 9.4
+
 = 3.1.2 = 
 
-*2024-09-24*
+*2024-08-07*
 
 * Fix - Corrected sorting of grouped modules by threshold, preserving original keys
 * Fix - Removed subtle 1px top border shadow from the progress bar that created the appearance of padding above the inner bar

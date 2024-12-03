@@ -87,7 +87,7 @@ class Icons
      */
     public static function get_svg($icon, $size)
     {
-        $arr = self::$icons;
+        $arr = apply_filters('fsl_svg_icons', self::$icons);
 
         $svg = '';
         if (array_key_exists($icon, $arr)) {
@@ -111,6 +111,6 @@ class Icons
      */
     public static function get_all()
     {
-        return self::$icons;
+        return apply_filters('fsl_svg_icons', self::$icons);
     }
 }
