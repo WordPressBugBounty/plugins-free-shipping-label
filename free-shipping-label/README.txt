@@ -3,7 +3,7 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 5.5
-Stable tag: 3.2.0
+Stable tag: 3.2.1
 Tested up to: 6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -54,8 +54,8 @@ Give your customers a smooth shopping journey and increase your average order va
 
 With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), you get a lot more features, including:
 
-_ __NEW__ Threshold Icon indicator
-- __NEW__ More display options
+_ Threshold Icon indicator
+- More display options
 - Animated Circular progress bar
 - Customizable Circular progress bar
 - Image label
@@ -75,6 +75,20 @@ _ __NEW__ Threshold Icon indicator
 - Progress bar widget
 - Progress bar compatible with [WooCommerce Cart and Checkout blocks](https://woocommerce.com/checkout-blocks/)
 - and more!
+
+### Add Additional Steps/Levels with FSL Discount Add-On
+
+Take your Free Shipping Label plugin to the next level with the [FSL Discount Add-On](https://devnet.hr/plugins/free-shipping-label/#fsl-discount). Unlock new possibilities for boosting sales by introducing a dynamic discount bar, encouraging customers to spend more and enhancing their shopping experience.
+
+#### Key Features:
+- **Add up to Three Discount Steps:** Motivate customers with single, double, or triple-step goals to unlock exclusive discounts.
+- **Flexible Discount Options:** Apply percentage discounts automatically or use customizable coupon codes.
+- **Customizable Messages:** Tailor progress bar text to match your store’s tone and promotions.
+- **Customizable Threshold Icon:** Make your progress bar visually engaging with unique threshold icons.
+
+Inspire your customers to spend more, increase cart values, and create a rewarding shopping experience. [Learn More](https://devnet.hr/plugins/free-shipping-label/#fsl-discount).
+
+
 
 ### Support
 
@@ -150,6 +164,13 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.2.1 = 
+
+*2025-01-17*
+
+* Add - Add-on support - Discount bar
+* Performance – WC tested up to: 9.5
 
 = 3.2.0 = 
 
