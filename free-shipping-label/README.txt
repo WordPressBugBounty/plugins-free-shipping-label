@@ -3,7 +3,7 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 5.5
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 Tested up to: 6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,37 +24,40 @@ Give your customers a smooth shopping journey and increase your average order va
 
 ### [DOCUMENTATION](https://devnet.hr/docs/free-shipping-label/) | [FREE SHIPPING LABEL PRO](https://devnet.hr/plugins/free-shipping-label/)
 
-🎉 Upgrade Alert! Free Shipping Label for WooCommerce 3.0.0 is Here! 🚚✨ Unleash the power of the **Gift Bar** module, enjoy enhanced customization, and experience optimized performance. Elevate your store with seamless upgrades and dynamic new features. [Dive into the details now.](https://devnet.hr/blog/free-shipping-label-for-woocommerce-3-0-0-is-here/)
+🎉 **Make the Most of the Gift Bar Module!** 🎁✨ Boost sales and delight your customers by offering free gifts as they shop. The **Gift Bar** module seamlessly integrates into your progress bar, encouraging shoppers to add more to their cart to unlock a reward. It’s the perfect way to enhance engagement and increase average order value. [Learn more about how it works.](https://devnet.hr/docs/free-shipping-label/gift-bar/)
+
+🎉 **Looking to Add More Goals to Your Progress Bar?** 🛒💸 The [Discount Bar Add-On](https://devnet.hr/plugins/free-shipping-label/#fsl-discount) lets you introduce up to three additional steps, encouraging customers to unlock exciting discounts as they shop. It’s a powerful way to boost cart values, engage shoppers, and drive more sales. [Learn more about it here.](https://devnet.hr/docs/free-shipping-label/discount-bar/)
 
 ## Who is plugin for?
 
-* eCommerce Store Owners
-* Agencies building shops for clients
-* Anyone trying to create a better user experience
-* Anyone trying to increase shop performance
-* Anyone trying to add more dynamism to the shop
+- eCommerce Store Owners
+- Agencies building shops for clients
+- Anyone trying to create a better user experience
+- Anyone trying to increase shop performance
+- Anyone trying to add more dynamism to the shop
 
 ### Features
 
-* Animated Gift bar
-* Animated progress bar
-* Customize progress bar
-* Display on the cart page and checkout pages
-* Hide shipping rates when free shipping is available
-* Message after free shipping threshold is reached
-* Show to all users or only for logged ones
-* Product Label for simple and variable products
-* Customize Product Label
-* Translation ready
-* Easy to use, no coding required
-* Compatible with Table Rate Shipping Method for WooCommerce by Flexible Shipping
-* Compatible with WooCommerce Advanced Free Shipping
+- Animated Gift bar
+- Animated progress bar
+- Customize progress bar
+- Display on the cart page and checkout pages
+- Hide shipping rates when free shipping is available
+- Message after free shipping threshold is reached
+- Show to all users or only for logged ones
+- Product Label for simple and variable products
+- Customize Product Label
+- Translation ready
+- Easy to use, no coding required
+- Compatible with: 
+    - Table Rate Shipping Method for WooCommerce by Flexible Shipping
+    - Compatible with WooCommerce Advanced Free Shipping
 
 ### Get More Options in Free Shipping Label Pro
 
 With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), you get a lot more features, including:
 
-_ Threshold Icon indicator
+- Threshold Icon indicator
 - More display options
 - Animated Circular progress bar
 - Customizable Circular progress bar
@@ -73,7 +76,11 @@ _ Threshold Icon indicator
 - Progress bar shortcode
 - Progress bar gutenberg block
 - Progress bar widget
-- Progress bar compatible with [WooCommerce Cart and Checkout blocks](https://woocommerce.com/checkout-blocks/)
+- Progress bar compatible with: 
+    - [WooCommerce Cart and Checkout blocks](https://woocommerce.com/checkout-blocks/)
+    - Elementor
+    - FunnelKit
+    - WPC Fly Cart
 - and more!
 
 ### Add Additional Steps/Levels with FSL Discount Add-On
@@ -164,6 +171,13 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.2.2 =
+
+*2025-01-27*
+
+* Update - Updated Freemius SDK to the latest version
+* Performance - WC tested up to 9.6
 
 = 3.2.1 = 
 

@@ -370,6 +370,23 @@ class Options {
                 'disabled' => true,
             ]];
         }
+        // WPC Fly Cart positions
+        if ( defined( 'WOOFC_VERSION' ) ) {
+            $minicart_optgroup = [[
+                'label'    => esc_html__( '-- WPC Fly Cart --', 'free-shipping-label' ),
+                'options'  => [
+                    '1' => esc_html__( 'Above area', 'free-shipping-label' ),
+                    '2' => esc_html__( 'Above cart items', 'free-shipping-label' ),
+                    '3' => esc_html__( 'Bellow cart items', 'free-shipping-label' ),
+                    '4' => esc_html__( 'Above bottom', 'free-shipping-label' ),
+                    '5' => esc_html__( 'Above buttons', 'free-shipping-label' ),
+                    '6' => esc_html__( 'Bellow buttons', 'free-shipping-label' ),
+                    '7' => esc_html__( 'Bellow bottom', 'free-shipping-label' ),
+                    '8' => esc_html__( 'Bellow area', 'free-shipping-label' ),
+                ],
+                'disabled' => true,
+            ]];
+        }
         $progress_bar = [
             [
                 'type'    => 'checkbox',
