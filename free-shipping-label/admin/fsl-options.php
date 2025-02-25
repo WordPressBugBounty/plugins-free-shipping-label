@@ -387,6 +387,20 @@ class Options {
                 'disabled' => true,
             ]];
         }
+        // Side Cart
+        if ( defined( 'XOO_WSC_PLUGIN_FILE' ) ) {
+            $minicart_optgroup = [[
+                'label'    => esc_html__( '-- Side Cart --', 'free-shipping-label' ),
+                'options'  => [
+                    '1' => esc_html__( 'Header', 'free-shipping-label' ),
+                    '2' => esc_html__( 'Before products', 'free-shipping-label' ),
+                    '3' => esc_html__( 'After products', 'free-shipping-label' ),
+                    '4' => esc_html__( 'Footer start', 'free-shipping-label' ),
+                    '5' => esc_html__( 'Footer end', 'free-shipping-label' ),
+                ],
+                'disabled' => true,
+            ]];
+        }
         $progress_bar = [
             [
                 'type'    => 'checkbox',

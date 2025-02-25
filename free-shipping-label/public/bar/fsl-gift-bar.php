@@ -4,6 +4,7 @@ namespace Devnet\FSL\Frontend\Bar;
 
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Helper;
+use Devnet\FSL\Includes\Compatibility;
 class Gift_Bar extends FSL_Bar {
     public function __construct() {
     }

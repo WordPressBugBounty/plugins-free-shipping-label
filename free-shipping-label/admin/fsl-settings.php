@@ -107,7 +107,7 @@ class Settings
 
     public function plugin_page()
     {
-        echo '<div class="fsl-wrap">';
+        echo '<div class="fsl-wrap devnet-plugin-settings-page" data-id="devnet_fsl">';
 
         $this->settings_api->show_navigation();
         $this->settings_api->show_forms();

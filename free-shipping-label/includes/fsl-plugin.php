@@ -98,6 +98,10 @@ class FSL_PLUGIN {
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-i18n.php';
         /**
+         * The class responsible for defining compatibility functions of the plugin.
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-compatibility.php';
+        /**
          * The class responsible for defining helper functions of the plugin.
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-helper.php';

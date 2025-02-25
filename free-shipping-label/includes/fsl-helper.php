@@ -23,20 +23,6 @@ class Helper {
     }
 
     /**
-     * Get information about shipping method.
-     *
-     * @since    2.6.8
-     * @param    string    $shipping_id       The id of the method.
-     * @return   number                                 
-     */
-    static function get_flexible_shipping_method_min_amount( $shipping_id ) {
-        $option_name = 'woocommerce_' . str_replace( ':', '_', $shipping_id ) . '_settings';
-        $option = get_option( $option_name );
-        $amount = ( isset( $option['method_free_shipping'] ) ? $option['method_free_shipping'] : null );
-        return $amount;
-    }
-
-    /**
      * Get chosen shipping method.
      *
      * @since    2.1.0
@@ -69,18 +55,29 @@ class Helper {
         $custom_threshold = $general_options['custom_threshold'] ?? $amount;
         $custom_threshold_per_method = $general_options['custom_threshold_per_method'] ?? [];
         $chosen_shipping_id = self::chosen_shipping_method();
+        /**
+         * Custom threshold check.
+         * 
+         */
         if ( $enable_custom_threshold && !$only_virtual_products_in_cart ) {
             $amount = $custom_threshold;
             return apply_filters( 'fsl_min_amount', $amount );
         }
-        $is_flexible_shipping = self::starts_with( $chosen_shipping_id, 'flexible_shipping' );
-        if ( $is_flexible_shipping ) {
-            $amount = self::get_flexible_shipping_method_min_amount( $chosen_shipping_id );
-            if ( self::only_virtual_products() ) {
+        /**
+         * Third-part shipping methods check.
+         * First check by chosen shipping method.
+         */
+        $amount = Compatibility::get_custom_shipping_min_amount( $chosen_shipping_id );
+        if ( $amount !== null ) {
+            if ( $only_virtual_products_in_cart ) {
                 $amount = null;
             }
             return apply_filters( 'fsl_min_amount', $amount );
         }
+        /**
+         * Standard WooCommerce Shipping methods check.
+         * 
+         */
         $amount = null;
         $cart = WC()->cart;
         if ( $cart ) {
@@ -105,14 +102,12 @@ class Helper {
                     }
                     break;
                 }
-                if ( self::starts_with( $method->id, 'flexible_shipping' ) ) {
-                    $flexible_shipping_method_id = $method->id . ':' . $method->instance_id;
-                    $amount = self::get_flexible_shipping_method_min_amount( $flexible_shipping_method_id );
-                }
+                // Run compatibility checks
+                $amount = Compatibility::get_custom_shipping_min_amount( $method->id, $method );
             }
-            if ( $only_virtual_products_in_cart ) {
-                $amount = null;
-            }
+        }
+        if ( $only_virtual_products_in_cart ) {
+            $amount = null;
         }
         return apply_filters( 'fsl_min_amount', $amount );
     }
@@ -127,9 +122,11 @@ class Helper {
         $only_virtual = false;
         $cart = WC()->cart;
         if ( $cart ) {
+            // Allow filtering whether downloadable products should be treated as virtual
+            $include_downloadable = apply_filters( 'fsl_treat_downloadables_as_virtual', true );
             foreach ( $cart->get_cart() as $cart_item ) {
                 $product = $cart_item['data'];
-                if ( $product->is_virtual() || $product->is_downloadable() ) {
+                if ( $product->is_virtual() || $include_downloadable && $product->is_downloadable() ) {
                     $only_virtual = true;
                 } else {
                     $only_virtual = false;

@@ -3,7 +3,7 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 5.5
-Stable tag: 3.2.2
+Stable tag: 3.3.0
 Tested up to: 6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -51,7 +51,7 @@ Give your customers a smooth shopping journey and increase your average order va
 - Easy to use, no coding required
 - Compatible with: 
     - Table Rate Shipping Method for WooCommerce by Flexible Shipping
-    - Compatible with WooCommerce Advanced Free Shipping
+    - WooCommerce Advanced Free Shipping
 
 ### Get More Options in Free Shipping Label Pro
 
@@ -81,6 +81,7 @@ With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), 
     - Elementor
     - FunnelKit
     - WPC Fly Cart
+    - Side Cart
 - and more!
 
 ### Add Additional Steps/Levels with FSL Discount Add-On
@@ -171,6 +172,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.3.0 =
+
+*2025-02-25*
+
+* Add - `fsl_treat_downloadables_as_virtual` filter hook
+* Add - Compatibility with Advanced Free Shipping plugin
+* Update - Settings pages
 
 = 3.2.2 =
 
