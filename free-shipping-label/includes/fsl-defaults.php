@@ -60,7 +60,8 @@ class Defaults
             'bar_type'               => 'linear',
             'indicator_icon'         => '',
             'indicator_icon_size'    => 24,
-            'indicator_icon_bg_color' => '#ffffff',
+            'indicator_icon_shape'   => 'rounded',
+            'indicator_icon_bg_color' => '#95578a',
             'circle_size'            => 150,
             'inside_circle'          => 'icon',
             'icon'                   => 'delivery-truck-5',
@@ -158,6 +159,8 @@ class Defaults
     {
         $options = [
             'enable_label'                    => 0,
+            'exclude'                         => [],
+            'include_shipping_class'          => '',
             'show_on_single_simple_product'   => 1,
             'show_on_single_variable_product' => 1,
             'show_on_single_variation'        => 1,
@@ -167,7 +170,6 @@ class Defaults
             'text_color'                      => '#000000',
             'bg_color'                        => '#ffffff',
             'hide_border_shadow'              => 0,
-            'exclude'                         => [],
             'label_over_image'                => 0,
             'position'                        => 'top-left',
             'margin_y'                        => '32px',

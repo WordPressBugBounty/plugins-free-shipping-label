@@ -30,6 +30,12 @@ class FSL_Label {
      */
     private $excluded_products;
 
+    /**
+     * Included shipping class.
+     * 
+     */
+    private $include_shipping_class;
+
     public function __construct() {
     }
 
@@ -42,7 +48,8 @@ class FSL_Label {
      */
     public function public_data() {
         $this->fsl_label_options = (DEVNET_FSL_OPTIONS['label'] ?? []) + Defaults::label();
-        $this->free_shipping_min_amount = Helper::get_free_shipping_min_amount();
+        $this->free_shipping_min_amount = (float) Helper::get_free_shipping_min_amount();
+        $this->include_shipping_class = DEVNET_FSL_OPTIONS['label']['include_shipping_class'] ?? '';
         $excluded = Helper::label_excluded( 'ids' );
         if ( isset( $excluded['category'] ) ) {
             $this->excluded_categories = array_flip( $excluded['category'] );
@@ -79,6 +86,13 @@ class FSL_Label {
             $regular_price = $product->get_regular_price();
             $sale_price = $product->get_sale_price();
             $price = ( $sale_price ? $sale_price : $regular_price );
+        }
+        if ( !empty( $this->include_shipping_class ) ) {
+            $shipping_class_id = (int) $product->get_shipping_class_id();
+            if ( (int) $this->include_shipping_class === $shipping_class_id ) {
+                // Set to the highest value that will be much higher than free shipping threshold.
+                $price = PHP_INT_MAX;
+            }
         }
         $price = apply_filters( 'fsl_product_price', $price, $product );
         $label_html = '';

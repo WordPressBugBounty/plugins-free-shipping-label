@@ -5,7 +5,7 @@ namespace Devnet\FSL\Admin;
 /**
  * Settings API wrapper class.
  * 
- * @updated    16.10.2024.
+ * @updated    10.03.2025.
  */
 
 class Settings_API
@@ -95,6 +95,12 @@ class Settings_API
     {
         //register settings sections
         foreach ($this->settings_sections as $section) {
+
+            // If set tabs, skip adding options and settings sections. We'll just use it as a wrapper.
+            if (filter_var($section['tabs'] ?? false, FILTER_VALIDATE_BOOL)) {
+                continue;
+            }
+
             if (false == get_option($section['id'])) {
                 add_option($section['id']);
             }
@@ -117,37 +123,45 @@ class Settings_API
         //register settings fields
         foreach ($this->settings_fields as $section => $field) {
             foreach ($field as $option) {
-                $name     = $option['name'];
-                $type     = isset($option['type']) ? $option['type'] : 'text';
-                $label    = isset($option['label']) ? $option['label'] : '';
-                $callback = isset($option['callback']) ? $option['callback'] : [$this, 'callback_' . $type];
+                $name     = $option['name'] ?? '';
+                $type     = $option['type'] ?? 'text';
+                $label    = $option['label'] ?? '';
+                $callback = $option['callback'] ?? [$this, 'callback_' . $type];
 
                 $args = [
                     'id'                => $name,
-                    'class'             => isset($option['class']) ? $option['class'] : $name,
+                    'class'             => $option['class'] ?? $name,
                     'label_for'         => "{$section}[{$name}]",
-                    'desc'              => isset($option['desc']) ? $option['desc'] : '',
+                    'desc'              => $option['desc'] ?? '',
                     'name'              => $label,
                     'section'           => $section,
-                    'size'              => isset($option['size']) ? $option['size'] : null,
-                    'options'           => isset($option['options']) ? $option['options'] : '',
-                    'optgroup'          => isset($option['optgroup']) ? $option['optgroup'] : [],
-                    'std'               => isset($option['default']) ? $option['default'] : '',
-                    'sanitize_callback' => isset($option['sanitize_callback']) ? $option['sanitize_callback'] : '',
+                    'size'              => $option['size'] ?? null,
+                    'options'           => $option['options'] ?? '',
+                    'optgroup'          => $option['optgroup'] ?? [],
+                    'std'               => $option['default'] ?? '',
+                    'sanitize_callback' => $option['sanitize_callback'] ?? '',
                     'type'              => $type,
-                    'placeholder'       => isset($option['placeholder']) ? $option['placeholder'] : '',
-                    'min'               => isset($option['min']) ? $option['min'] : '',
-                    'max'               => isset($option['max']) ? $option['max'] : '',
-                    'step'              => isset($option['step']) ? $option['step'] : '',
-                    'multiple'          => isset($option['multiple']) ? $option['multiple'] : '',
-                    'unit'              => isset($option['unit']) ? $option['unit'] : '',
-                    'rows'              => isset($option['rows']) ? $option['rows'] : '',
-                    'cols'              => isset($option['cols']) ? $option['cols'] : '',
-                    'disabled'          => isset($option['disabled']) ? $option['disabled'] : '',
-                    'pro_plan'          => isset($option['pro_plan']) ? $option['pro_plan'] : '',
-                    'fields'             => isset($option['fields']) ? $option['fields'] : [],
-                    'repeatable'        => isset($option['repeatable']) ? $option['repeatable'] : false,
+                    'placeholder'       => $option['placeholder'] ?? '',
+                    'min'               => $option['min'] ?? '',
+                    'max'               => $option['max'] ?? '',
+                    'step'              => $option['step'] ?? '',
+                    'multiple'          => $option['multiple'] ?? '',
+                    'unit'              => $option['unit'] ?? '',
+                    'rows'              => $option['rows'] ?? '',
+                    'cols'              => $option['cols'] ?? '',
+                    'disabled'          => $option['disabled'] ?? '',
+                    'pro_plan'          => $option['pro_plan'] ?? '',
+                    'fields'             => $option['fields'] ?? [],
+                    'repeatable'        => $option['repeatable'] ?? false,
+                    'tab_id'            => $option['tab_id'] ?? '',
+                    'tabs'              => $option['tabs'] ?? [],
+                    'prefix'             => $option['prefix'] ?? false,
                 ];
+
+
+                if (!empty($args['tab_id'])) {
+                    $args['class'] .= ' ' . $section . '_' . $args['tab_id'];
+                }
 
                 if ($args['pro_plan']) {
                     $args['class'] .= ' ' . $args['pro_plan'];
@@ -159,6 +173,12 @@ class Settings_API
 
         // creates our settings in the options table
         foreach ($this->settings_sections as $section) {
+
+            // If set tabs, skip registering the section..
+            if (filter_var($section['tabs'] ?? false, FILTER_VALIDATE_BOOL)) {
+                continue;
+            }
+
             register_setting($section['id'], $section['id'], [$this, 'sanitize_options']);
         }
     }
@@ -773,6 +793,7 @@ class Settings_API
         printf('<p class="description">%s</p>', wp_kses($args['desc'], $this->kses_args()));
     }
 
+
     /**
      * Displays a select box for creating the pages select box
      *
@@ -892,46 +913,122 @@ class Settings_API
         echo '<h2 class="nav-tab-wrapper">';
 
         foreach ($this->settings_sections as $tab) {
-            printf('<a href="#%1$s" class="nav-tab" id="%1$s-tab">%2$s</a>', esc_attr($tab['id']), esc_html($tab['title']));
+
+            $is_inner_tab = $tab['parent'] ?? null;
+
+            // Skip rendering top nav tabs for inner navigation.
+            if ($is_inner_tab) {
+                continue;
+            }
+
+            $has_tabs = (filter_var($tab['tabs'] ?? false, FILTER_VALIDATE_BOOL));
+            $classes = 'nav-tab';
+
+            $classes = $has_tabs ? $classes . ' has-tabs' : $classes;
+
+            printf('<a href="#%1$s" class="%2$s" id="%1$s-tab">%3$s</a>', esc_attr($tab['id']), esc_attr($classes), esc_html($tab['title']));
         }
 
         echo '</h2>';
     }
 
     /**
-     * Show the section settings forms
-     *
-     * This function displays every sections in a different form
+     * Show inner navigation if is set.
      */
+    public function inner_navigation($form)
+    {
+        $form_id = $form['id'] ?? '';
+        $title   = $form['title'] ?? '';
+
+        $tab_items = '';
+
+        foreach ($this->settings_sections as $tab) {
+
+            $parent_id  = $tab['parent'] ?? '';
+
+            if ($form_id !== $parent_id) continue;
+
+            $tab_items .= sprintf('<a href="#%1$s" class="nav-tab inner-tab" id="%1$s-tab">%2$s</a>', esc_attr($tab['id']), esc_html($tab['title']));
+        }
+
+        if ($tab_items) {
+
+            echo '<h2>' . esc_html($title) . '</h2>';
+            echo '<div class="nav-tab-wrapper">' . wp_kses_post($tab_items) . '</div>';
+        }
+    }
+
     public function show_forms()
     {
-?>
-        <div class="metabox-holder">
-            <?php foreach ($this->settings_sections as $form) { ?>
-                <div id="<?php echo esc_attr($form['id']); ?>" class="group" style="display: none;">
-                    <form method="post" action="options.php">
-                        <?php
+        echo '<div class="metabox-holder">';
 
-                        do_action($this->plugin_slug . '_form_top', $form);
-                        do_action($this->plugin_slug . '_form_top_' . $form['id'], $form);
+        foreach ($this->settings_sections as $form) {
+            $is_tab = $form['parent'] ?? false;
+            $has_tabs = filter_var($form['tabs'] ?? false, FILTER_VALIDATE_BOOL);
 
-                        settings_fields($form['id']);
-                        do_settings_sections($form['id']);
+            // Skip inner tabs
+            if ($is_tab) {
+                continue;
+            }
 
-                        do_action($this->plugin_slug . '_form_bottom_' . $form['id'], $form);
-                        do_action($this->plugin_slug . '_form_bottom', $form);
+            $classes = 'group' . ($has_tabs ? ' has-tabs' : '');
+            $form_id = esc_attr($form['id']);
 
-                        if (isset($this->settings_fields[$form['id']])) :
-                        ?>
-                            <div class="submit-row" style="padding-left: 10px">
-                                <?php submit_button(); ?>
-                            </div>
-                        <?php endif; ?>
-                    </form>
-                </div>
-            <?php } ?>
-        </div>
-<?php
+            echo '<div id="' . $form_id . '" class="' . esc_attr($classes) . '" style="display: none;">';
 
+            $this->inner_navigation($form);
+
+            if ($has_tabs) {
+                $this->render_inner_tabs($form['id']); // Call function to render inner tabs
+            } else {
+                $this->render_form($form);
+            }
+
+            echo '</div>'; // Close section div
+        }
+
+        echo '</div>';
+    }
+
+    /**
+     * Function to render inner tabs of a parent section.
+     */
+    private function render_inner_tabs($parent_id)
+    {
+        foreach ($this->settings_sections as $tab) {
+            if (($tab['parent'] ?? '') === $parent_id) {
+
+                echo '<div id="' . esc_attr($tab['id']) . '" class="group" style="display: none;">';
+
+                $this->render_form($tab);
+
+                echo '</div>'; // Close section div
+            }
+        }
+    }
+
+    /**
+     * Function to render the settings form.
+     */
+    private function render_form($form)
+    {
+        echo '<form method="post" action="options.php">';
+
+        do_action($this->plugin_slug . '_form_top', $form);
+        do_action($this->plugin_slug . '_form_top_' . $form['id'], $form);
+
+        settings_fields($form['id']);
+        do_settings_sections($form['id']);
+
+        do_action($this->plugin_slug . '_form_bottom_' . $form['id'], $form);
+        do_action($this->plugin_slug . '_form_bottom', $form);
+
+        if (isset($this->settings_fields[$form['id']])) {
+            echo '<div class="submit-row" style="padding-left: 10px">';
+            submit_button();
+            echo '</div>';
+        }
+
+        echo '</form>';
     }
 }

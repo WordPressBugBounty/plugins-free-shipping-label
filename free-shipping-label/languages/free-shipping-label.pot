@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0+.
 msgid ""
 msgstr ""
-"Project-Id-Version: Free Shipping Label 3.3.0\n"
+"Project-Id-Version: Free Shipping Label 3.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/free-shipping-label\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-02-24T11:08:08+00:00\n"
+"POT-Creation-Date: 2025-03-18T10:10:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: free-shipping-label\n"
@@ -147,9 +147,9 @@ msgid "Shine "
 msgstr ""
 
 #: admin/fsl-options.php:154
-#: admin/fsl-options.php:1153
+#: admin/fsl-options.php:1175
 #: DIST/plugin/admin/fsl-options.php:154
-#: DIST/plugin/admin/fsl-options.php:1153
+#: DIST/plugin/admin/fsl-options.php:1167
 msgid "Hide border shadow"
 msgstr ""
 
@@ -175,943 +175,972 @@ msgstr ""
 
 #: admin/fsl-options.php:176
 #: DIST/plugin/admin/fsl-options.php:176
+msgid "Indicator icon shape"
+msgstr ""
+
+#: admin/fsl-options.php:178
+#: DIST/plugin/admin/fsl-options.php:178
+msgid "Round"
+msgstr ""
+
+#: admin/fsl-options.php:179
+#: DIST/plugin/admin/fsl-options.php:179
+msgid "Rounded "
+msgstr ""
+
+#: admin/fsl-options.php:180
+#: DIST/plugin/admin/fsl-options.php:180
+msgid "Square "
+msgstr ""
+
+#: admin/fsl-options.php:187
+#: DIST/plugin/admin/fsl-options.php:187
 msgid "Indicator Icon size"
 msgstr ""
 
-#: admin/fsl-options.php:186
-#: DIST/plugin/admin/fsl-options.php:186
+#: admin/fsl-options.php:197
+#: DIST/plugin/admin/fsl-options.php:197
 msgid "Indicator Icon background color"
 msgstr ""
 
-#: admin/fsl-options.php:192
-#: DIST/plugin/admin/fsl-options.php:192
+#: admin/fsl-options.php:203
+#: DIST/plugin/admin/fsl-options.php:203
 msgid "Circle size"
 msgstr ""
 
-#: admin/fsl-options.php:193
-#: DIST/plugin/admin/fsl-options.php:193
+#: admin/fsl-options.php:204
+#: DIST/plugin/admin/fsl-options.php:204
 msgid "width and height in pixels"
-msgstr ""
-
-#: admin/fsl-options.php:194
-#: DIST/plugin/admin/fsl-options.php:194
-msgid "width and height in px"
 msgstr ""
 
 #: admin/fsl-options.php:205
 #: DIST/plugin/admin/fsl-options.php:205
+msgid "width and height in px"
+msgstr ""
+
+#: admin/fsl-options.php:216
+#: DIST/plugin/admin/fsl-options.php:216
 msgid "Inside circle"
 msgstr ""
 
-#: admin/fsl-options.php:207
-#: admin/fsl-options.php:886
-#: admin/fsl-options.php:978
-#: DIST/plugin/admin/fsl-options.php:207
-#: DIST/plugin/admin/fsl-options.php:886
-#: DIST/plugin/admin/fsl-options.php:978
+#: admin/fsl-options.php:218
+#: admin/fsl-options.php:899
+#: admin/fsl-options.php:992
+#: DIST/plugin/admin/fsl-options.php:218
+#: DIST/plugin/admin/fsl-options.php:899
+#: DIST/plugin/admin/fsl-options.php:992
 msgid "Nothing"
 msgstr ""
 
-#: admin/fsl-options.php:208
-#: DIST/plugin/admin/fsl-options.php:208
+#: admin/fsl-options.php:219
+#: DIST/plugin/admin/fsl-options.php:219
 msgid "Title "
 msgstr ""
 
-#: admin/fsl-options.php:209
-#: DIST/plugin/admin/fsl-options.php:209
+#: admin/fsl-options.php:220
+#: DIST/plugin/admin/fsl-options.php:220
 msgid "Description "
 msgstr ""
 
-#: admin/fsl-options.php:210
-#: DIST/plugin/admin/fsl-options.php:210
+#: admin/fsl-options.php:221
+#: DIST/plugin/admin/fsl-options.php:221
 msgid "Icon "
 msgstr ""
 
-#: admin/fsl-options.php:217
-#: DIST/plugin/admin/fsl-options.php:217
+#: admin/fsl-options.php:228
+#: DIST/plugin/admin/fsl-options.php:228
 msgid "Select icon"
 msgstr ""
 
-#: admin/fsl-options.php:224
-#: DIST/plugin/admin/fsl-options.php:224
+#: admin/fsl-options.php:235
+#: DIST/plugin/admin/fsl-options.php:235
 msgid "Icon color"
 msgstr ""
 
-#: admin/fsl-options.php:230
-#: DIST/plugin/admin/fsl-options.php:230
+#: admin/fsl-options.php:241
+#: DIST/plugin/admin/fsl-options.php:241
 msgid "Circle background color"
 msgstr ""
 
-#: admin/fsl-options.php:236
-#: admin/fsl-options.php:1139
-#: DIST/plugin/admin/fsl-options.php:236
-#: DIST/plugin/admin/fsl-options.php:1139
+#: admin/fsl-options.php:247
+#: admin/fsl-options.php:1161
+#: DIST/plugin/admin/fsl-options.php:247
+#: DIST/plugin/admin/fsl-options.php:1153
 msgid "Text color"
 msgstr ""
 
-#: admin/fsl-options.php:242
-#: DIST/plugin/admin/fsl-options.php:242
+#: admin/fsl-options.php:253
+#: DIST/plugin/admin/fsl-options.php:253
 msgid "Box background color"
 msgstr ""
 
-#: admin/fsl-options.php:248
-#: DIST/plugin/admin/fsl-options.php:248
+#: admin/fsl-options.php:259
+#: DIST/plugin/admin/fsl-options.php:259
 msgid "Box maximal width"
-msgstr ""
-
-#: admin/fsl-options.php:249
-#: DIST/plugin/admin/fsl-options.php:249
-msgid "max width in pixels, set 0 for full width"
-msgstr ""
-
-#: admin/fsl-options.php:250
-#: DIST/plugin/admin/fsl-options.php:250
-msgid "max width in px"
 msgstr ""
 
 #: admin/fsl-options.php:260
 #: DIST/plugin/admin/fsl-options.php:260
-msgid "Box alignment"
+msgid "max width in pixels, set 0 for full width"
 msgstr ""
 
-#: admin/fsl-options.php:262
-#: admin/fsl-options.php:318
-#: DIST/plugin/admin/fsl-options.php:262
-#: DIST/plugin/admin/fsl-options.php:318
-msgid "center"
-msgstr ""
-
-#: admin/fsl-options.php:263
-#: admin/fsl-options.php:319
-#: DIST/plugin/admin/fsl-options.php:263
-#: DIST/plugin/admin/fsl-options.php:319
-msgid "Left"
-msgstr ""
-
-#: admin/fsl-options.php:264
-#: admin/fsl-options.php:320
-#: DIST/plugin/admin/fsl-options.php:264
-#: DIST/plugin/admin/fsl-options.php:320
-msgid "right"
+#: admin/fsl-options.php:261
+#: DIST/plugin/admin/fsl-options.php:261
+msgid "max width in px"
 msgstr ""
 
 #: admin/fsl-options.php:271
 #: DIST/plugin/admin/fsl-options.php:271
+msgid "Box alignment"
+msgstr ""
+
+#: admin/fsl-options.php:273
+#: admin/fsl-options.php:329
+#: DIST/plugin/admin/fsl-options.php:273
+#: DIST/plugin/admin/fsl-options.php:329
+msgid "center"
+msgstr ""
+
+#: admin/fsl-options.php:274
+#: admin/fsl-options.php:330
+#: DIST/plugin/admin/fsl-options.php:274
+#: DIST/plugin/admin/fsl-options.php:330
+msgid "Left"
+msgstr ""
+
+#: admin/fsl-options.php:275
+#: admin/fsl-options.php:331
+#: DIST/plugin/admin/fsl-options.php:275
+#: DIST/plugin/admin/fsl-options.php:331
+msgid "right"
+msgstr ""
+
+#: admin/fsl-options.php:282
+#: DIST/plugin/admin/fsl-options.php:282
 msgid "Center text"
-msgstr ""
-
-#: admin/fsl-options.php:277
-#: DIST/plugin/admin/fsl-options.php:277
-msgid "Bar border radius"
-msgstr ""
-
-#: admin/fsl-options.php:278
-#: DIST/plugin/admin/fsl-options.php:278
-msgid "Lower values create sharper corners. Set to 0 for a boxed shape."
 msgstr ""
 
 #: admin/fsl-options.php:288
 #: DIST/plugin/admin/fsl-options.php:288
+msgid "Bar border radius"
+msgstr ""
+
+#: admin/fsl-options.php:289
+#: DIST/plugin/admin/fsl-options.php:289
+msgid "Lower values create sharper corners. Set to 0 for a boxed shape."
+msgstr ""
+
+#: admin/fsl-options.php:299
+#: DIST/plugin/admin/fsl-options.php:299
 msgid "Remove bar stripes"
 msgstr ""
 
-#: admin/fsl-options.php:307
-#: DIST/plugin/admin/fsl-options.php:307
+#: admin/fsl-options.php:318
+#: DIST/plugin/admin/fsl-options.php:318
 msgid "Circular"
 msgstr ""
 
-#: admin/fsl-options.php:343
-#: DIST/plugin/admin/fsl-options.php:343
+#: admin/fsl-options.php:354
+#: DIST/plugin/admin/fsl-options.php:354
 msgid "Initial shipping zone"
 msgstr ""
 
-#: admin/fsl-options.php:344
-#: DIST/plugin/admin/fsl-options.php:344
+#: admin/fsl-options.php:355
+#: DIST/plugin/admin/fsl-options.php:355
 msgid "This zone's free shipping threshold will be used only if customer didn't already enter address."
 msgstr ""
 
-#: admin/fsl-options.php:351
-#: DIST/plugin/admin/fsl-options.php:351
+#: admin/fsl-options.php:362
+#: DIST/plugin/admin/fsl-options.php:362
 msgid "Enable custom threshold"
 msgstr ""
 
-#: admin/fsl-options.php:352
-#: DIST/plugin/admin/fsl-options.php:352
+#: admin/fsl-options.php:363
+#: DIST/plugin/admin/fsl-options.php:363
 msgid "This will ignore free shipping threshold in WooCommerce settings."
-msgstr ""
-
-#: admin/fsl-options.php:358
-#: DIST/plugin/admin/fsl-options.php:358
-msgid "Custom threshold - global"
-msgstr ""
-
-#: admin/fsl-options.php:359
-#: DIST/plugin/admin/fsl-options.php:359
-msgid "Set a Global Custom Threshold for manual control in situations where automatic detection isn't possible, ensuring accurate calculations for free shipping across all zones."
-msgstr ""
-
-#: admin/fsl-options.php:360
-#: DIST/plugin/admin/fsl-options.php:360
-msgid "Amount"
 msgstr ""
 
 #: admin/fsl-options.php:369
 #: DIST/plugin/admin/fsl-options.php:369
-msgid "Custom threshold per zone and shipping method"
+msgid "Custom threshold - global"
 msgstr ""
 
 #: admin/fsl-options.php:370
 #: DIST/plugin/admin/fsl-options.php:370
+msgid "Set a Global Custom Threshold for manual control in situations where automatic detection isn't possible, ensuring accurate calculations for free shipping across all zones."
+msgstr ""
+
+#: admin/fsl-options.php:371
+#: DIST/plugin/admin/fsl-options.php:371
+msgid "Amount"
+msgstr ""
+
+#: admin/fsl-options.php:380
+#: DIST/plugin/admin/fsl-options.php:380
+msgid "Custom threshold per zone and shipping method"
+msgstr ""
+
+#: admin/fsl-options.php:381
+#: DIST/plugin/admin/fsl-options.php:381
 msgid "Configure individual free shipping thresholds for each zone and its methods. Note that these settings take priority over the global threshold, providing specific criteria for shipping calculations within designated zones."
-msgstr ""
-
-#: admin/fsl-options.php:377
-#: DIST/plugin/admin/fsl-options.php:377
-msgid "Visibility"
-msgstr ""
-
-#: admin/fsl-options.php:378
-#: DIST/plugin/admin/fsl-options.php:378
-msgid "Show only for logged in users."
-msgstr ""
-
-#: admin/fsl-options.php:384
-#: DIST/plugin/admin/fsl-options.php:384
-msgid "Hide shipping rates when free shipping is available?"
-msgstr ""
-
-#: admin/fsl-options.php:387
-#: DIST/plugin/admin/fsl-options.php:387
-msgid "No"
 msgstr ""
 
 #: admin/fsl-options.php:388
 #: DIST/plugin/admin/fsl-options.php:388
-msgid "Hide all other shipping methods and only show \"Free Shipping\""
+msgid "Visibility"
 msgstr ""
 
 #: admin/fsl-options.php:389
 #: DIST/plugin/admin/fsl-options.php:389
+msgid "Show only for logged in users."
+msgstr ""
+
+#: admin/fsl-options.php:395
+#: DIST/plugin/admin/fsl-options.php:395
+msgid "Hide shipping rates when free shipping is available?"
+msgstr ""
+
+#: admin/fsl-options.php:398
+#: DIST/plugin/admin/fsl-options.php:398
+msgid "No"
+msgstr ""
+
+#: admin/fsl-options.php:399
+#: DIST/plugin/admin/fsl-options.php:399
+msgid "Hide all other shipping methods and only show \"Free Shipping\""
+msgstr ""
+
+#: admin/fsl-options.php:400
+#: DIST/plugin/admin/fsl-options.php:400
 msgid "Hide all other shipping methods and only show \"Free Shipping\" and \"Local Pickup\""
 msgstr ""
 
-#: admin/fsl-options.php:396
-#: DIST/plugin/admin/fsl-options.php:396
+#: admin/fsl-options.php:407
+#: DIST/plugin/admin/fsl-options.php:407
 msgid "Multilingual"
 msgstr ""
 
-#: admin/fsl-options.php:397
-#: DIST/plugin/admin/fsl-options.php:397
+#: admin/fsl-options.php:408
+#: DIST/plugin/admin/fsl-options.php:408
 msgid "Use your own translated strings."
 msgstr ""
 
-#: admin/fsl-options.php:403
-#: DIST/plugin/admin/fsl-options.php:403
+#: admin/fsl-options.php:414
+#: DIST/plugin/admin/fsl-options.php:414
 msgid "Delete plugin data on deactivation"
 msgstr ""
 
-#: admin/fsl-options.php:438
-#: admin/fsl-options.php:672
-#: DIST/plugin/admin/fsl-options.php:438
-#: DIST/plugin/admin/fsl-options.php:672
+#: admin/fsl-options.php:449
+#: admin/fsl-options.php:684
+#: DIST/plugin/admin/fsl-options.php:449
+#: DIST/plugin/admin/fsl-options.php:684
 msgid "-- FunnelKit --"
 msgstr ""
 
-#: admin/fsl-options.php:440
-#: admin/fsl-options.php:674
-#: DIST/plugin/admin/fsl-options.php:440
-#: DIST/plugin/admin/fsl-options.php:674
+#: admin/fsl-options.php:451
+#: admin/fsl-options.php:686
+#: DIST/plugin/admin/fsl-options.php:451
+#: DIST/plugin/admin/fsl-options.php:686
 msgid "After header"
 msgstr ""
 
-#: admin/fsl-options.php:441
-#: admin/fsl-options.php:675
-#: DIST/plugin/admin/fsl-options.php:441
-#: DIST/plugin/admin/fsl-options.php:675
+#: admin/fsl-options.php:452
+#: admin/fsl-options.php:687
+#: DIST/plugin/admin/fsl-options.php:452
+#: DIST/plugin/admin/fsl-options.php:687
 msgid "Before cart items"
 msgstr ""
 
-#: admin/fsl-options.php:442
-#: admin/fsl-options.php:676
-#: DIST/plugin/admin/fsl-options.php:442
-#: DIST/plugin/admin/fsl-options.php:676
+#: admin/fsl-options.php:453
+#: admin/fsl-options.php:688
+#: DIST/plugin/admin/fsl-options.php:453
+#: DIST/plugin/admin/fsl-options.php:688
 msgid "After cart items"
 msgstr ""
 
-#: admin/fsl-options.php:443
-#: admin/fsl-options.php:535
-#: admin/fsl-options.php:650
-#: admin/fsl-options.php:677
-#: DIST/plugin/admin/fsl-options.php:443
-#: DIST/plugin/admin/fsl-options.php:535
-#: DIST/plugin/admin/fsl-options.php:650
-#: DIST/plugin/admin/fsl-options.php:677
+#: admin/fsl-options.php:454
+#: admin/fsl-options.php:546
+#: admin/fsl-options.php:662
+#: admin/fsl-options.php:689
+#: DIST/plugin/admin/fsl-options.php:454
+#: DIST/plugin/admin/fsl-options.php:546
+#: DIST/plugin/admin/fsl-options.php:662
+#: DIST/plugin/admin/fsl-options.php:689
 msgid "Before button"
 msgstr ""
 
-#: admin/fsl-options.php:444
-#: admin/fsl-options.php:536
-#: admin/fsl-options.php:651
-#: admin/fsl-options.php:678
-#: DIST/plugin/admin/fsl-options.php:444
-#: DIST/plugin/admin/fsl-options.php:536
-#: DIST/plugin/admin/fsl-options.php:651
-#: DIST/plugin/admin/fsl-options.php:678
+#: admin/fsl-options.php:455
+#: admin/fsl-options.php:547
+#: admin/fsl-options.php:663
+#: admin/fsl-options.php:690
+#: DIST/plugin/admin/fsl-options.php:455
+#: DIST/plugin/admin/fsl-options.php:547
+#: DIST/plugin/admin/fsl-options.php:663
+#: DIST/plugin/admin/fsl-options.php:690
 msgid "After button"
 msgstr ""
 
-#: admin/fsl-options.php:456
-#: admin/fsl-options.php:689
-#: DIST/plugin/admin/fsl-options.php:456
-#: DIST/plugin/admin/fsl-options.php:689
+#: admin/fsl-options.php:467
+#: admin/fsl-options.php:701
+#: DIST/plugin/admin/fsl-options.php:467
+#: DIST/plugin/admin/fsl-options.php:701
 msgid "-- WPC Fly Cart --"
 msgstr ""
 
-#: admin/fsl-options.php:458
-#: admin/fsl-options.php:691
-#: DIST/plugin/admin/fsl-options.php:458
-#: DIST/plugin/admin/fsl-options.php:691
+#: admin/fsl-options.php:469
+#: admin/fsl-options.php:703
+#: DIST/plugin/admin/fsl-options.php:469
+#: DIST/plugin/admin/fsl-options.php:703
 msgid "Above area"
 msgstr ""
 
-#: admin/fsl-options.php:459
-#: admin/fsl-options.php:692
-#: DIST/plugin/admin/fsl-options.php:459
-#: DIST/plugin/admin/fsl-options.php:692
+#: admin/fsl-options.php:470
+#: admin/fsl-options.php:704
+#: DIST/plugin/admin/fsl-options.php:470
+#: DIST/plugin/admin/fsl-options.php:704
 msgid "Above cart items"
 msgstr ""
 
-#: admin/fsl-options.php:460
-#: admin/fsl-options.php:693
-#: DIST/plugin/admin/fsl-options.php:460
-#: DIST/plugin/admin/fsl-options.php:693
+#: admin/fsl-options.php:471
+#: admin/fsl-options.php:705
+#: DIST/plugin/admin/fsl-options.php:471
+#: DIST/plugin/admin/fsl-options.php:705
 msgid "Bellow cart items"
 msgstr ""
 
-#: admin/fsl-options.php:461
-#: admin/fsl-options.php:694
-#: DIST/plugin/admin/fsl-options.php:461
-#: DIST/plugin/admin/fsl-options.php:694
+#: admin/fsl-options.php:472
+#: admin/fsl-options.php:706
+#: DIST/plugin/admin/fsl-options.php:472
+#: DIST/plugin/admin/fsl-options.php:706
 msgid "Above bottom"
 msgstr ""
 
-#: admin/fsl-options.php:462
-#: admin/fsl-options.php:695
-#: DIST/plugin/admin/fsl-options.php:462
-#: DIST/plugin/admin/fsl-options.php:695
+#: admin/fsl-options.php:473
+#: admin/fsl-options.php:707
+#: DIST/plugin/admin/fsl-options.php:473
+#: DIST/plugin/admin/fsl-options.php:707
 msgid "Above buttons"
 msgstr ""
 
-#: admin/fsl-options.php:463
-#: admin/fsl-options.php:696
-#: DIST/plugin/admin/fsl-options.php:463
-#: DIST/plugin/admin/fsl-options.php:696
+#: admin/fsl-options.php:474
+#: admin/fsl-options.php:708
+#: DIST/plugin/admin/fsl-options.php:474
+#: DIST/plugin/admin/fsl-options.php:708
 msgid "Bellow buttons"
 msgstr ""
 
-#: admin/fsl-options.php:464
-#: admin/fsl-options.php:697
-#: DIST/plugin/admin/fsl-options.php:464
-#: DIST/plugin/admin/fsl-options.php:697
+#: admin/fsl-options.php:475
+#: admin/fsl-options.php:709
+#: DIST/plugin/admin/fsl-options.php:475
+#: DIST/plugin/admin/fsl-options.php:709
 msgid "Bellow bottom"
 msgstr ""
 
-#: admin/fsl-options.php:465
-#: admin/fsl-options.php:698
-#: DIST/plugin/admin/fsl-options.php:465
-#: DIST/plugin/admin/fsl-options.php:698
+#: admin/fsl-options.php:476
+#: admin/fsl-options.php:710
+#: DIST/plugin/admin/fsl-options.php:476
+#: DIST/plugin/admin/fsl-options.php:710
 msgid "Bellow area"
 msgstr ""
 
-#: admin/fsl-options.php:476
-#: admin/fsl-options.php:708
-#: DIST/plugin/admin/fsl-options.php:476
-#: DIST/plugin/admin/fsl-options.php:708
+#: admin/fsl-options.php:487
+#: admin/fsl-options.php:720
+#: DIST/plugin/admin/fsl-options.php:487
+#: DIST/plugin/admin/fsl-options.php:720
 msgid "-- Side Cart --"
 msgstr ""
 
-#: admin/fsl-options.php:478
-#: admin/fsl-options.php:710
-#: DIST/plugin/admin/fsl-options.php:478
-#: DIST/plugin/admin/fsl-options.php:710
+#: admin/fsl-options.php:489
+#: admin/fsl-options.php:722
+#: DIST/plugin/admin/fsl-options.php:489
+#: DIST/plugin/admin/fsl-options.php:722
 msgid "Header"
 msgstr ""
 
-#: admin/fsl-options.php:479
-#: admin/fsl-options.php:711
-#: DIST/plugin/admin/fsl-options.php:479
-#: DIST/plugin/admin/fsl-options.php:711
+#: admin/fsl-options.php:490
+#: admin/fsl-options.php:723
+#: DIST/plugin/admin/fsl-options.php:490
+#: DIST/plugin/admin/fsl-options.php:723
 msgid "Before products"
 msgstr ""
 
-#: admin/fsl-options.php:480
-#: admin/fsl-options.php:712
-#: DIST/plugin/admin/fsl-options.php:480
-#: DIST/plugin/admin/fsl-options.php:712
+#: admin/fsl-options.php:491
+#: admin/fsl-options.php:724
+#: DIST/plugin/admin/fsl-options.php:491
+#: DIST/plugin/admin/fsl-options.php:724
 msgid "After products"
 msgstr ""
 
-#: admin/fsl-options.php:481
-#: admin/fsl-options.php:713
-#: DIST/plugin/admin/fsl-options.php:481
-#: DIST/plugin/admin/fsl-options.php:713
+#: admin/fsl-options.php:492
+#: admin/fsl-options.php:725
+#: DIST/plugin/admin/fsl-options.php:492
+#: DIST/plugin/admin/fsl-options.php:725
 msgid "Footer start"
 msgstr ""
 
-#: admin/fsl-options.php:482
-#: admin/fsl-options.php:714
-#: DIST/plugin/admin/fsl-options.php:482
-#: DIST/plugin/admin/fsl-options.php:714
+#: admin/fsl-options.php:493
+#: admin/fsl-options.php:726
+#: DIST/plugin/admin/fsl-options.php:493
+#: DIST/plugin/admin/fsl-options.php:726
 msgid "Footer end"
 msgstr ""
 
-#: admin/fsl-options.php:493
-#: DIST/plugin/admin/fsl-options.php:493
+#: admin/fsl-options.php:504
+#: DIST/plugin/admin/fsl-options.php:504
 msgid "Enable Progress Bar"
-msgstr ""
-
-#: admin/fsl-options.php:499
-#: DIST/plugin/admin/fsl-options.php:499
-msgid "Enable on Local Pickup"
-msgstr ""
-
-#: admin/fsl-options.php:500
-#: DIST/plugin/admin/fsl-options.php:500
-msgid "Show bar if Local Pickup is selected."
-msgstr ""
-
-#: admin/fsl-options.php:506
-#: DIST/plugin/admin/fsl-options.php:506
-msgid "Allow zero shipping cost"
-msgstr ""
-
-#: admin/fsl-options.php:509
-#: DIST/plugin/admin/fsl-options.php:509
-msgid "Free shipping is indicated by a shipping cost of zero. Enable this setting if a third-party shipping plugin is used and the progress bar appears despite selecting free shipping."
 msgstr ""
 
 #: admin/fsl-options.php:510
 #: DIST/plugin/admin/fsl-options.php:510
-msgid "Refer to the "
+msgid "Enable on Local Pickup"
 msgstr ""
 
 #: admin/fsl-options.php:511
-#: admin/fsl-options.php:1097
+#: DIST/plugin/admin/fsl-options.php:511
+msgid "Show bar if Local Pickup is selected."
+msgstr ""
+
+#: admin/fsl-options.php:517
+#: DIST/plugin/admin/fsl-options.php:517
+msgid "Allow zero shipping cost"
+msgstr ""
+
+#: admin/fsl-options.php:520
+#: DIST/plugin/admin/fsl-options.php:520
+msgid "Free shipping is indicated by a shipping cost of zero. Enable this setting if a third-party shipping plugin is used and the progress bar appears despite selecting free shipping."
+msgstr ""
+
+#: admin/fsl-options.php:521
+#: DIST/plugin/admin/fsl-options.php:521
+msgid "Refer to the "
+msgstr ""
+
+#: admin/fsl-options.php:522
+#: admin/fsl-options.php:1119
 #: admin/fsl-settings.php:157
 #: admin/fsl-settings.php:172
 #: admin/fsl-settings.php:187
-#: DIST/plugin/admin/fsl-options.php:511
-#: DIST/plugin/admin/fsl-options.php:1097
+#: DIST/plugin/admin/fsl-options.php:522
+#: DIST/plugin/admin/fsl-options.php:1111
 #: DIST/plugin/admin/fsl-settings.php:157
 #: DIST/plugin/admin/fsl-settings.php:172
 #: DIST/plugin/admin/fsl-settings.php:187
 msgid "documentation"
 msgstr ""
 
-#: admin/fsl-options.php:512
-#: admin/fsl-options.php:1098
-#: DIST/plugin/admin/fsl-options.php:512
-#: DIST/plugin/admin/fsl-options.php:1098
+#: admin/fsl-options.php:523
+#: admin/fsl-options.php:1120
+#: DIST/plugin/admin/fsl-options.php:523
+#: DIST/plugin/admin/fsl-options.php:1112
 msgid "for more information."
 msgstr ""
 
-#: admin/fsl-options.php:519
-#: DIST/plugin/admin/fsl-options.php:519
+#: admin/fsl-options.php:530
+#: DIST/plugin/admin/fsl-options.php:530
 msgid "Positions"
 msgstr ""
 
-#: admin/fsl-options.php:525
-#: DIST/plugin/admin/fsl-options.php:525
+#: admin/fsl-options.php:536
+#: DIST/plugin/admin/fsl-options.php:536
 msgid "Display on the cart page"
 msgstr ""
 
-#: admin/fsl-options.php:532
-#: DIST/plugin/admin/fsl-options.php:532
+#: admin/fsl-options.php:543
+#: DIST/plugin/admin/fsl-options.php:543
 msgid "Cart position"
 msgstr ""
 
-#: admin/fsl-options.php:534
-#: admin/fsl-options.php:649
-#: DIST/plugin/admin/fsl-options.php:534
-#: DIST/plugin/admin/fsl-options.php:649
+#: admin/fsl-options.php:545
+#: admin/fsl-options.php:661
+#: DIST/plugin/admin/fsl-options.php:545
+#: DIST/plugin/admin/fsl-options.php:661
 msgid "Before cart total"
 msgstr ""
 
-#: admin/fsl-options.php:537
-#: admin/fsl-options.php:652
-#: DIST/plugin/admin/fsl-options.php:537
-#: DIST/plugin/admin/fsl-options.php:652
+#: admin/fsl-options.php:548
+#: admin/fsl-options.php:664
+#: DIST/plugin/admin/fsl-options.php:548
+#: DIST/plugin/admin/fsl-options.php:664
 msgid "Before cart"
 msgstr ""
 
-#: admin/fsl-options.php:538
-#: admin/fsl-options.php:653
-#: DIST/plugin/admin/fsl-options.php:538
-#: DIST/plugin/admin/fsl-options.php:653
+#: admin/fsl-options.php:549
+#: admin/fsl-options.php:665
+#: DIST/plugin/admin/fsl-options.php:549
+#: DIST/plugin/admin/fsl-options.php:665
 msgid "After cart"
 msgstr ""
 
-#: admin/fsl-options.php:545
-#: DIST/plugin/admin/fsl-options.php:545
+#: admin/fsl-options.php:556
+#: DIST/plugin/admin/fsl-options.php:556
 msgid "Display on the checkout page"
 msgstr ""
 
-#: admin/fsl-options.php:551
-#: DIST/plugin/admin/fsl-options.php:551
+#: admin/fsl-options.php:562
+#: DIST/plugin/admin/fsl-options.php:562
 msgid "Checkout position"
 msgstr ""
 
-#: admin/fsl-options.php:553
-#: admin/fsl-options.php:636
-#: DIST/plugin/admin/fsl-options.php:553
-#: DIST/plugin/admin/fsl-options.php:636
+#: admin/fsl-options.php:564
+#: admin/fsl-options.php:648
+#: DIST/plugin/admin/fsl-options.php:564
+#: DIST/plugin/admin/fsl-options.php:648
 msgid "Before checkout form"
 msgstr ""
 
-#: admin/fsl-options.php:554
-#: admin/fsl-options.php:637
-#: DIST/plugin/admin/fsl-options.php:554
-#: DIST/plugin/admin/fsl-options.php:637
+#: admin/fsl-options.php:565
+#: admin/fsl-options.php:649
+#: DIST/plugin/admin/fsl-options.php:565
+#: DIST/plugin/admin/fsl-options.php:649
 msgid "After checkout form"
 msgstr ""
 
-#: admin/fsl-options.php:555
-#: admin/fsl-options.php:638
-#: DIST/plugin/admin/fsl-options.php:555
-#: DIST/plugin/admin/fsl-options.php:638
+#: admin/fsl-options.php:566
+#: admin/fsl-options.php:650
+#: DIST/plugin/admin/fsl-options.php:566
+#: DIST/plugin/admin/fsl-options.php:650
 msgid "Before order review"
 msgstr ""
 
-#: admin/fsl-options.php:556
-#: admin/fsl-options.php:639
-#: DIST/plugin/admin/fsl-options.php:556
-#: DIST/plugin/admin/fsl-options.php:639
+#: admin/fsl-options.php:567
+#: admin/fsl-options.php:651
+#: DIST/plugin/admin/fsl-options.php:567
+#: DIST/plugin/admin/fsl-options.php:651
 msgid "Before submit button"
 msgstr ""
 
-#: admin/fsl-options.php:557
-#: admin/fsl-options.php:640
-#: DIST/plugin/admin/fsl-options.php:557
-#: DIST/plugin/admin/fsl-options.php:640
+#: admin/fsl-options.php:568
+#: admin/fsl-options.php:652
+#: DIST/plugin/admin/fsl-options.php:568
+#: DIST/plugin/admin/fsl-options.php:652
 msgid "After submit button"
 msgstr ""
 
-#: admin/fsl-options.php:558
-#: admin/fsl-options.php:641
-#: DIST/plugin/admin/fsl-options.php:558
-#: DIST/plugin/admin/fsl-options.php:641
+#: admin/fsl-options.php:569
+#: admin/fsl-options.php:653
+#: DIST/plugin/admin/fsl-options.php:569
+#: DIST/plugin/admin/fsl-options.php:653
 msgid "Before payment"
 msgstr ""
 
-#: admin/fsl-options.php:565
-#: DIST/plugin/admin/fsl-options.php:565
+#: admin/fsl-options.php:576
+#: DIST/plugin/admin/fsl-options.php:576
 msgid "Display in the mini cart widget"
 msgstr ""
 
-#: admin/fsl-options.php:566
-#: DIST/plugin/admin/fsl-options.php:566
+#: admin/fsl-options.php:577
+#: DIST/plugin/admin/fsl-options.php:577
 msgid "Note: This option may not work if the mini-cart/side-cart lacks specific WooCommerce hook required for proper functionality, especially if customized by your theme or a third-party plugin."
 msgstr ""
 
-#: admin/fsl-options.php:572
-#: DIST/plugin/admin/fsl-options.php:572
+#: admin/fsl-options.php:583
+#: DIST/plugin/admin/fsl-options.php:583
 msgid "Minicart position"
 msgstr ""
 
-#: admin/fsl-options.php:574
-#: admin/fsl-options.php:661
-#: DIST/plugin/admin/fsl-options.php:574
-#: DIST/plugin/admin/fsl-options.php:661
+#: admin/fsl-options.php:585
+#: admin/fsl-options.php:673
+#: DIST/plugin/admin/fsl-options.php:585
+#: DIST/plugin/admin/fsl-options.php:673
 msgid "Before minicart"
 msgstr ""
 
-#: admin/fsl-options.php:575
-#: admin/fsl-options.php:662
-#: DIST/plugin/admin/fsl-options.php:575
-#: DIST/plugin/admin/fsl-options.php:662
+#: admin/fsl-options.php:586
+#: admin/fsl-options.php:674
+#: DIST/plugin/admin/fsl-options.php:586
+#: DIST/plugin/admin/fsl-options.php:674
 msgid "Before content"
 msgstr ""
 
-#: admin/fsl-options.php:576
-#: admin/fsl-options.php:663
-#: DIST/plugin/admin/fsl-options.php:576
-#: DIST/plugin/admin/fsl-options.php:663
+#: admin/fsl-options.php:587
+#: admin/fsl-options.php:675
+#: DIST/plugin/admin/fsl-options.php:587
+#: DIST/plugin/admin/fsl-options.php:675
 msgid "After content"
 msgstr ""
 
-#: admin/fsl-options.php:577
-#: admin/fsl-options.php:664
-#: DIST/plugin/admin/fsl-options.php:577
-#: DIST/plugin/admin/fsl-options.php:664
+#: admin/fsl-options.php:588
+#: admin/fsl-options.php:676
+#: DIST/plugin/admin/fsl-options.php:588
+#: DIST/plugin/admin/fsl-options.php:676
 msgid "Before buttons"
 msgstr ""
 
-#: admin/fsl-options.php:578
-#: admin/fsl-options.php:665
-#: DIST/plugin/admin/fsl-options.php:578
-#: DIST/plugin/admin/fsl-options.php:665
+#: admin/fsl-options.php:589
+#: admin/fsl-options.php:677
+#: DIST/plugin/admin/fsl-options.php:589
+#: DIST/plugin/admin/fsl-options.php:677
 msgid "After minicart"
 msgstr ""
 
-#: admin/fsl-options.php:586
-#: DIST/plugin/admin/fsl-options.php:586
+#: admin/fsl-options.php:597
+#: DIST/plugin/admin/fsl-options.php:597
 msgid "Shortcode"
 msgstr ""
 
-#: admin/fsl-options.php:741
-#: DIST/plugin/admin/fsl-options.php:741
+#: admin/fsl-options.php:753
+#: DIST/plugin/admin/fsl-options.php:753
 msgid "Enable Notice Bar"
 msgstr ""
 
-#: admin/fsl-options.php:747
-#: admin/fsl-options.php:1087
-#: DIST/plugin/admin/fsl-options.php:747
-#: DIST/plugin/admin/fsl-options.php:1087
+#: admin/fsl-options.php:759
+#: admin/fsl-options.php:1109
+#: DIST/plugin/admin/fsl-options.php:759
+#: DIST/plugin/admin/fsl-options.php:1101
 msgid "Position"
 msgstr ""
 
-#: admin/fsl-options.php:750
-#: admin/fsl-options.php:1089
-#: DIST/plugin/admin/fsl-options.php:750
-#: DIST/plugin/admin/fsl-options.php:1089
+#: admin/fsl-options.php:762
+#: admin/fsl-options.php:1111
+#: DIST/plugin/admin/fsl-options.php:762
+#: DIST/plugin/admin/fsl-options.php:1103
 msgid "Top Left"
 msgstr ""
 
-#: admin/fsl-options.php:751
-#: admin/fsl-options.php:1090
-#: DIST/plugin/admin/fsl-options.php:751
-#: DIST/plugin/admin/fsl-options.php:1090
+#: admin/fsl-options.php:763
+#: admin/fsl-options.php:1112
+#: DIST/plugin/admin/fsl-options.php:763
+#: DIST/plugin/admin/fsl-options.php:1104
 msgid "Top Right"
 msgstr ""
 
-#: admin/fsl-options.php:752
-#: admin/fsl-options.php:1091
-#: DIST/plugin/admin/fsl-options.php:752
-#: DIST/plugin/admin/fsl-options.php:1091
+#: admin/fsl-options.php:764
+#: admin/fsl-options.php:1113
+#: DIST/plugin/admin/fsl-options.php:764
+#: DIST/plugin/admin/fsl-options.php:1105
 msgid "Bottom Left"
 msgstr ""
 
-#: admin/fsl-options.php:753
-#: admin/fsl-options.php:1092
-#: DIST/plugin/admin/fsl-options.php:753
-#: DIST/plugin/admin/fsl-options.php:1092
+#: admin/fsl-options.php:765
+#: admin/fsl-options.php:1114
+#: DIST/plugin/admin/fsl-options.php:765
+#: DIST/plugin/admin/fsl-options.php:1106
 msgid "Bottom Right"
 msgstr ""
 
-#: admin/fsl-options.php:760
-#: admin/fsl-options.php:768
-#: admin/fsl-options.php:1105
-#: admin/fsl-options.php:1113
-#: DIST/plugin/admin/fsl-options.php:760
-#: DIST/plugin/admin/fsl-options.php:768
-#: DIST/plugin/admin/fsl-options.php:1105
-#: DIST/plugin/admin/fsl-options.php:1113
+#: admin/fsl-options.php:772
+#: admin/fsl-options.php:780
+#: admin/fsl-options.php:1127
+#: admin/fsl-options.php:1135
+#: DIST/plugin/admin/fsl-options.php:772
+#: DIST/plugin/admin/fsl-options.php:780
+#: DIST/plugin/admin/fsl-options.php:1119
+#: DIST/plugin/admin/fsl-options.php:1127
 msgid "Margin: "
 msgstr ""
 
-#: admin/fsl-options.php:761
-#: admin/fsl-options.php:1106
-#: DIST/plugin/admin/fsl-options.php:761
-#: DIST/plugin/admin/fsl-options.php:1106
+#: admin/fsl-options.php:773
+#: admin/fsl-options.php:1128
+#: DIST/plugin/admin/fsl-options.php:773
+#: DIST/plugin/admin/fsl-options.php:1120
 msgid "Vertical margin"
 msgstr ""
 
-#: admin/fsl-options.php:769
-#: admin/fsl-options.php:1114
-#: DIST/plugin/admin/fsl-options.php:769
-#: DIST/plugin/admin/fsl-options.php:1114
+#: admin/fsl-options.php:781
+#: admin/fsl-options.php:1136
+#: DIST/plugin/admin/fsl-options.php:781
+#: DIST/plugin/admin/fsl-options.php:1128
 msgid "Horizontal margin"
 msgstr ""
 
-#: admin/fsl-options.php:776
-#: DIST/plugin/admin/fsl-options.php:776
+#: admin/fsl-options.php:788
+#: DIST/plugin/admin/fsl-options.php:788
 msgid "Hide automatically"
 msgstr ""
 
-#: admin/fsl-options.php:777
-#: DIST/plugin/admin/fsl-options.php:777
+#: admin/fsl-options.php:789
+#: DIST/plugin/admin/fsl-options.php:789
 msgid "After adding to cart the Notice Bar will be visible for 5 seconds."
 msgstr ""
 
-#: admin/fsl-options.php:783
-#: admin/fsl-options.php:923
-#: DIST/plugin/admin/fsl-options.php:783
-#: DIST/plugin/admin/fsl-options.php:923
+#: admin/fsl-options.php:795
+#: admin/fsl-options.php:936
+#: DIST/plugin/admin/fsl-options.php:795
+#: DIST/plugin/admin/fsl-options.php:936
 msgid "Inherit Progress Bar Settings"
 msgstr ""
 
-#: admin/fsl-options.php:784
-#: admin/fsl-options.php:924
-#: DIST/plugin/admin/fsl-options.php:784
-#: DIST/plugin/admin/fsl-options.php:924
+#: admin/fsl-options.php:796
+#: admin/fsl-options.php:937
+#: DIST/plugin/admin/fsl-options.php:796
+#: DIST/plugin/admin/fsl-options.php:937
 msgid "Turn off for additional customization."
 msgstr ""
 
-#: admin/fsl-options.php:847
-#: admin/fsl-options.php:1166
-#: DIST/plugin/admin/fsl-options.php:847
-#: DIST/plugin/admin/fsl-options.php:1166
+#: admin/fsl-options.php:860
+#: admin/fsl-options.php:1188
+#: DIST/plugin/admin/fsl-options.php:860
+#: DIST/plugin/admin/fsl-options.php:1180
 msgid "Enable"
-msgstr ""
-
-#: admin/fsl-options.php:854
-#: DIST/plugin/admin/fsl-options.php:854
-msgid "Display"
-msgstr ""
-
-#: admin/fsl-options.php:856
-#: admin/fsl-options.php:967
-#: DIST/plugin/admin/fsl-options.php:856
-#: DIST/plugin/admin/fsl-options.php:967
-msgid "After free shipping reached"
-msgstr ""
-
-#: admin/fsl-options.php:857
-#: admin/fsl-options.php:968
-#: DIST/plugin/admin/fsl-options.php:857
-#: DIST/plugin/admin/fsl-options.php:968
-msgid "Extend free shipping progress bar"
-msgstr ""
-
-#: admin/fsl-options.php:858
-#: admin/fsl-options.php:969
-#: DIST/plugin/admin/fsl-options.php:858
-#: DIST/plugin/admin/fsl-options.php:969
-msgid "Only Gift Bar"
-msgstr ""
-
-#: admin/fsl-options.php:859
-#: admin/fsl-options.php:970
-#: DIST/plugin/admin/fsl-options.php:859
-#: DIST/plugin/admin/fsl-options.php:970
-msgid "Standalone"
-msgstr ""
-
-#: admin/fsl-options.php:866
-#: DIST/plugin/admin/fsl-options.php:866
-msgid "Threshold"
 msgstr ""
 
 #: admin/fsl-options.php:867
 #: DIST/plugin/admin/fsl-options.php:867
+msgid "Display"
+msgstr ""
+
+#: admin/fsl-options.php:869
+#: admin/fsl-options.php:981
+#: DIST/plugin/admin/fsl-options.php:869
+#: DIST/plugin/admin/fsl-options.php:981
+msgid "After free shipping reached"
+msgstr ""
+
+#: admin/fsl-options.php:870
+#: admin/fsl-options.php:982
+#: DIST/plugin/admin/fsl-options.php:870
+#: DIST/plugin/admin/fsl-options.php:982
+msgid "Extend free shipping progress bar"
+msgstr ""
+
+#: admin/fsl-options.php:871
+#: admin/fsl-options.php:983
+#: DIST/plugin/admin/fsl-options.php:871
+#: DIST/plugin/admin/fsl-options.php:983
+msgid "Only Gift Bar"
+msgstr ""
+
+#: admin/fsl-options.php:872
+#: admin/fsl-options.php:984
+#: DIST/plugin/admin/fsl-options.php:872
+#: DIST/plugin/admin/fsl-options.php:984
+msgid "Standalone"
+msgstr ""
+
+#: admin/fsl-options.php:879
+#: DIST/plugin/admin/fsl-options.php:879
+msgid "Threshold"
+msgstr ""
+
+#: admin/fsl-options.php:880
+#: DIST/plugin/admin/fsl-options.php:880
 msgid "Min. cart amount for qualifying for the free gift product"
 msgstr ""
 
-#: admin/fsl-options.php:875
-#: DIST/plugin/admin/fsl-options.php:875
+#: admin/fsl-options.php:888
+#: DIST/plugin/admin/fsl-options.php:888
 msgid "Gift product"
 msgstr ""
 
-#: admin/fsl-options.php:876
-#: DIST/plugin/admin/fsl-options.php:876
+#: admin/fsl-options.php:889
+#: DIST/plugin/admin/fsl-options.php:889
 msgid "Select the free gift product"
 msgstr ""
 
-#: admin/fsl-options.php:884
-#: DIST/plugin/admin/fsl-options.php:884
+#: admin/fsl-options.php:897
+#: DIST/plugin/admin/fsl-options.php:897
 msgid "After threshold reached"
 msgstr ""
 
-#: admin/fsl-options.php:887
-#: DIST/plugin/admin/fsl-options.php:887
+#: admin/fsl-options.php:900
+#: DIST/plugin/admin/fsl-options.php:900
 msgid "Automatically add to cart with price of 0"
 msgstr ""
 
-#: admin/fsl-options.php:888
-#: admin/fsl-options.php:980
-#: DIST/plugin/admin/fsl-options.php:888
-#: DIST/plugin/admin/fsl-options.php:980
+#: admin/fsl-options.php:901
+#: admin/fsl-options.php:994
+#: DIST/plugin/admin/fsl-options.php:901
+#: DIST/plugin/admin/fsl-options.php:994
 msgid "Add as order additional information"
 msgstr ""
 
-#: admin/fsl-options.php:890
-#: DIST/plugin/admin/fsl-options.php:890
+#: admin/fsl-options.php:903
+#: DIST/plugin/admin/fsl-options.php:903
 msgid "What should we do with the gift product after the threshold is reached?"
-msgstr ""
-
-#: admin/fsl-options.php:896
-#: DIST/plugin/admin/fsl-options.php:896
-msgid "Label"
 msgstr ""
 
 #: admin/fsl-options.php:909
 #: DIST/plugin/admin/fsl-options.php:909
+msgid "Label"
+msgstr ""
+
+#: admin/fsl-options.php:922
+#: DIST/plugin/admin/fsl-options.php:922
 msgid "Display Mode"
 msgstr ""
 
-#: admin/fsl-options.php:911
-#: admin/fsl-options.php:988
-#: DIST/plugin/admin/fsl-options.php:911
-#: DIST/plugin/admin/fsl-options.php:988
+#: admin/fsl-options.php:924
+#: admin/fsl-options.php:1002
+#: DIST/plugin/admin/fsl-options.php:924
+#: DIST/plugin/admin/fsl-options.php:1002
 msgid "Vertical list"
 msgstr ""
 
-#: admin/fsl-options.php:912
-#: admin/fsl-options.php:989
-#: DIST/plugin/admin/fsl-options.php:912
-#: DIST/plugin/admin/fsl-options.php:989
+#: admin/fsl-options.php:925
+#: admin/fsl-options.php:1003
+#: DIST/plugin/admin/fsl-options.php:925
+#: DIST/plugin/admin/fsl-options.php:1003
 msgid "Horizontal Labels"
 msgstr ""
 
-#: admin/fsl-options.php:913
-#: admin/fsl-options.php:990
-#: DIST/plugin/admin/fsl-options.php:913
-#: DIST/plugin/admin/fsl-options.php:990
+#: admin/fsl-options.php:926
+#: admin/fsl-options.php:1004
+#: DIST/plugin/admin/fsl-options.php:926
+#: DIST/plugin/admin/fsl-options.php:1004
 msgid "Horizontal Labels with description"
 msgstr ""
 
-#: admin/fsl-options.php:914
-#: admin/fsl-options.php:991
-#: DIST/plugin/admin/fsl-options.php:914
-#: DIST/plugin/admin/fsl-options.php:991
+#: admin/fsl-options.php:927
+#: admin/fsl-options.php:1005
+#: DIST/plugin/admin/fsl-options.php:927
+#: DIST/plugin/admin/fsl-options.php:1005
 msgid "Description Only Above"
 msgstr ""
 
-#: admin/fsl-options.php:915
-#: admin/fsl-options.php:992
-#: DIST/plugin/admin/fsl-options.php:915
-#: DIST/plugin/admin/fsl-options.php:992
+#: admin/fsl-options.php:928
+#: admin/fsl-options.php:1006
+#: DIST/plugin/admin/fsl-options.php:928
+#: DIST/plugin/admin/fsl-options.php:1006
 msgid "Description Only Beneath"
 msgstr ""
 
-#: admin/fsl-options.php:917
-#: DIST/plugin/admin/fsl-options.php:917
+#: admin/fsl-options.php:930
+#: DIST/plugin/admin/fsl-options.php:930
 msgid "Choose the layout style for displaying progress indicators and related text. Options include different arrangements for displaying free shipping and gift progress information."
 msgstr ""
 
-#: admin/fsl-options.php:979
-#: DIST/plugin/admin/fsl-options.php:979
+#: admin/fsl-options.php:993
+#: DIST/plugin/admin/fsl-options.php:993
 msgid "Automatically add to cart"
 msgstr ""
 
-#: admin/fsl-options.php:1016
-#: DIST/plugin/admin/fsl-options.php:1016
+#: admin/fsl-options.php:1030
+#: DIST/plugin/admin/fsl-options.php:1030
 msgid "Enable Product Label"
 msgstr ""
 
-#: admin/fsl-options.php:1023
-#: DIST/plugin/admin/fsl-options.php:1023
+#: admin/fsl-options.php:1037
+#: DIST/plugin/admin/fsl-options.php:1037
 msgid "Exclude"
 msgstr ""
 
-#: admin/fsl-options.php:1024
-#: DIST/plugin/admin/fsl-options.php:1024
+#: admin/fsl-options.php:1038
+#: DIST/plugin/admin/fsl-options.php:1038
 msgid "Select products or categories."
 msgstr ""
 
-#: admin/fsl-options.php:1032
-#: DIST/plugin/admin/fsl-options.php:1032
+#: admin/fsl-options.php:1046
+msgid "Show for Shipping Class"
+msgstr ""
+
+#: admin/fsl-options.php:1047
+msgid "Display the free shipping label on products assigned to the selected shipping class."
+msgstr ""
+
+#: admin/fsl-options.php:1054
+#: DIST/plugin/admin/fsl-options.php:1046
 msgid "Single product page"
 msgstr ""
 
-#: admin/fsl-options.php:1038
-#: admin/fsl-options.php:1066
-#: DIST/plugin/admin/fsl-options.php:1038
-#: DIST/plugin/admin/fsl-options.php:1066
+#: admin/fsl-options.php:1060
+#: admin/fsl-options.php:1088
+#: DIST/plugin/admin/fsl-options.php:1052
+#: DIST/plugin/admin/fsl-options.php:1080
 msgid "Enable for simple products"
 msgstr ""
 
-#: admin/fsl-options.php:1045
-#: admin/fsl-options.php:1073
-#: DIST/plugin/admin/fsl-options.php:1045
-#: DIST/plugin/admin/fsl-options.php:1073
+#: admin/fsl-options.php:1067
+#: admin/fsl-options.php:1095
+#: DIST/plugin/admin/fsl-options.php:1059
+#: DIST/plugin/admin/fsl-options.php:1087
 msgid "Enable for variable products"
 msgstr ""
 
-#: admin/fsl-options.php:1046
-#: admin/fsl-options.php:1074
-#: DIST/plugin/admin/fsl-options.php:1046
-#: DIST/plugin/admin/fsl-options.php:1074
+#: admin/fsl-options.php:1068
+#: admin/fsl-options.php:1096
+#: DIST/plugin/admin/fsl-options.php:1060
+#: DIST/plugin/admin/fsl-options.php:1088
 msgid "The label will only be displayed if the lowest variation price meets the requirements for free shipping."
 msgstr ""
 
-#: admin/fsl-options.php:1052
-#: DIST/plugin/admin/fsl-options.php:1052
+#: admin/fsl-options.php:1074
+#: DIST/plugin/admin/fsl-options.php:1066
 msgid "Enable for single variation"
 msgstr ""
 
-#: admin/fsl-options.php:1053
-#: DIST/plugin/admin/fsl-options.php:1053
+#: admin/fsl-options.php:1075
+#: DIST/plugin/admin/fsl-options.php:1067
 msgid "Customer needs to select a variation first."
 msgstr ""
 
-#: admin/fsl-options.php:1059
-#: DIST/plugin/admin/fsl-options.php:1059
+#: admin/fsl-options.php:1081
+#: DIST/plugin/admin/fsl-options.php:1073
 msgid "Listed products"
 msgstr ""
 
-#: admin/fsl-options.php:1060
-#: DIST/plugin/admin/fsl-options.php:1060
+#: admin/fsl-options.php:1082
+#: DIST/plugin/admin/fsl-options.php:1074
 msgid "Main shop page, category pages, archive pages, etc."
 msgstr ""
 
-#: admin/fsl-options.php:1080
-#: DIST/plugin/admin/fsl-options.php:1080
+#: admin/fsl-options.php:1102
+#: DIST/plugin/admin/fsl-options.php:1094
 msgid "Label over image"
 msgstr ""
 
-#: admin/fsl-options.php:1081
-#: DIST/plugin/admin/fsl-options.php:1081
+#: admin/fsl-options.php:1103
+#: DIST/plugin/admin/fsl-options.php:1095
 msgid "Show label over product image."
 msgstr ""
 
-#: admin/fsl-options.php:1096
-#: DIST/plugin/admin/fsl-options.php:1096
+#: admin/fsl-options.php:1118
+#: DIST/plugin/admin/fsl-options.php:1110
 msgid "Top positions align well with most themes, while bottom positions may display a label close to the button or price. Margins can be adjusted for further customization. Refer to the "
 msgstr ""
 
-#: admin/fsl-options.php:1122
-#: DIST/plugin/admin/fsl-options.php:1122
+#: admin/fsl-options.php:1144
+#: DIST/plugin/admin/fsl-options.php:1136
 msgid "Text Label"
 msgstr ""
 
-#: admin/fsl-options.php:1128
-#: DIST/plugin/admin/fsl-options.php:1128
+#: admin/fsl-options.php:1150
+#: DIST/plugin/admin/fsl-options.php:1142
 msgid "Label Text"
 msgstr ""
 
-#: admin/fsl-options.php:1146
-#: DIST/plugin/admin/fsl-options.php:1146
+#: admin/fsl-options.php:1168
+#: DIST/plugin/admin/fsl-options.php:1160
 msgid "Background color"
 msgstr ""
 
-#: admin/fsl-options.php:1160
-#: DIST/plugin/admin/fsl-options.php:1160
+#: admin/fsl-options.php:1182
+#: DIST/plugin/admin/fsl-options.php:1174
 msgid "Image Label"
 msgstr ""
 
-#: admin/fsl-options.php:1167
-#: DIST/plugin/admin/fsl-options.php:1167
+#: admin/fsl-options.php:1189
+#: DIST/plugin/admin/fsl-options.php:1181
 msgid "If enabled, text label will be ignored."
 msgstr ""
 
-#: admin/fsl-options.php:1173
-#: DIST/plugin/admin/fsl-options.php:1173
+#: admin/fsl-options.php:1195
+#: DIST/plugin/admin/fsl-options.php:1187
 msgid "Image"
 msgstr ""
 
-#: admin/fsl-options.php:1174
-#: DIST/plugin/admin/fsl-options.php:1174
+#: admin/fsl-options.php:1196
+#: DIST/plugin/admin/fsl-options.php:1188
 msgid "Please select an image from the media library or paste the URL of an external image."
 msgstr ""
 
-#: admin/fsl-options.php:1180
-#: DIST/plugin/admin/fsl-options.php:1180
+#: admin/fsl-options.php:1202
+#: DIST/plugin/admin/fsl-options.php:1194
 msgid "Width "
 msgstr ""
 
-#: admin/fsl-options.php:1181
-#: DIST/plugin/admin/fsl-options.php:1181
+#: admin/fsl-options.php:1203
+#: DIST/plugin/admin/fsl-options.php:1195
 msgid "width in pixels (px)"
 msgstr ""
 
-#: admin/fsl-options.php:1183
-#: DIST/plugin/admin/fsl-options.php:1183
+#: admin/fsl-options.php:1205
+#: DIST/plugin/admin/fsl-options.php:1197
 msgid "width in px"
 msgstr ""
 
-#: admin/fsl-options.php:1218
-#: DIST/plugin/admin/fsl-options.php:1218
+#: admin/fsl-options.php:1240
+#: admin/fsl-options.php:1305
+#: DIST/plugin/admin/fsl-options.php:1232
 msgid "-- None --"
 msgstr ""
 
@@ -1197,38 +1226,38 @@ msgstr ""
 msgid "You have free shipping!"
 msgstr ""
 
-#: DIST/plugin/includes/fsl-defaults.php:107
-#: includes/fsl-defaults.php:107
-msgid "Free Gift"
-msgstr ""
-
 #: DIST/plugin/includes/fsl-defaults.php:108
 #: includes/fsl-defaults.php:108
-msgid "Free Gift on orders over {threshold}"
+msgid "Free Gift"
 msgstr ""
 
 #: DIST/plugin/includes/fsl-defaults.php:109
 #: includes/fsl-defaults.php:109
-msgid "Add at least {remaining} more to get a free gift!"
+msgid "Free Gift on orders over {threshold}"
 msgstr ""
 
 #: DIST/plugin/includes/fsl-defaults.php:110
 #: includes/fsl-defaults.php:110
+msgid "Add at least {remaining} more to get a free gift!"
+msgstr ""
+
+#: DIST/plugin/includes/fsl-defaults.php:111
+#: includes/fsl-defaults.php:111
 msgid "You've earned a free gift!"
 msgstr ""
 
-#: DIST/plugin/includes/fsl-defaults.php:166
-#: includes/fsl-defaults.php:166
+#: DIST/plugin/includes/fsl-defaults.php:167
+#: includes/fsl-defaults.php:169
 msgid "Free shipping!"
 msgstr ""
 
-#: DIST/plugin/public/bar/fsl-bar.php:216
-#: public/bar/fsl-bar.php:216
+#: DIST/plugin/public/bar/fsl-bar.php:217
+#: public/bar/fsl-bar.php:217
 msgid "Free Shipping"
 msgstr ""
 
-#: DIST/plugin/public/bar/fsl-bar.php:458
-#: public/bar/fsl-bar.php:458
+#: DIST/plugin/public/bar/fsl-bar.php:459
+#: public/bar/fsl-bar.php:459
 msgid "Waiting for Free Shipping coupon"
 msgstr ""
 

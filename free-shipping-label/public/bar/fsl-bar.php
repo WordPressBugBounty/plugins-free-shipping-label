@@ -25,6 +25,7 @@ class FSL_Bar {
         'bar_type',
         'indicator_icon',
         'indicator_icon_size',
+        'indicator_icon_shape',
         'indicator_icon_bg_color',
         'circle_size',
         'inside_circle',
@@ -433,6 +434,7 @@ class FSL_Bar {
                 $opt['threshold_indicators'][$module_name] = [
                     'indicator_icon'          => $options['indicator_icon'],
                     'indicator_icon_size'     => $indicator_icon_size,
+                    'indicator_icon_shape'    => $options['indicator_icon_shape'],
                     'indicator_icon_bg_color' => $options['indicator_icon_bg_color'],
                     'icon'                    => $options['icon'],
                     'icon_color'              => $options['icon_color'],

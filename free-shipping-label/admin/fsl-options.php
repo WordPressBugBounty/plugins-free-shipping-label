@@ -155,6 +155,17 @@ class Options {
                 'label'   => esc_html__( 'Threshold Indicator Icon', 'free-shipping-label' ),
                 'default' => Defaults::bar( 'indicator_icon' ),
             ],
+            'indicator_icon_shape'     => [
+                'type'    => 'select',
+                'name'    => 'indicator_icon_shape' . $is_disabled,
+                'label'   => esc_html__( 'Indicator icon shape', 'free-shipping-label' ),
+                'options' => [
+                    'round'   => esc_html__( 'Round', 'free-shipping-label' ),
+                    'rounded' => esc_html__( 'Rounded ', 'free-shipping-label' ),
+                    'square'  => esc_html__( 'Square ', 'free-shipping-label' ),
+                ],
+                'default' => Defaults::bar( 'indicator_icon_shape' ),
+            ],
             'indicator_icon_size'      => [
                 'type'              => 'number',
                 'name'              => 'indicator_icon_size' . $is_disabled,
@@ -512,6 +523,7 @@ class Options {
             self::common_options( 'bar_type' ),
             self::common_options( 'indicator_icon', true ),
             self::common_options( 'indicator_icon_size', true ),
+            self::common_options( 'indicator_icon_shape', true ),
             self::common_options( 'indicator_icon_bg_color', true ),
             self::common_options( 'circle_size', true ),
             self::common_options( 'inside_circle', true ),
@@ -602,6 +614,7 @@ class Options {
             self::common_options( 'bar_type', true ),
             self::common_options( 'indicator_icon', true ),
             self::common_options( 'indicator_icon_size', true ),
+            self::common_options( 'indicator_icon_shape', true ),
             self::common_options( 'indicator_icon_bg_color', true ),
             self::common_options( 'circle_size', true ),
             self::common_options( 'inside_circle', true ),
@@ -716,6 +729,7 @@ class Options {
             self::common_options( 'bar_type', true ),
             self::common_options( 'indicator_icon', true ),
             self::common_options( 'indicator_icon_size', true ),
+            self::common_options( 'indicator_icon_shape', true ),
             self::common_options( 'indicator_icon_bg_color', true ),
             self::common_options( 'circle_size', true ),
             self::common_options( 'inside_circle', true ),
@@ -759,6 +773,14 @@ class Options {
                 'options'  => [],
                 'multiple' => true,
                 'default'  => Defaults::label( 'exclude' ),
+            ],
+            [
+                'type'    => 'select',
+                'name'    => 'include_shipping_class__disabled',
+                'label'   => esc_html__( 'Show for Shipping Class', 'free-shipping-label' ),
+                'desc'    => esc_html__( 'Display the free shipping label on products assigned to the selected shipping class.', 'free-shipping-label' ),
+                'options' => self::shipping_classes_option_list(),
+                'default' => Defaults::label( 'include_shipping_class' ),
             ],
             [
                 'type'  => 'info',
@@ -824,7 +846,7 @@ class Options {
                     'bottom-right' => esc_html__( 'Bottom Right', 'free-shipping-label' ),
                 ],
                 'desc'    => sprintf(
-                    '%s <a href="https://devnet.hr/docs/free-shipping-label/product-label/#position" target="_blank">%s</a> %s',
+                    '%s <a href="https://devnet.hr/docs/free-shipping-label/product-label/#label-over-image" target="_blank">%s</a> %s',
                     esc_html__( 'Top positions align well with most themes, while bottom positions may display a label close to the button or price. Margins can be adjusted for further customization. Refer to the ', 'free-shipping-label' ),
                     esc_html__( 'documentation', 'free-shipping-label' ),
                     esc_html__( 'for more information.', 'free-shipping-label' )
@@ -963,6 +985,21 @@ class Options {
             }
         }
         return $fields;
+    }
+
+    private static function shipping_classes_option_list() {
+        $shipping_classes = get_terms( 'product_shipping_class', array(
+            'hide_empty' => false,
+        ) );
+        $options = [
+            '' => esc_html__( '-- None --', 'free-shipping-label' ),
+        ];
+        if ( !empty( $shipping_classes ) && !is_wp_error( $shipping_classes ) ) {
+            foreach ( $shipping_classes as $key => $class ) {
+                $options[esc_attr( $class->term_id )] = esc_html( $class->name );
+            }
+        }
+        return $options;
     }
 
 }
