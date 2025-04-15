@@ -2,9 +2,9 @@
 
 namespace Devnet\FSL\Frontend\Bar;
 
+use Devnet\FSL\Includes\Compatibility;
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Helper;
-use Devnet\FSL\Includes\Compatibility;
 class Gift_Bar extends FSL_Bar {
     public function __construct() {
     }
@@ -149,6 +149,7 @@ class Gift_Bar extends FSL_Bar {
         // Calculate the percentage
         $calc = Helper::calculate_percentage( $threshold, $cart_subtotal );
         $gift_pass = $calc['percent'] === 100;
+        $gift_pass = apply_filters( 'fsl_gift_pass', $gift_pass, $cart );
         return $gift_pass;
     }
 
@@ -177,8 +178,10 @@ class Gift_Bar extends FSL_Bar {
             return;
         }
         $gift_pass = $this->gift_pass( $cart );
-        // Get the product ID from the gift options
-        $product_id = $this->get_gift_product( 'id' );
+        $gift_product = $this->get_gift_product( 'product' );
+        $product_ids = $this->resolve_product_and_variation_id( $gift_product );
+        $product_id = $product_ids['product_id'];
+        $variation_id = $product_ids['variation_id'];
         // If no valid product ID, return
         if ( !$product_id ) {
             return;
@@ -201,17 +204,75 @@ class Gift_Bar extends FSL_Bar {
                 'price'    => 0,
                 'fsl_gift' => true,
             ];
-            /**
+            /*
              * TODO: force product in cart, no mather if it is out of stock.
              */
             $cart->add_to_cart(
                 $product_id,
                 1,
-                0,
+                $variation_id,
                 [],
                 $args
             );
         }
+    }
+
+    /**
+     * Resolve a WooCommerce product ID and variation ID from a given product input.
+     *
+     * @since 3.3.2
+     */
+    public function resolve_product_and_variation_id( $product ) {
+        $output = [
+            'product_id'   => 0,
+            'variation_id' => 0,
+        ];
+        if ( !$product ) {
+            return $output;
+        }
+        // If variation: set parent and itself
+        if ( $product->is_type( 'variation' ) ) {
+            $output['product_id'] = $product->get_parent_id();
+            $output['variation_id'] = $product->get_id();
+            return $output;
+        }
+        // If simple: product ID only
+        if ( !$product->is_type( 'variable' ) ) {
+            $output['product_id'] = $product->get_id();
+            return $output;
+        }
+        // If variable: find variation
+        $output['product_id'] = $product->get_id();
+        $default_attributes = $product->get_default_attributes();
+        $variation_ids = $product->get_children();
+        if ( !empty( $default_attributes ) ) {
+            foreach ( $variation_ids as $vid ) {
+                $variation = wc_get_product( $vid );
+                if ( !$variation || !$variation->is_in_stock() ) {
+                    continue;
+                }
+                $match = true;
+                foreach ( $default_attributes as $name => $value ) {
+                    if ( strtolower( $variation->get_attribute( $name ) ) !== strtolower( $value ) ) {
+                        $match = false;
+                        break;
+                    }
+                }
+                if ( $match ) {
+                    $output['variation_id'] = $vid;
+                    return $output;
+                }
+            }
+        }
+        // Fallback: first in-stock variation
+        foreach ( $variation_ids as $vid ) {
+            $variation = wc_get_product( $vid );
+            if ( $variation && $variation->is_in_stock() ) {
+                $output['variation_id'] = $vid;
+                break;
+            }
+        }
+        return $output;
     }
 
     /**

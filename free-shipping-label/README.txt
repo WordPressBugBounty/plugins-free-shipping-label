@@ -3,8 +3,8 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 5.9
-Stable tag: 3.3.1
-Tested up to: 6.7
+Stable tag: 3.3.2
+Tested up to: 6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.3.2 =
+
+*2025-04-15*
+
+* Performance - WP tested up to 6.8
+* Performance - WC tested up to 9.8
+* Dev - Added `fsl_gift_pass` filter hook
 
 = 3.3.1 =
 

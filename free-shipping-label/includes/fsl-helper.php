@@ -182,13 +182,15 @@ class Helper {
      * 
      * @since    2.6.0
      */
-    static function search_product_titles( $find = '' ) {
+    static function search_product_titles( $find = '', $variations = false ) {
         global $wpdb;
         $wild = '%';
         $like = $wild . $wpdb->esc_like( $find ) . $wild;
-        $sql = $wpdb->prepare( "SELECT ID, post_title FROM {$wpdb->posts} WHERE post_type = 'product' AND post_title LIKE %s", $like );
-        $results = $wpdb->get_results( $sql );
-        return $results;
+        // Determine post types to include
+        $post_types = ( $variations ? "('product', 'product_variation')" : "('product')" );
+        // Build and prepare SQL
+        $sql = $wpdb->prepare( "SELECT ID, post_title FROM {$wpdb->posts}\n             WHERE post_type IN {$post_types}\n             AND post_status = 'publish'\n             AND post_title LIKE %s", $like );
+        return $wpdb->get_results( $sql );
     }
 
     /**
@@ -218,7 +220,8 @@ class Helper {
             }
         }
         if ( in_array( 'product', $search_in ) ) {
-            $found_products = self::search_product_titles( $search_term );
+            $variations = in_array( 'product_variation', $search_in );
+            $found_products = self::search_product_titles( $search_term, $variations );
             if ( !empty( $found_products ) ) {
                 foreach ( $found_products as $product ) {
                     $title = $product->post_title;
