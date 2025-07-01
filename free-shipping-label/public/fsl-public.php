@@ -2,41 +2,47 @@
 
 namespace Devnet\FSL\Frontend;
 
+use Devnet\FSL\Frontend\FSL_Label;
 use Devnet\FSL\Frontend\Bar\FSL_Bar;
+use Devnet\FSL\Frontend\Bar\Gift_Bar;
+
+
+if (! defined('ABSPATH')) {
+	exit;
+}
+
 
 class FSL_Public
 {
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
 	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
 	private $version;
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @param      string    $plugin_name       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
-	 */
 	public function __construct($plugin_name, $version)
 	{
+		if (is_admin() && !wp_doing_ajax()) {
+			return;
+		}
 
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
+
+		$options     		 = DEVNET_FSL_OPTIONS['general'] ?? [];
+		$only_logged_users   = $options['only_logged_users'] ?? false;
+
+		if ($only_logged_users && !is_user_logged_in()) return;
+
+		add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
+		add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
+		add_filter('woocommerce_package_rates', [$this, 'maybe_hide_shipping'], 10, 2);
+
+		/**
+		 * Initialize modules.
+		 * 
+		 */
+		new FSL_Label();
+		new FSL_Bar();
+		new Gift_Bar();
 	}
 
 
@@ -81,23 +87,23 @@ class FSL_Public
 
 
 	/**
-	 * Hide shipping rates when free shipping is available.
+	 * Conditionally hides shipping methods when free shipping is available.
 	 *
-	 * @param array $rates Array of rates found for the package.
-	 * @return array
 	 */
-	public function hide_shipping_when_free_is_available($rates)
+	public function maybe_hide_shipping($rates)
 	{
-		$fsl_general         = DEVNET_FSL_OPTIONS['general'] ?? [];
-		$hide_shipping_rates = isset($fsl_general['hide_shipping_rates']) ? $fsl_general['hide_shipping_rates'] : false;
+
+		$options     		 = DEVNET_FSL_OPTIONS['general'] ?? [];
+		$hide_shipping_rates = $options['hide_shipping_rates'] ?? false;
 
 		if (!$hide_shipping_rates) {
 			return $rates;
 		}
 
-		$free = [];
-
 		if ('hide_all' === $hide_shipping_rates) {
+
+			$free = [];
+
 			foreach ($rates as $rate_id => $rate) {
 				if ('free_shipping' === $rate->method_id) {
 					$free[$rate_id] = $rate;
@@ -108,6 +114,9 @@ class FSL_Public
 		}
 
 		if ('hide_except_local' === $hide_shipping_rates) {
+
+			$new_rates = [];
+
 			foreach ($rates as $rate_id => $rate) {
 				// Only modify rates if free_shipping is present.
 				if ('free_shipping' === $rate->method_id) {

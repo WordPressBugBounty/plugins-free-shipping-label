@@ -5,8 +5,25 @@ namespace Devnet\FSL\Frontend\Bar;
 use Devnet\FSL\Includes\Compatibility;
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Helper;
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
 class Gift_Bar extends FSL_Bar {
+    public $is_multilingual = false;
+
     public function __construct() {
+        if ( defined( 'FSL_MODULE_GIFT_BAR' ) && FSL_MODULE_GIFT_BAR === false ) {
+            return;
+        }
+        $this->is_multilingual = DEVNET_FSL_OPTIONS['general']['multilingual'] ?? false;
+        $options = DEVNET_FSL_OPTIONS['gift_bar'] ?? [];
+        $enable = $options['enable_bar'] ?? false;
+        $after_threshold = $options['after_threshold'] ?? '';
+        $price_display = $options['price_display'] ?? 'label';
+        if ( !$enable ) {
+            return;
+        }
+        add_filter( 'fsl_progress_bar_setup_data', [$this, 'setup_data_for_gift_bar'] );
     }
 
     public function setup_data_for_gift_bar( $data ) {
@@ -16,7 +33,6 @@ class Gift_Bar extends FSL_Bar {
         $enable = $gift_opt['enable_bar'] ?? false;
         $threshold = $gift_opt['threshold'] ?? 0;
         $display = $gift_opt['display'] ?? 'after';
-        $layout = $gift_opt['layout'] ?? 'list';
         $inherit_pb = $gift_opt['inherit_progress_bar_settings'] ?? true;
         if ( !$enable || !$threshold ) {
             return $data;
@@ -28,6 +44,7 @@ class Gift_Bar extends FSL_Bar {
         $free_shipping_threshold = $free_shipping_data['threshold'] ?? false;
         $free_shipping_percent = $free_shipping_data['percent'] ?? 0;
         $free_shipping_reached = $free_shipping_options['qualified_message'] ?? '';
+        $layout = $free_shipping_options['layout'] ?? 'list';
         $options = [
             'show_fsl_title'       => true,
             'show_fsl_description' => true,
@@ -253,7 +270,7 @@ class Gift_Bar extends FSL_Bar {
                 }
                 $match = true;
                 foreach ( $default_attributes as $name => $value ) {
-                    if ( strtolower( $variation->get_attribute( $name ) ) !== strtolower( $value ) ) {
+                    if ( sanitize_title( $variation->get_attribute( $name ) ) !== $value ) {
                         $match = false;
                         break;
                     }
@@ -323,7 +340,7 @@ class Gift_Bar extends FSL_Bar {
      */
     public function gift_cart_item_name( $_product_title, $cart_item, $cart_item_key ) {
         if ( !empty( $cart_item['fsl_gift'] ) ) {
-            $_product_title .= '<p>' . esc_html__( 'Free', 'free-shipping-label' ) . '</p>';
+            $_product_title .= '<p>' . esc_html( $this->free_gift_label() ) . '</p>';
         }
         return $_product_title;
     }
@@ -352,6 +369,13 @@ class Gift_Bar extends FSL_Bar {
     public function gift_cart_item_price_label( $price, $cart_item, $cart_item_key ) {
         if ( !empty( $cart_item['fsl_gift'] ) ) {
             $price = '<span class="amount">' . esc_html( $this->free_gift_label() ) . '</span>';
+            if ( self::get_gift_bar_option( 'price_display' ) === 'crossed' ) {
+                $regular_price = wc_get_price_to_display( $cart_item['data'], [
+                    'price' => $cart_item['data']->get_regular_price(),
+                ] );
+                $zero_price = wc_price( 0 );
+                $price = '<del>' . wc_price( $regular_price ) . '</del> <ins>' . $zero_price . '</ins>';
+            }
         }
         return $price;
     }
@@ -364,6 +388,17 @@ class Gift_Bar extends FSL_Bar {
     public function order_gift_item( $subtotal, $item, $order ) {
         if ( !empty( $item['_fsl_gift'] ) ) {
             $subtotal = '<span class="amount">' . esc_html( $this->free_gift_label() ) . '</span>';
+            if ( self::get_gift_bar_option( 'price_display' ) === 'crossed' ) {
+                $product = $item->get_product();
+                if ( is_null( $product ) ) {
+                    return $subtotal;
+                }
+                $regular_price = wc_get_price_to_display( $product, [
+                    'price' => $product->get_regular_price(),
+                ] );
+                $zero_price = wc_price( 0 );
+                $subtotal = '<del>' . wc_price( $regular_price ) . '</del> <ins>' . $zero_price . '</ins>';
+            }
         }
         return $subtotal;
     }

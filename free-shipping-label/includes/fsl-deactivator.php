@@ -3,6 +3,11 @@
 namespace Devnet\FSL\Includes;
 
 
+if (! defined('ABSPATH')) {
+	exit;
+}
+
+
 class Deactivator
 {
 
@@ -22,6 +27,7 @@ class Deactivator
 			delete_option('devnet_fsl_notice_bar');
 			delete_option('devnet_fsl_label');
 			delete_option('devnet_fsl_multilingual_check');
+			delete_option('devnet_fsl_layout_check');
 		}
 	}
 }

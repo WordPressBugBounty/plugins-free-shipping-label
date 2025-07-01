@@ -4,6 +4,9 @@ namespace Devnet\FSL\Admin;
 
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Icons;
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
 /**
  * Options for settings panel
  *
@@ -520,6 +523,21 @@ class Options {
             self::common_options( 'description' ),
             self::common_options( 'qualified_message' ),
             self::common_options( 'info-bar-design' ),
+            [
+                'type'    => 'select',
+                'name'    => 'layout',
+                'label'   => esc_html__( 'Layout for Multiple Goals', 'free-shipping-label' ),
+                'options' => [
+                    'list'        => esc_html__( 'Vertical list', 'free-shipping-label' ),
+                    '_disabled_1' => esc_html__( 'Horizontal Labels', 'free-shipping-label' ),
+                    '_disabled_2' => esc_html__( 'Horizontal Labels with description', 'free-shipping-label' ),
+                    '_disabled_3' => esc_html__( 'Description Only Above', 'free-shipping-label' ),
+                    '_disabled_4' => esc_html__( 'Description Only Beneath', 'free-shipping-label' ),
+                    '_disabled_5' => esc_html__( 'Threshold Bubbles (Experimental)', 'free-shipping-label' ),
+                ],
+                'desc'    => esc_html__( 'Only applies when multiple thresholds are defined (e.g. Free Shipping, Gift, Discount).', 'free-shipping-label' ),
+                'default' => Defaults::bar( 'layout' ),
+            ],
             self::common_options( 'bar_type' ),
             self::common_options( 'indicator_icon', true ),
             self::common_options( 'indicator_icon_size', true ),
@@ -699,26 +717,24 @@ class Options {
                 'default'           => Defaults::gift_bar( 'label' ),
                 'sanitize_callback' => 'sanitize_text_field',
             ],
+            [
+                'type'    => 'select',
+                'name'    => 'price_display',
+                'label'   => esc_html__( 'Price display', 'free-shipping-label' ),
+                'options' => [
+                    'label'   => esc_html__( 'Label only (no price)', 'free-shipping-label' ),
+                    'zero'    => esc_html__( 'Show only 0.00 as price', 'free-shipping-label' ),
+                    'crossed' => esc_html__( 'Crossed original price + 0.00', 'free-shipping-label' ),
+                ],
+                'desc'    => esc_html__( 'Choose how the free gift price should be shown in the cart and checkout.', 'free-shipping-label' ),
+                'default' => Defaults::gift_bar( 'price_display' ),
+            ],
             self::common_options( 'info-bar-text' ),
             self::common_options( 'info-bar-placeholders', false, 'gift_bar' ),
             self::common_options( 'title', false, 'gift_bar' ),
             self::common_options( 'description', false, 'gift_bar' ),
             self::common_options( 'qualified_message', false, 'gift_bar' ),
             self::common_options( 'info-bar-design', true ),
-            [
-                'type'    => 'select',
-                'name'    => 'layout',
-                'label'   => esc_html__( 'Display Mode', 'free-shipping-label' ),
-                'options' => [
-                    'list'        => esc_html__( 'Vertical list', 'free-shipping-label' ),
-                    '_disabled_1' => esc_html__( 'Horizontal Labels', 'free-shipping-label' ),
-                    '_disabled_2' => esc_html__( 'Horizontal Labels with description', 'free-shipping-label' ),
-                    '_disabled_3' => esc_html__( 'Description Only Above', 'free-shipping-label' ),
-                    '_disabled_4' => esc_html__( 'Description Only Beneath', 'free-shipping-label' ),
-                ],
-                'desc'    => esc_html__( 'Choose the layout style for displaying progress indicators and related text. Options include different arrangements for displaying free shipping and gift progress information.', 'free-shipping-label' ),
-                'default' => Defaults::gift_bar( 'layout' ),
-            ],
             [
                 'type'    => 'checkbox',
                 'name'    => 'inherit_progress_bar_settings__disabled',

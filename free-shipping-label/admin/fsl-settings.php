@@ -3,6 +3,11 @@
 namespace Devnet\FSL\Admin;
 
 
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+
 class Settings
 {
 
@@ -19,6 +24,8 @@ class Settings
     {
 
         $this->settings_api = new Settings_API('devnet_fsl');
+
+        $this->admin_init();
     }
 
     public function admin_init()
@@ -42,19 +49,11 @@ class Settings
 
         //initialize settings
         $this->settings_api->admin_init();
+
+        // Calling it from here to avoid unnecessary code execution.
+        add_action('devnet_fsl_form_top', [$this, 'panel_description']);
     }
 
-    public function admin_menu()
-    {
-        add_submenu_page(
-            'woocommerce',
-            'Free Shipping Label',
-            'Free Shipping Label',
-            apply_filters('fsl_admin_menu_user_capability', 'manage_options'),
-            'free-shipping-label-settings',
-            [$this, 'plugin_page']
-        );
-    }
 
     public function get_settings_sections()
     {

@@ -2,35 +2,26 @@
 
 namespace Devnet\FSL\Admin;
 
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
 class FSL_Admin {
-    /**
-     * The ID of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $plugin_name    The ID of this plugin.
-     */
     private $plugin_name;
 
-    /**
-     * The version of this plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     * @var      string    $version    The current version of this plugin.
-     */
     private $version;
 
-    /**
-     * Initialize the class and set its properties.
-     *
-     * @since    1.0.0
-     * @param      string    $plugin_name       The name of this plugin.
-     * @param      string    $version    The version of this plugin.
-     */
     public function __construct( $plugin_name, $version ) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
+        $page = ( isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : null );
+        if ( $page === 'free-shipping-label-settings' ) {
+            add_action( 'admin_enqueue_scripts', [$this, 'enqueue_styles'] );
+            add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts'] );
+            add_filter( 'admin_footer_text', [$this, 'admin_credits'] );
+        }
+        add_action( 'admin_menu', [$this, 'admin_menu'], 100 );
+        add_filter( 'plugin_action_links_' . DEVNET_FSL_PATH, [$this, 'plugin_action_links'] );
+        add_action( 'before_woocommerce_init', [$this, 'cot_compatible'] );
     }
 
     /**
@@ -81,6 +72,18 @@ class FSL_Admin {
         wp_localize_script( 'fsl-admin', 'devnet_fsl_admin_ajax', [
             'ajaxurl' => admin_url( 'admin-ajax.php' ),
         ] );
+    }
+
+    public function admin_menu() {
+        $plugin_settings = new Settings();
+        add_submenu_page(
+            'woocommerce',
+            'Free Shipping Label',
+            'Free Shipping Label',
+            apply_filters( 'fsl_admin_menu_user_capability', 'manage_options' ),
+            'free-shipping-label-settings',
+            [$plugin_settings, 'plugin_page']
+        );
     }
 
     /**

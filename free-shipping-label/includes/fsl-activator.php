@@ -2,7 +2,11 @@
 
 namespace Devnet\FSL\Includes;
 
-use function PHPSTORM_META\type;
+
+if (! defined('ABSPATH')) {
+	exit;
+}
+
 
 class Activator
 {
@@ -36,7 +40,8 @@ class Activator
 	 */
 	public static function check_and_format_options()
 	{
-		self::multilingual_check();
+		//self::multilingual_check();
+		self::migrate_layout_option();
 	}
 
 	/**
@@ -72,5 +77,79 @@ class Activator
 				}
 			}
 		}
+	}
+
+	/**
+	 * Check if there was set `layout` option in GiftBar or inFSL Discount.
+	 * Update `layout` in Progress Bar settings.
+	 * 
+	 * @since	3.4.0
+	 */
+	public static function migrate_layout_option()
+	{
+		$layout_check = get_option('devnet_fsl_layout_check');
+
+		if ($layout_check || !defined('DEVNET_FSL_OPTIONS')) {
+			return;
+		}
+
+		$gift_bar_options = DEVNET_FSL_OPTIONS['gift_bar'] ?? [];
+		$options_with_layout = ['gift_bar' => $gift_bar_options];
+
+		if (defined('DEVNET_FSL_DISCOUNT_OPTIONS')) {
+			$options_with_layout = array_merge($options_with_layout, DEVNET_FSL_DISCOUNT_OPTIONS);
+		}
+
+		$layout = self::get_layout_with_highest_enabled_threshold($options_with_layout);
+
+		if (!$layout) {
+			return;
+		}
+
+		$progress_bar_options = DEVNET_FSL_OPTIONS['progress_bar'] ?? [];
+
+		if (empty($progress_bar_options)) {
+			return;
+		}
+
+		$progress_bar_options['layout'] = $layout;
+
+		update_option('devnet_fsl_bar', $progress_bar_options);
+		update_option('devnet_fsl_layout_check', true);
+	}
+
+
+	private static function get_layout_with_highest_enabled_threshold(array $options_with_layout): ?string
+	{
+		$enabled = [];
+		$all = [];
+
+		foreach ($options_with_layout as $key => $group) {
+			if (!isset($group['threshold'], $group['layout'])) {
+				continue;
+			}
+
+			$entry = [
+				'key'       => $key,
+				'threshold' => (float) $group['threshold'],
+				'layout'    => $group['layout'],
+			];
+
+			$all[] = $entry;
+
+			if (!empty($group['enable_bar'])) {
+				$enabled[] = $entry;
+			}
+		}
+
+		$target = !empty($enabled) ? $enabled : $all;
+
+		if (empty($target)) {
+			return null;
+		}
+
+		usort($target, fn($a, $b) => $b['threshold'] <=> $a['threshold']);
+
+		return $target[0]['layout'];
 	}
 }

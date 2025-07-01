@@ -2,6 +2,12 @@
 
 namespace Devnet\FSL\Includes;
 
+
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+
 class Defaults
 {
 
@@ -49,6 +55,7 @@ class Defaults
             'title'                  => esc_html__('Free delivery on orders over {free_shipping_amount}', 'free-shipping-label'),
             'description'            => esc_html__('Add at least {remaining} more to get free shipping!', 'free-shipping-label'),
             'qualified_message'       => esc_html__('You have free shipping!', 'free-shipping-label'),
+            'layout'                 => 'list',
             'bar_inner_color'        => '#95578a',
             'bar_bg_color'           => '#ecd4e5',
             'bar_border_color'       => '#333333',
@@ -106,10 +113,10 @@ class Defaults
             'gift_product'                  => '',
             'after_threshold'               => '',
             'label'                         => esc_html__('Free Gift', 'free-shipping-label'),
+            'price_display'                 => 'label',
             'title'                         => esc_html__('Free Gift on orders over {threshold}', 'free-shipping-label'),
             'description'                   => esc_html__('Add at least {remaining} more to get a free gift!', 'free-shipping-label'),
             'qualified_message'              => esc_html__("You've earned a free gift!", 'free-shipping-label'),
-            'layout'                        => 'list',
             'inherit_progress_bar_settings' => 1
         ];
 

@@ -2,11 +2,17 @@
 
 namespace Devnet\FSL\Includes;
 
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
 class Helper {
     /**
      * Save free shipping instance.
      */
     static $free_shipping_instance = [];
+
+    public function __construct() {
+    }
 
     /**
      * Check if string starts with string.

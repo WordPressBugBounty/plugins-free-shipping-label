@@ -3,6 +3,9 @@
 namespace Devnet\FSL\Includes;
 
 use Devnet\FSL\Includes\Helper;
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
 class Compatibility {
     public static function get_custom_shipping_min_amount( $chosen_shipping_id, $method = null ) {
         /**

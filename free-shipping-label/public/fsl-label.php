@@ -4,6 +4,9 @@ namespace Devnet\FSL\Frontend;
 
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Helper;
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
 class FSL_Label {
     /**
      * Free Shipping minimum amount/threshold.
@@ -37,6 +40,19 @@ class FSL_Label {
     private $include_shipping_class;
 
     public function __construct() {
+        $options = DEVNET_FSL_OPTIONS['label'] ?? [];
+        $enable_label = $options['enable_label'] ?? false;
+        $label_over_image = $options['label_over_image'] ?? false;
+        if ( !$enable_label ) {
+            return;
+        }
+        add_action( 'wp_loaded', [$this, 'public_data'] );
+        add_filter(
+            'woocommerce_get_price_html',
+            [$this, 'get_price_html'],
+            99999,
+            2
+        );
     }
 
     /**

@@ -5,6 +5,9 @@ namespace Devnet\FSL\Frontend\Bar;
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Helper;
 use Devnet\FSL\Includes\Icons;
+if ( !defined( 'ABSPATH' ) ) {
+    exit;
+}
 class FSL_Bar {
     public $is_multilingual = false;
 
@@ -41,8 +44,31 @@ class FSL_Bar {
         'remove_bar_stripes'
     ];
 
-    public function __construct() {
+    public function __construct( $skip_hooks = false ) {
         $this->is_multilingual = DEVNET_FSL_OPTIONS['general']['multilingual'] ?? false;
+        if ( $skip_hooks ) {
+            return;
+        }
+        $options = DEVNET_FSL_OPTIONS['progress_bar'] ?? [];
+        $enable = $options['enable_bar'] ?? false;
+        $show_on_cart = $options['show_on_cart'] ?? false;
+        $show_on_minicart = $options['show_on_minicart'] ?? false;
+        $show_on_checkout = $options['show_on_checkout'] ?? false;
+        $cart_hook = 'woocommerce_proceed_to_checkout';
+        $checkout_hook = 'woocommerce_review_order_before_submit';
+        $minicart_hook = 'woocommerce_widget_shopping_cart_before_buttons';
+        if ( !$enable ) {
+            return;
+        }
+        if ( $show_on_cart ) {
+            add_action( $cart_hook, [$this, 'fsl_bar_cart'], 10 );
+        }
+        if ( $show_on_minicart ) {
+            add_action( $minicart_hook, [$this, 'fsl_bar_minicart'] );
+        }
+        if ( $show_on_checkout ) {
+            add_action( $checkout_hook, [$this, 'fsl_bar_checkout'], 10 );
+        }
     }
 
     /**
@@ -108,6 +134,8 @@ class FSL_Bar {
             $opt['description'] = Defaults::bar( 'description' );
             $opt['qualified_message'] = Defaults::bar( 'qualified_message' );
         }
+        $layout = $opt['layout'] ?? Defaults::bar( 'layout' );
+        $opt['layout'] = Defaults::bar( 'layout' );
         if ( $only_inheritable ) {
             // Filter out non-inheritable options.
             foreach ( $opt as $key => $value ) {
@@ -293,15 +321,15 @@ class FSL_Bar {
         $grouped_modules = $setup_data['modules']['group']['grouped_modules'] ?? [];
         $stand_alone_modules = $setup_data['modules'] ?? [];
         // Sorting logic
-        $sortByThreshold = function ( $a, $b ) {
+        $sort_by_threshold = function ( $a, $b ) {
             return ($a['threshold'] ?? 0) <=> ($b['threshold'] ?? 0);
         };
         // Sort grouped modules if available; otherwise, sort stand-alone modules
         if ( !empty( $grouped_modules ) && count( $grouped_modules ) > 1 ) {
-            uasort( $grouped_modules, $sortByThreshold );
+            uasort( $grouped_modules, $sort_by_threshold );
             $setup_data['modules']['group']['grouped_modules'] = $grouped_modules;
         } elseif ( !empty( $stand_alone_modules ) && count( $stand_alone_modules ) > 1 ) {
-            uasort( $stand_alone_modules, $sortByThreshold );
+            uasort( $stand_alone_modules, $sort_by_threshold );
             $setup_data['modules'] = $stand_alone_modules;
         }
         echo '<div class="fsl-wrapper" data-updatable="' . esc_attr( $is_updatable ) . '">';
@@ -355,7 +383,7 @@ class FSL_Bar {
     }
 
     /**
-     * Build circular progress bar html.
+     * 
      * 
      * @since	3.0.0
      */
@@ -395,12 +423,11 @@ class FSL_Bar {
         $opt = $args['options'] ?? [];
         $percent = $args['percent'] ?? 0;
         $bar_type = $opt['bar_type'] ?? Defaults::bar( 'bar_type' );
-        $html = '';
-        if ( $layout === 'list' ) {
-            $html .= '<ul class="fsl-modules-list">';
-        }
+        // Pass layout value to options.
+        $opt['layout'] = $layout;
+        $is_threshold_bubbles_layout = $layout === 'threshold_bubbles';
         $thresholds = [];
-        $show_module_desc = '';
+        $focused_module = '';
         $higher_percentage = -1;
         // Initialize to a low value to ensure comparison works
         foreach ( $grouped_modules as $module_name => $module ) {
@@ -408,12 +435,14 @@ class FSL_Bar {
             $percent = $module['percent'] ?? null;
             if ( $percent !== null && $percent < 100 && $percent > $higher_percentage ) {
                 $higher_percentage = $percent;
-                $show_module_desc = $module_name;
+                $focused_module = $module_name;
             }
         }
         // Ensure $thresholds is not empty before calling max
         $highest_threshold = ( !empty( $thresholds ) ? max( $thresholds ) : null );
         $show_full_progress_bar = false;
+        $display_data = [];
+        $longest_text = '';
         foreach ( $grouped_modules as $module_name => $module ) {
             if ( empty( $module ) ) {
                 continue;
@@ -422,13 +451,29 @@ class FSL_Bar {
             $placeholder_args = $module['placeholder_args'] ?? [];
             $threshold = $module['threshold'] ?? '';
             $reached = $module['reached']['qualified_message'] ?? '';
+            $percent = $module['percent'] ?? null;
+            $is_reached = $percent === 100;
             $title = $options['title'] ?? '';
             $description = $options['description'] ?? '';
             $label = $options['label'] ?? '';
             $show_qualified_message = $options['show_qualified_message'] ?? false;
             $indicator_icon = $options['indicator_icon'] ?? false;
-            $reached_class = ( $reached ? 'fsl-reached' : '' );
             $threshold_percentage = $threshold / $highest_threshold * 100;
+            $text = [
+                'qualified_message' => $this->get_fsl_qualified_message_html( $reached, $placeholder_args ),
+                'title'             => $this->get_fsl_title_html( $title, $placeholder_args ),
+                'description'       => $this->get_fsl_description_html( $description, $placeholder_args ),
+            ];
+            if ( $is_threshold_bubbles_layout ) {
+                if ( $is_reached ) {
+                    $combined_text = $text['qualified_message'];
+                } else {
+                    $combined_text = $text['title'] . ' ' . $text['description'];
+                }
+                if ( strlen( $combined_text ) > strlen( $longest_text ) ) {
+                    $longest_text = $combined_text;
+                }
+            }
             if ( $indicator_icon ) {
                 $indicator_icon_size = ( isset( $options['indicator_icon_size'] ) && (int) $options['indicator_icon_size'] ? (int) $options['indicator_icon_size'] : 1 );
                 $opt['threshold_indicators'][$module_name] = [
@@ -441,10 +486,20 @@ class FSL_Bar {
                     'threshold'               => $threshold,
                     'highest_threshold'       => $highest_threshold,
                     'threshold_percentage'    => $threshold_percentage,
+                    'focused'                 => $focused_module === $module_name,
+                    'text'                    => $text,
                 ];
                 if ( $threshold_percentage === 100 ) {
                     $opt['bar_width_adjust'] = $indicator_icon_size / 2;
                 }
+            } elseif ( $is_threshold_bubbles_layout ) {
+                $opt['threshold_indicators'][$module_name] = [
+                    'threshold'            => $threshold,
+                    'highest_threshold'    => $highest_threshold,
+                    'threshold_percentage' => $threshold_percentage,
+                    'focused'              => $focused_module === $module_name,
+                    'text'                 => $text,
+                ];
             }
             $show_full_progress_bar = $options['show_full_progress_bar'] ?? false;
             if ( $bar_type === 'linear' && $layout !== 'list' ) {
@@ -455,40 +510,37 @@ class FSL_Bar {
                     $show_qualified_message = true;
                 }
             }
-            if ( $layout === 'list' ) {
-                $html .= '<li class="' . esc_attr( $reached_class ) . '">';
-            }
-            $html .= '<div class="fsl-module-block ' . esc_attr( $reached_class ) . '">';
-            if ( $reached && $show_qualified_message ) {
-                $html .= $this->get_fsl_qualified_message_html( $reached, $placeholder_args );
-            } else {
-                if ( $title ) {
-                    $html .= $this->get_fsl_title_html( $title, $placeholder_args );
-                }
-                if ( $description ) {
-                    $html .= $this->get_fsl_description_html( $description, $placeholder_args );
-                }
-            }
-            $html .= '</div>';
-            if ( $layout === 'list' ) {
-                $html .= '</li>';
-            }
+            $display_data[$module_name] = [
+                'text'                      => $text,
+                'is_reached'                => $is_reached,
+                'reached_class'             => ( $is_reached ? 'fsl-reached' : '' ),
+                'display_title'             => $title,
+                'display_description'       => $description,
+                'display_qualified_message' => $reached && $show_qualified_message,
+            ];
         }
+        // Start building HTML
+        $html = '';
         if ( $layout === 'list' ) {
-            $html .= '</ul>';
+            $html .= $this->build_vertical_list_html( $display_data );
+        } elseif ( $is_threshold_bubbles_layout ) {
+            $show_full_progress_bar = true;
+            $html .= $this->render_height_adjuster( $longest_text );
+        } else {
+            foreach ( $display_data as $data ) {
+                $html .= $this->build_module_text_html( $data );
+            }
         }
         if ( !$reached || $show_full_progress_bar ) {
             $progress_bar_html = '';
             if ( 'linear' === $bar_type ) {
                 $progress_bar_html = $this->linear_bar_html( $percent, $opt );
-                if ( $show_module_desc ) {
+                if ( $focused_module ) {
                     $fsl_description_html = '';
                     // Layouts that include descriptions
                     $layouts_with_desc = ['horizontal_2', 'desc_only_above', 'desc_only_beneath'];
                     if ( in_array( $layout, $layouts_with_desc ) ) {
-                        $description = $grouped_modules[$show_module_desc]['options']['description'] ?? '';
-                        $placeholder_args = $grouped_modules[$show_module_desc]['placeholder_args'] ?? [];
-                        $fsl_description_html = $this->get_fsl_description_html( $description, $placeholder_args );
+                        $fsl_description_html = $display_data[$focused_module]['text']['description'] ?? '';
                     }
                     // Append or prepend the description based on layout
                     switch ( $layout ) {
@@ -507,6 +559,60 @@ class FSL_Bar {
             $html .= $progress_bar_html;
         }
         return $html;
+    }
+
+    /**
+     * Build vertical list.
+     * 
+     * @since	3.4.0
+     */
+    public function build_vertical_list_html( $modules_data = [] ) {
+        $html = '<ul class="fsl-modules-list">';
+        foreach ( $modules_data as $module ) {
+            $reached_class = $module['reached_class'] ?? '';
+            $html .= '<li class="' . esc_attr( $reached_class ) . '">';
+            $html .= $this->build_module_text_html( $module );
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        return $html;
+    }
+
+    /**
+     * Build vertical list.
+     * 
+     * @since	3.4.0
+     */
+    public function build_module_text_html( $module_data ) {
+        $reached_class = $module_data['reached_class'] ?? '';
+        $display_title = $module_data['display_title'] ?? false;
+        $display_description = $module_data['display_description'] ?? false;
+        $display_qualified_message = $module_data['display_qualified_message'] ?? false;
+        $title = $module_data['text']['title'] ?? '';
+        $description = $module_data['text']['description'] ?? '';
+        $qualified_message = $module_data['text']['qualified_message'] ?? '';
+        $html = '<div class="fsl-module-block ' . esc_attr( $reached_class ) . '">';
+        if ( $display_qualified_message ) {
+            $html .= $qualified_message;
+        } else {
+            if ( $display_title ) {
+                $html .= $title;
+            }
+            if ( $display_description ) {
+                $html .= $description;
+            }
+        }
+        $html .= '</div>';
+        return $html;
+    }
+
+    /** 
+     * Build hidden height adjuster.
+     * 
+     * @since	3.4.0
+     */
+    public function render_height_adjuster( $text ) {
+        return '<div class="fsl-height-adjuster" style="visibility:hidden; opacity:0;">' . wp_kses_post( $text ) . '</div>';
     }
 
     public function get_fsl_title_html( $text, $placeholder_args ) {
@@ -556,38 +662,118 @@ class FSL_Bar {
      * @since	2.6.0
      */
     public function linear_bar_html( $progress, $opt = [] ) {
-        if ( !$opt['bar_height'] ) {
-            return;
+        if ( empty( $opt['bar_height'] ) ) {
+            return '';
         }
-        $bar_height = $opt['bar_height'] ?? '';
+        $bar_height = $opt['bar_height'];
         $bar_inner_color = $opt['bar_inner_color'] ?? '';
         $bar_bg_color = $opt['bar_bg_color'] ?? '';
         $bar_border_color = $opt['bar_border_color'] ?? '';
-        $indicators_html = '';
-        $style_pb = [];
+        $style_pb = ['--fsl-percent:' . $progress . ';', '--fsl-bar-inner-color:' . $bar_inner_color . ';'];
         $classes_pb = [
             'fsl-progress-bar',
             'progress-bar',
             'shine',
             'stripes'
         ];
-        $style_pb_amount = ['width:' . $progress . '%;', 'height:' . $bar_height . 'px;', 'background-color:' . $bar_inner_color . ';'];
-        $style_pb[] = '--fsl-percent:' . $progress . ';';
-        $style_pb[] = '--fsl-bar-inner-color:' . $bar_inner_color . ';';
         if ( $bar_bg_color ) {
             $style_pb[] = 'background-color:' . $bar_bg_color . ';';
         }
         if ( $bar_border_color ) {
             $style_pb[] = 'border-color:' . $bar_border_color . ';';
         }
-        $style_pb = implode( ' ', $style_pb );
-        $classes_pb = implode( ' ', $classes_pb );
-        $style_pb_amount = implode( ' ', $style_pb_amount );
-        $html = '<div class="' . esc_attr( $classes_pb ) . '" style="' . esc_attr( $style_pb ) . '">';
-        $html .= '<span class="fsl-progress-amount progress-amount" style="' . esc_attr( $style_pb_amount ) . '"></span>';
+        $style_pb_amount = ['width:' . $progress . '%;', 'height:' . $bar_height . 'px;', 'background-color:' . $bar_inner_color . ';'];
+        $threshold_data = [
+            'html'    => '',
+            'style'   => [],
+            'classes' => [],
+        ];
+        $threshold_data = apply_filters(
+            'fsl_progress_bar_threshold_data',
+            $threshold_data,
+            $progress,
+            $opt
+        );
+        $indicators_html = $threshold_data['html'] ?? '';
+        $style_pb = array_merge( $style_pb, $threshold_data['style'] ?? [] );
+        $classes_pb = array_merge( $classes_pb, $threshold_data['classes'] ?? [] );
+        $html = '<div class="' . esc_attr( implode( ' ', $classes_pb ) ) . '" style="' . esc_attr( implode( ' ', $style_pb ) ) . '">';
+        $html .= '<span class="fsl-progress-amount progress-amount" style="' . esc_attr( implode( ' ', $style_pb_amount ) ) . '"></span>';
         $html .= $indicators_html;
         $html .= '</div>';
         return $html;
+    }
+
+    public static function set_threshold_indicators( $progress, $opt ) {
+        $layout = $opt['layout'] ?? '';
+        $bar_height = $opt['bar_height'] ?? '';
+        $threshold_bubbles = $layout === 'threshold_bubbles';
+        $indicator_icon = $opt['indicator_icon'] ?? false;
+        $threshold_indicators = $opt['threshold_indicators'] ?? [];
+        $bar_width_adjust = $opt['bar_width_adjust'] ?? 0;
+        $module_name = $opt['module_name'] ?? '';
+        $style = [];
+        $classes = [];
+        $html = '';
+        $is_fallback = false;
+        // Add fallback indicator if missing
+        if ( empty( $threshold_indicators ) && $indicator_icon && $module_name ) {
+            $threshold_indicators[$module_name] = $opt;
+            $is_fallback = true;
+        }
+        if ( !empty( $threshold_indicators ) ) {
+            if ( $bar_width_adjust ) {
+                $classes[] = 'fsl-bar-width-adjust';
+                $style[] = '--fsl-bar-width-adjust:' . $bar_width_adjust . 'px;';
+            }
+            foreach ( $threshold_indicators as $module => $data ) {
+                $threshold_percentage = $data['threshold_percentage'] ?? 100;
+                $is_reached = $progress >= $threshold_percentage;
+                $reached_class = ( $is_reached ? 'fsl-threshold-reached' : '' );
+                $indicator_style = ['--fsl-module-threshold:' . $threshold_percentage . '%;', '--fsl-bar-height:' . $bar_height . 'px;'];
+                $indicator_classes = ['fsl-threshold-indicator', 'fsl-' . sanitize_html_class( $module ), $reached_class];
+                $indicator_inner = '';
+                // ICON
+                if ( !empty( $data['icon'] ) ) {
+                    $icon_name = $data['icon'];
+                    $icon_size = $data['indicator_icon_size'] ?? 24;
+                    $icon_shape = $data['indicator_icon_shape'] ?? 'round';
+                    $icon_bg_color = $data['indicator_icon_bg_color'] ?? '#ffffff';
+                    $icon_color = $data['icon_color'] ?? '#333333';
+                    $icon_html = Icons::get_svg( $icon_name, $icon_size );
+                    $indicator_inner .= apply_filters(
+                        'fsl_threshold_indicator_icon_html',
+                        $icon_html,
+                        $module,
+                        $data
+                    );
+                    $indicator_style[] = '--fsl-icon-bg-color:' . $icon_bg_color . ';';
+                    $indicator_style[] = '--fsl-icon-color:' . $icon_color . ';';
+                    $indicator_style[] = '--fsl-icon-size:' . $icon_size . 'px;';
+                    $indicator_classes[] = 'fsl-icon-shape-' . $icon_shape;
+                    $indicator_classes[] = 'fsl-has-threshold-icon';
+                }
+                // BUBBLE
+                if ( $threshold_bubbles && !$is_fallback ) {
+                    $is_focused = $data['focused'] ?? false;
+                    $z_index = ( $is_focused ? 1 : 0 );
+                    $indicator_style[] = '--fsl-indicator-z-index:' . $z_index . ';';
+                    $indicator_classes[] = 'fsl-has-threshold-bubble';
+                    $text = $data['text'] ?? [];
+                    $title = $text['title'] ?? '';
+                    $description = $text['description'] ?? '';
+                    $qualified_message = $text['qualified_message'] ?? '';
+                    $message = ( $is_reached ? $qualified_message : $title . $description );
+                    $indicator_inner .= '<span class="fsl-threshold-bubble">' . $message . '</span>';
+                }
+                $html .= '<span class="' . esc_attr( implode( ' ', array_filter( $indicator_classes ) ) ) . '" style="' . esc_attr( implode( ' ', $indicator_style ) ) . '">' . $indicator_inner . '</span>';
+            }
+        }
+        return [
+            'html'    => $html,
+            'style'   => $style,
+            'classes' => $classes,
+        ];
     }
 
 }

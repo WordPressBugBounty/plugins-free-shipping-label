@@ -3,6 +3,11 @@
 namespace Devnet\FSL\Includes;
 
 
+if (! defined('ABSPATH')) {
+	exit;
+}
+
+
 class Loader
 {
 

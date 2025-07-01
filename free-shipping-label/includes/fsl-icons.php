@@ -2,6 +2,12 @@
 
 namespace Devnet\FSL\Includes;
 
+
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+
 /**
  * SVG Icons class
  * @since 2.6.0

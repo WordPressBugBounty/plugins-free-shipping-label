@@ -2,6 +2,12 @@
 
 namespace Devnet\FSL\Admin;
 
+
+if (! defined('ABSPATH')) {
+    exit;
+}
+
+
 /**
  * Settings API wrapper class.
  * 
