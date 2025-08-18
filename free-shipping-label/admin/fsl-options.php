@@ -529,6 +529,7 @@ class Options {
                 'label'   => esc_html__( 'Layout for Multiple Goals', 'free-shipping-label' ),
                 'options' => [
                     'list'        => esc_html__( 'Vertical list', 'free-shipping-label' ),
+                    'list_alt'    => esc_html__( 'Vertical list (alt)', 'free-shipping-label' ),
                     '_disabled_1' => esc_html__( 'Horizontal Labels', 'free-shipping-label' ),
                     '_disabled_2' => esc_html__( 'Horizontal Labels with description', 'free-shipping-label' ),
                     '_disabled_3' => esc_html__( 'Description Only Above', 'free-shipping-label' ),

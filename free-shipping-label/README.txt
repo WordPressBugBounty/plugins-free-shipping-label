@@ -3,7 +3,7 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 6.4
-Stable tag: 3.4.0
+Stable tag: 3.4.1
 Tested up to: 6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -26,7 +26,7 @@ Give your customers a smooth shopping journey and increase your average order va
 
 🎉 **Make the Most of the Gift Bar Module!** 🎁✨ Boost sales and delight your customers by offering free gifts as they shop. The **Gift Bar** module seamlessly integrates into your progress bar, encouraging shoppers to add more to their cart to unlock a reward. It’s the perfect way to enhance engagement and increase average order value. [Learn more about how it works.](https://devnet.hr/docs/free-shipping-label/gift-bar/)
 
-🎉 **Looking to Add More Goals to Your Progress Bar?** 🛒💸 The [Discount Bar Add-On](https://devnet.hr/plugins/free-shipping-label/#fsl-discount) lets you introduce up to three additional steps, encouraging customers to unlock exciting discounts as they shop. It’s a powerful way to boost cart values, engage shoppers, and drive more sales. [Learn more about it here.](https://devnet.hr/docs/free-shipping-label/discount-bar/)
+🎉 **Looking to Add More Goals to Your Progress Bar?** 🛒💸 The [Discount Bar Add-On](https://devnet.hr/plugins/free-shipping-label/fsl-discount) lets you introduce up to three additional steps, encouraging customers to unlock exciting discounts as they shop. It’s a powerful way to boost cart values, engage shoppers, and drive more sales. [Learn more about it here.](https://devnet.hr/docs/free-shipping-label/discount-bar/)
 
 ## Who is plugin for?
 
@@ -86,7 +86,7 @@ With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), 
 
 ### Add Additional Steps/Levels with FSL Discount Add-On
 
-Take your Free Shipping Label plugin to the next level with the [FSL Discount Add-On](https://devnet.hr/plugins/free-shipping-label/#fsl-discount). Unlock new possibilities for boosting sales by introducing a dynamic discount bar, encouraging customers to spend more and enhancing their shopping experience.
+Take your Free Shipping Label plugin to the next level with the [FSL Discount Add-On](https://devnet.hr/plugins/free-shipping-label/fsl-discount). Unlock new possibilities for boosting sales by introducing a dynamic discount bar, encouraging customers to spend more and enhancing their shopping experience.
 
 #### Key Features:
 - **Add up to Three Discount Steps:** Motivate customers with single, double, or triple-step goals to unlock exclusive discounts.
@@ -94,7 +94,7 @@ Take your Free Shipping Label plugin to the next level with the [FSL Discount Ad
 - **Customizable Messages:** Tailor progress bar text to match your store’s tone and promotions.
 - **Customizable Threshold Icon:** Make your progress bar visually engaging with unique threshold icons.
 
-Inspire your customers to spend more, increase cart values, and create a rewarding shopping experience. [Learn More](https://devnet.hr/plugins/free-shipping-label/#fsl-discount).
+Inspire your customers to spend more, increase cart values, and create a rewarding shopping experience. [Learn More](https://devnet.hr/plugins/free-shipping-label/fsl-discount).
 
 
 
@@ -122,6 +122,7 @@ Here are some other plugins we have developed that you might find useful:
 - [Easy Booking Calendar](https://wordpress.org/plugins/easy-booking-calendar/) - Turn any product into a reservation-ready item. This plugin adds a customizable calendar to product pages, allowing customers to select date ranges for bookings.
 - [BizNotes](https://wordpress.org/plugins/biznotes/) - Exclusive admin notes for seamless order management among multiple admins. Effortless collaboration, powered up.
 - [Snap Blocks](https://wordpress.org/plugins/snap-blocks/) - A lightweight plugin that lets you create reusable content blocks in WordPress.
+- [PingVid](https://wordpress.org/plugins/pingvid/) - A lightweight WordPress plugin that adds a floating video widget to your site.
 
 
 == Installation ==
@@ -175,19 +176,28 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 == Changelog ==
 
+= 3.4.1 =
+
+*2025-08-18*
+
+* Add: Layout option - Vertical list (alt) - all descriptions displayed
+* Update: Layout option - Vertical list - show only current goal description
+* Update: Freemius SDK updated to the latest version
+* Performance: Tested up to WooCommerce 10.1
+
 = 3.4.0 =
 
 *2025-07-01*
 
-- Fix: Resolved edge case causing memory spikes
-- Fix: Gift Bar – Label is now translatable  
-- Add: Gift Product – Price display options  
-- Update: Display Mode options moved to Progress Bar > Layout for Multiple Goals  
-- Update: Freemius SDK updated to the latest version
-- Update: Minor style adjustments across front-end components  
-- Update: Improved UI of settings pages for better usability
-- Performance: Code optimizations for better plugin efficiency
-- Performance: Tested up to WooCommerce 9.9  
+* Fix: Resolved edge case causing memory spikes
+* Fix: Gift Bar – Label is now translatable  
+* Add: Gift Product – Price display options  
+* Update: Display Mode options moved to Progress Bar > Layout for Multiple Goals  
+* Update: Freemius SDK updated to the latest version
+* Update: Minor style adjustments across front-end components  
+* Update: Improved UI of settings pages for better usability
+* Performance: Code optimizations for better plugin efficiency
+* Performance: Tested up to WooCommerce 9.9  
 
 = 3.3.2 =
 
@@ -619,7 +629,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: loading translations
 * Update: textdomain
 
-= 1.0. = 
+= 1.0.0 = 
 
 *2020-07-30*
 

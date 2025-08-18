@@ -134,8 +134,11 @@ class FSL_Bar {
             $opt['description'] = Defaults::bar( 'description' );
             $opt['qualified_message'] = Defaults::bar( 'qualified_message' );
         }
+        // Save Layout to variable.
         $layout = $opt['layout'] ?? Defaults::bar( 'layout' );
-        $opt['layout'] = Defaults::bar( 'layout' );
+        if ( !in_array( $layout, ['list', 'list_alt'], true ) ) {
+            $opt['layout'] = Defaults::bar( 'layout' );
+        }
         if ( $only_inheritable ) {
             // Filter out non-inheritable options.
             foreach ( $opt as $key => $value ) {
@@ -502,7 +505,7 @@ class FSL_Bar {
                 ];
             }
             $show_full_progress_bar = $options['show_full_progress_bar'] ?? false;
-            if ( $bar_type === 'linear' && $layout !== 'list' ) {
+            if ( $bar_type === 'linear' && !in_array( $layout, ['list', 'list_alt'], true ) ) {
                 $title = null;
                 $description = null;
                 if ( $layout === 'horizontal_1' || $layout === 'horizontal_2' ) {
@@ -517,11 +520,13 @@ class FSL_Bar {
                 'display_title'             => $title,
                 'display_description'       => $description,
                 'display_qualified_message' => $reached && $show_qualified_message,
+                'focused'                   => $focused_module === $module_name,
+                'layout'                    => $layout,
             ];
         }
         // Start building HTML
         $html = '';
-        if ( $layout === 'list' ) {
+        if ( $layout === 'list' || $layout === 'list_alt' ) {
             $html .= $this->build_vertical_list_html( $display_data );
         } elseif ( $is_threshold_bubbles_layout ) {
             $show_full_progress_bar = true;
@@ -591,6 +596,11 @@ class FSL_Bar {
         $title = $module_data['text']['title'] ?? '';
         $description = $module_data['text']['description'] ?? '';
         $qualified_message = $module_data['text']['qualified_message'] ?? '';
+        $layout = $module_data['layout'] ?? '';
+        $is_focused = $module_data['focused'] ?? false;
+        if ( $layout === 'list' && !$is_focused ) {
+            $display_description = false;
+        }
         $html = '<div class="fsl-module-block ' . esc_attr( $reached_class ) . '">';
         if ( $display_qualified_message ) {
             $html .= $qualified_message;

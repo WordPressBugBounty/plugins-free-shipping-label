@@ -96,7 +96,10 @@ class Helper {
                 // Check if initial zone still exists.
                 $zone = ( $init_zone ? $init_zone : $zone );
             }
-            foreach ( $zone->get_shipping_methods( true ) as $key => $method ) {
+            // $cache_key = 'fsl_min_amount_zone_' . $zone->get_id();
+            // $amount = get_transient($cache_key);
+            // if (false === $amount) {
+            foreach ( $zone->get_shipping_methods() as $key => $method ) {
                 if ( $method->id === 'free_shipping' ) {
                     $instance = ( isset( $method->instance_settings ) ? $method->instance_settings : null );
                     self::$free_shipping_instance = $instance;
@@ -111,6 +114,8 @@ class Helper {
                 // Run compatibility checks
                 $amount = Compatibility::get_custom_shipping_min_amount( $method->id, $method );
             }
+            //     set_transient($cache_key, $amount, HOUR_IN_SECONDS);
+            // }
         }
         if ( $only_virtual_products_in_cart ) {
             $amount = null;

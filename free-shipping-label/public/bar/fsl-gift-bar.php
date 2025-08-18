@@ -88,6 +88,7 @@ class Gift_Bar extends FSL_Bar {
                 'remaining' => $remaining,
                 'threshold' => $threshold,
             ],
+            'display'          => $display,
         ];
         if ( $pass ) {
             $gift_bar_data['reached']['qualified_message'] = $options['qualified_message'];

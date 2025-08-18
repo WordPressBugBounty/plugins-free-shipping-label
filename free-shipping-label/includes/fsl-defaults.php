@@ -10,6 +10,16 @@ if (! defined('ABSPATH')) {
 
 class Defaults
 {
+    private static function format_output($options = [], $option_name = '')
+    {
+        $output = $options;
+
+        if ($option_name) {
+            $output = $options[$option_name] ?? null;
+        }
+
+        return $output;
+    }
 
     /**
      * @since    2.0.1
@@ -26,13 +36,7 @@ class Defaults
             'delete_options'          => 0
         ];
 
-        $output = $options;
-
-        if ($option_name) {
-            $output = $options[$option_name] ?? null;
-        }
-
-        return $output;
+        return self::format_output($options, $option_name);
     }
 
     /**
@@ -82,13 +86,7 @@ class Defaults
             'remove_bar_stripes'     => 0,
         ];
 
-        $output = $options;
-
-        if ($option_name) {
-            $output = $options[$option_name] ?? null;
-        }
-
-        return $output;
+        return self::format_output($options, $option_name);
     }
 
     /**
@@ -120,13 +118,7 @@ class Defaults
             'inherit_progress_bar_settings' => 1
         ];
 
-        $output = $options;
-
-        if ($option_name) {
-            $output = $options[$option_name] ?? null;
-        }
-
-        return $output;
+        return self::format_output($options, $option_name);
     }
 
     /**
@@ -150,13 +142,7 @@ class Defaults
             'inherit_progress_bar_settings' => 1
         ];
 
-        $output = $options;
-
-        if ($option_name) {
-            $output = $options[$option_name] ?? null;
-        }
-
-        return $output;
+        return self::format_output($options, $option_name);
     }
 
     /**
@@ -186,12 +172,6 @@ class Defaults
             'image_width'                     => 50
         ];
 
-        $output = $options;
-
-        if ($option_name) {
-            $output = $options[$option_name] ?? null;
-        }
-
-        return $output;
+        return self::format_output($options, $option_name);
     }
 }
