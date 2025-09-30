@@ -2,7 +2,6 @@
 
 namespace Devnet\FSL\Admin;
 
-
 if (! defined('ABSPATH')) {
     exit;
 }

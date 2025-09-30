@@ -3,7 +3,7 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 6.4
-Stable tag: 3.4.1
+Stable tag: 3.4.2
 Tested up to: 6.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -176,6 +176,15 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 == Changelog ==
 
+= 3.4.2 =
+
+*2025-09-30*
+
+* Fix: Product label image now displays correctly on single variations when Label Over Image is enabled
+* Update: Detect block-based Cart/Checkout pages with notice in settings about compatibility and block usage
+* Update: Freemius SDK updated to the latest version
+* Compatibility: Tested up to WooCommerce 10.2
+
 = 3.4.1 =
 
 *2025-08-18*
@@ -183,7 +192,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Add: Layout option - Vertical list (alt) - all descriptions displayed
 * Update: Layout option - Vertical list - show only current goal description
 * Update: Freemius SDK updated to the latest version
-* Performance: Tested up to WooCommerce 10.1
+* Compatibility: Tested up to WooCommerce 10.1
 
 = 3.4.0 =
 
@@ -197,14 +206,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Minor style adjustments across front-end components  
 * Update: Improved UI of settings pages for better usability
 * Performance: Code optimizations for better plugin efficiency
-* Performance: Tested up to WooCommerce 9.9  
+* Compatibility: Tested up to WooCommerce 9.9  
 
 = 3.3.2 =
 
 *2025-04-15*
 
-* Performance: WP tested up to 6.8
-* Performance: WC tested up to 9.8
+* Compatibility: WP tested up to 6.8
+* Compatibility: WC tested up to 9.8
 * Dev: Added `fsl_gift_pass` filter hook
 
 = 3.3.1 =
@@ -213,7 +222,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: Ensure the minimum amount is always treated as a float to prevent calculation issues
 * Update: Settings pages
-* Performance: WC tested up to 9.7
+* Compatibility: WC tested up to 9.7
 
 = 3.3.0 =
 
@@ -228,14 +237,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2025-01-27*
 
 * Update: Updated Freemius SDK to the latest version
-* Performance: WC tested up to 9.6
+* Compatibility: WC tested up to 9.6
 
 = 3.2.1 = 
 
 *2025-01-17*
 
 * Add: Add-on support - Discount bar
-* Performance: WC tested up to: 9.5
+* Compatibility: WC tested up to: 9.5
 
 = 3.2.0 = 
 
@@ -248,8 +257,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Color picker
 * Update: Settings API
 * Update: Freemius WordPress SDK to latest version
-* Performance: WP tested up to: 6.7
-* Performance: WC tested up to: 9.4
+* Compatibility: WP tested up to: 6.7
+* Compatibility: WC tested up to: 9.4
 
 = 3.1.2 = 
 
@@ -259,7 +268,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: Removed subtle 1px top border shadow from the progress bar that created the appearance of padding above the inner bar
 * Update: Free Shipping text placeholder now supports both `{free_shipping_amount}` and `{threshold}` variables
 * Update: Freemius WordPress SDK to latest version
-* Performance: WC tested up to: 9.3
+* Compatibility: WC tested up to: 9.3
 
 = 3.1.1 = 
 
@@ -281,8 +290,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Language file
 * Dev: Additional `product` parameter to `fsl_product_price` filter hook
 * Dev: Additional `price` parameter to `fsl_product_label_html` filter hook
-* Performance: WP tested up to: 6.6
-* Performance: WC tested up to: 9.1
+* Compatibility: WP tested up to: 6.6
+* Compatibility: WC tested up to: 9.1
 
 = 3.0.6 = 
 
@@ -290,7 +299,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Update: settings panel - descriptions
 * Update: language file
-* Performance: WC tested up to: 8.9
+* Compatibility: WC tested up to: 8.9
 
 = 3.0.5 = 
 
@@ -303,7 +312,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2024-04-23*
 
 * Update: Freemius WordPress SDK
-* Performance: WC tested up to: 8.8
+* Compatibility: WC tested up to: 8.8
 
 = 3.0.3 = 
 
@@ -313,7 +322,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: settings panel - footer
 * Update: Freemius WordPress SDK
 * Update: language file
-* Performance: WC tested up to: 8.7
+* Compatibility: WC tested up to: 8.7
 * Dev: added new `fsl_progress_bar_setup_args` filter hook
 
 = 3.0.2 = 
@@ -321,8 +330,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2024-03-18*
 
 * Fix: Flexible shipping instance id fix
-* Performance: WC tested up to: 8.6
-* Performance: WP tested up to: 6.5
+* Compatibility: WC tested up to: 8.6
+* Compatibility: WP tested up to: 6.5
 
 = 3.0.1 = 
 
@@ -342,16 +351,16 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Freemius WordPress SDK
 * Dev: removed unused position filter hooks
 * Dev: added new `fsl_admin_menu_user_capability` filter hook
-* Performance: WC tested up to: 8.3
-* Performance: WP tested up to: 6.4
+* Compatibility: WC tested up to: 8.3
+* Compatibility: WP tested up to: 6.4
 
 = 2.6.13 = 
 
 *2023-07-31*
 
 * Fix: error on settings page
-* Performance: WC tested up to: 7.9
-* Performance: WP tested up to: 6.3
+* Compatibility: WC tested up to: 7.9
+* Compatibility: WP tested up to: 6.3
 
 = 2.6.12 = 
 
@@ -372,7 +381,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: Progress bar not loading if local pickup selected first
 * Update: readme.txt
 * Update: Freemius WordPress SDK to 2.5.9
-* Performance: WC tested up to: 7.8
+* Compatibility: WC tested up to: 7.8
 * Dev: Added new `fsl_progress_bar_placeholder_html` filter hook
 
 = 2.6.9 = 
@@ -383,7 +392,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: free shipping requires - both, coupon
 * Fix: when allowed zero shipping and selected local pickup showing qualified message
 * Update: Freemius WordPress SDK to 2.5.8
-* Performance: WC tested up to: 7.7
+* Compatibility: WC tested up to: 7.7
 
 = 2.6.8 = 
 
@@ -399,7 +408,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: svg icons in settings section
 * Update: settings API
 * Update: freemius sdk
-* Performance: WC tested up to: 7.6
+* Compatibility: WC tested up to: 7.6
 
 = 2.6.6 = 
 
@@ -408,8 +417,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: color pickers with alpha/transparent option
 * Update: freemius sdk
 * Security - additional security layer in settings API
-* Performance: WC tested up to: 7.5
-* Performance: WP tested up to: 6.2
+* Compatibility: WC tested up to: 7.5
+* Compatibility: WP tested up to: 6.2
 
 = 2.6.5 =
 * Security - enhanced security measures taken including input sanitization, attribute escaping, and replacement of remote select2 with woocommerce select2
@@ -427,7 +436,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: Error related to contributors when viewing details of a plugin
 * Update: readme.txt
-* Performance: WC tested up to: 7.4
+* Compatibility: WC tested up to: 7.4
 
 = 2.6.2 = 
 
@@ -457,7 +466,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: Deactivate free version when PRO activated
 * Update: language .pot file
 * Update: Freemius sdk
-* Performance: WC tested up to: 7.3
+* Compatibility: WC tested up to: 7.3
 
 = 2.5.1 = 
 
@@ -470,8 +479,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 *2022-11-22*
 
-* Performance: WC tested up to: 7.1
-* Performance: WP tested up to: 6.1
+* Compatibility: WC tested up to: 7.1
+* Compatibility: WP tested up to: 6.1
 * Enhancement: Freemius integration
 * Update: HPOS compatibility
 * Update: product label filter priority
@@ -488,7 +497,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2022-10-14*
 
 * Fix: Don't show Progress Bar if only virtual products are in the cart
-* Performance: WC tested up to: 7.0
+* Compatibility: WC tested up to: 7.0
 * Update: Ignore coupon option deprecated
 * Update: language .pot file
 
@@ -506,8 +515,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: typos
 * Update: language .pot file
 * Enhancement: Security
-* Performance: WC tested up to: 6.5
-* Performance: WP tested up to: 6.0
+* Compatibility: WC tested up to: 6.5
+* Compatibility: WP tested up to: 6.0
 * Performance: Code optimization
 * Dev: Added new `fsl_settings_sections` filter hook
 * Dev: Added new `fsl_settings_fields` filter hook
@@ -524,7 +533,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: Error when deleted initial shipping zone
 * Fix: Fatal Error related to shipping packages
-* Performance: WC tested up to: 6.3
+* Compatibility: WC tested up to: 6.3
 
 = 2.3.0 = 
 
@@ -534,8 +543,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: issues with showing labels before shipping method are chosen
 * Fix: single product page: labels on variable products not showing up
 * Fix: typos
-* Performance: WP tested up to: 5.9
-* Performance: WC tested up to: 6.1
+* Compatibility: WP tested up to: 5.9
+* Compatibility: WC tested up to: 6.1
 
 = 2.2.3 = 
 
@@ -543,7 +552,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Dev: Added new `fsl_progress_bar_html` filter hook
 * Dev: Added new `fsl_checkout_progress_bar_position` filter hook
-* Performance: WC tested up to: 6.0
+* Compatibility: WC tested up to: 6.0
 * Performance: Code optimization
 
 = 2.2.2 = 
@@ -558,7 +567,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: PHP Warning related to `fsl_flexible_shipping_min_amount` hook
 * Dev: Added new `fsl_product_price` filter hook
-* Performance: WC tested up to: 5.7
+* Compatibility: WC tested up to: 5.7
 
 = 2.2.0 = 
 
@@ -567,7 +576,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Tweak - Added additional classes to progress bar
 * Fix: Gutenberg error
 * Enhancement: Hide shipping rates when free shipping is available
-* Performance: WC tested up to: 5.6
+* Compatibility: WC tested up to: 5.6
 * Dev: Added new `fsl_min_amount` filter hook
 * Dev: Added new `fsl_free_shipping_instance_key` filter hook
 * Dev: Added new `fsl_shipping_method_min_amount` filter hook
@@ -587,7 +596,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix – minor style issues
 * Enhancement: Disable for logged out users
 * Enhancement: Message after free shipping threshold is reached
-* Performance: WC tested up to: 5.2
+* Compatibility: WC tested up to: 5.2
 * Update: pot file
 
 = 2.0.3 = 
@@ -595,14 +604,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2021-01-22*
 
 * Fix – minor style issues
-* Performance: WC tested up to: 4.9
+* Compatibility: WC tested up to: 4.9
 
 = 2.0.2 = 
 
 *2020-12-19*
 
 * Fix – Syntax error
-* Performance: WC tested up to: 4.8
+* Compatibility: WC tested up to: 4.8
 
 = 2.0.1 = 
 
@@ -612,7 +621,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: pot file
 * Fix: Minor bug fixes
 * Performance: Code optimization
-* Performance: Tested with latest WooCommerce version (4.6.1)
+* Compatibility: Tested with latest WooCommerce version (4.6.1)
 
 = 2.0.0 = 
 

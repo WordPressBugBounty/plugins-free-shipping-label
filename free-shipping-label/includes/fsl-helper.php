@@ -327,4 +327,45 @@ class Helper {
         ];
     }
 
+    public static function detect_wc_cart_checkout_type() {
+        $result = [
+            'cart'     => 'unknown',
+            'checkout' => 'unknown',
+        ];
+        if ( !function_exists( 'wc_get_page_id' ) ) {
+            return $result;
+            // WooCommerce not active
+        }
+        foreach ( ['cart', 'checkout'] as $page ) {
+            $page_id = wc_get_page_id( $page );
+            if ( $page_id <= 0 ) {
+                $result[$page] = 'not_assigned';
+                continue;
+            }
+            $content = (string) get_post_field( 'post_content', $page_id );
+            if ( $content === '' ) {
+                $result[$page] = 'empty';
+                continue;
+            }
+            // Shortcode detection
+            if ( has_shortcode( $content, 'woocommerce_' . $page ) ) {
+                $result[$page] = 'shortcode';
+                continue;
+            }
+            // Block detection
+            if ( function_exists( 'has_block' ) ) {
+                if ( $page === 'cart' && has_block( 'woocommerce/cart', $content ) ) {
+                    $result[$page] = 'block';
+                    continue;
+                }
+                if ( $page === 'checkout' && has_block( 'woocommerce/checkout', $content ) ) {
+                    $result[$page] = 'block';
+                    continue;
+                }
+            }
+            $result[$page] = 'unknown';
+        }
+        return $result;
+    }
+
 }

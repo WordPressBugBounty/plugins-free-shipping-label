@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
 /**
  * Settings API wrapper class.
  * 
- * @updated    10.03.2025.
+ * @updated    25.09.2025.
  */
 
 class Settings_API
@@ -192,7 +192,10 @@ class Settings_API
     public function kses_args($additional_args = [])
     {
         $args = [
-            'br'    => [],
+            'br'     => [],
+            'b'      => [],
+            'em'     => [],
+            'strong' => [],
             'input' => [
                 'type'     => [],
                 'readonly' => [],
@@ -201,7 +204,10 @@ class Settings_API
             'a'     => [
                 'href'   => [],
                 'target' => []
-            ]
+            ],
+            'div'   => [
+                'class'  => []
+            ],
         ];
 
         return $args + $additional_args;
@@ -224,13 +230,13 @@ class Settings_API
     }
 
     /**
-     * Displays subtitle or descriptio settings group
+     * Displays subtitle or description settings group
      *
      * @param array   $args settings field args
      */
     public function callback_info($args)
     {
-        printf('<p class="info-description">%1$s</p>', wp_kses($args['desc'], $this->kses_args()));
+        printf('<div class="info-description">%1$s</div>', wp_kses($args['desc'], $this->kses_args()));
     }
 
     /**

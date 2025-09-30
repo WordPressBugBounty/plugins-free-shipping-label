@@ -95,9 +95,10 @@ class FSL_Label {
         $show_on_list_simple_products = $opt['show_on_list_simple_products'] ?? false;
         $type = $product->get_type();
         if ( 'variable' === $type ) {
-            $min_var_reg_price = $product->get_variation_regular_price( 'min', true );
-            $min_var_sale_price = $product->get_variation_sale_price( 'min', true );
-            $price = ( $min_var_sale_price ? $min_var_sale_price : $min_var_reg_price );
+            $min_or_max = 'min';
+            $_var_reg_price = $product->get_variation_regular_price( $min_or_max, true );
+            $_var_sale_price = $product->get_variation_sale_price( $min_or_max, true );
+            $price = ( $_var_sale_price ? $_var_sale_price : $_var_reg_price );
         } else {
             $regular_price = $product->get_regular_price();
             $sale_price = $product->get_sale_price();
@@ -173,8 +174,11 @@ class FSL_Label {
         // if it is enabled, show it only on the single product page,
         // but avoid any other products on the page (sliders, sidebars, etc.).
         // on single product page - page_id/queried_object_id must match with the product_id.
-        if ( !$label_over_image || $label_over_image && is_product() && $product->get_id() === get_queried_object_id() ) {
-            $price_html = $price_html . $this->product_label_output( $product );
+        // if (!$label_over_image || ($label_over_image && is_product() && $product->get_id() === get_queried_object_id())) {
+        //     $price_html = $price_html . $this->product_label_output($product);
+        // }
+        if ( !$label_over_image || $label_over_image && is_product() && ($product->get_id() === get_queried_object_id() || $product->is_type( 'variation' ) && $product->get_parent_id() === get_queried_object_id()) ) {
+            $price_html .= $this->product_label_output( $product );
         }
         return $price_html;
     }

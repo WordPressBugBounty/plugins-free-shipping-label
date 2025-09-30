@@ -4,6 +4,7 @@ namespace Devnet\FSL\Admin;
 
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Icons;
+use Devnet\FSL\Includes\Helper;
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -447,6 +448,7 @@ class Options {
                 'name'  => 'info-bar-positions',
                 'label' => esc_html__( 'Positions', 'free-shipping-label' ),
                 'class' => 'info',
+                'desc'  => self::progress_bar_position_notice(),
             ],
             [
                 'type'    => 'checkbox',
@@ -1017,6 +1019,60 @@ class Options {
             }
         }
         return $options;
+    }
+
+    private static function progress_bar_position_notice() {
+        $wc_page_type = Helper::detect_wc_cart_checkout_type();
+        $is_pro_active = false;
+        $doc_url_block = 'https://devnet.hr/docs/free-shipping-label/adding-the-progress-bar-block/';
+        $pro_url = 'https://devnet.hr/plugins/free-shipping-label/';
+        $is_cart_block = isset( $wc_page_type['cart'] ) && 'block' === $wc_page_type['cart'];
+        $is_checkout_block = isset( $wc_page_type['checkout'] ) && 'block' === $wc_page_type['checkout'];
+        if ( !$is_cart_block && !$is_checkout_block ) {
+            return '';
+        }
+        // Bolded labels for readability.
+        $cart_b = '<strong>' . esc_html__( 'Cart', 'free-shipping-label' ) . '</strong>';
+        $checkout_b = '<strong>' . esc_html__( 'Checkout', 'free-shipping-label' ) . '</strong>';
+        if ( $is_cart_block && $is_checkout_block ) {
+            $which_label = sprintf( 
+                /* translators: 1: "Cart", 2: "Checkout" */
+                __( '%1$s and %2$s', 'free-shipping-label' ),
+                $cart_b,
+                $checkout_b
+             );
+        } elseif ( $is_cart_block ) {
+            $which_label = $cart_b;
+        } else {
+            $which_label = $checkout_b;
+        }
+        $docs_a = '<a href="' . esc_url( $doc_url_block ) . '" target="_blank" rel="noopener noreferrer">';
+        $docs_z = '</a>';
+        $pro_a = '<a href="' . esc_url( $pro_url ) . '" target="_blank" rel="noopener noreferrer">';
+        $pro_z = '</a>';
+        if ( $is_pro_active ) {
+            $message = sprintf(
+                /* translators: 1: "Cart", "Checkout" or "Cart and Checkout" (bold), 2: <a> to docs, 3: </a> */
+                __( 'Your %1$s page(s) use WooCommerce Blocks. To display the Progress Bar, insert the FSL Progress Bar block where you prefer — see the %2$sAdding the block guide%3$s. The positions below apply only to shortcode-based Cart and Checkout.', 'free-shipping-label' ),
+                $which_label,
+                $docs_a,
+                $docs_z
+            );
+        } else {
+            $message = sprintf(
+                /* translators: 1: "Cart", "Checkout" or "Cart and Checkout" (bold), 2: <a> to Pro, 3: </a>, 4: <a> to docs, 5: </a> */
+                __( 'Your %1$s page(s) use WooCommerce Blocks. The positions below apply only to shortcode-based Cart and Checkout. You can switch to shortcodes, or %2$supgrade to Pro%3$s and use the Progress Bar block for flexible placement — see the %4$sAdding the block guide%5$s.', 'free-shipping-label' ),
+                $which_label,
+                $pro_a,
+                $pro_z,
+                $docs_a,
+                $docs_z
+            );
+        }
+        $html = '<div class="devnet-plugin-option-notice--warning">';
+        $html .= '<p>' . wp_kses_post( $message ) . '</p>';
+        $html .= '</div>';
+        return $html;
     }
 
 }
