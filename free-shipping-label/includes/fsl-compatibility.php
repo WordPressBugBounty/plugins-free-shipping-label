@@ -28,6 +28,24 @@ class Compatibility {
         if ( Helper::starts_with( $chosen_shipping_id, 'flexible_shipping' ) ) {
             $amount = self::get_flexible_shipping_method_min_amount( $chosen_shipping_id );
         }
+        /**
+         * Try to get threshold from "GLS Shipping for WooCommerce" (if applicable)
+         * 
+         */
+        if ( Helper::starts_with( $chosen_shipping_id, 'gls_shipping_method' ) ) {
+            if ( Helper::ends_with( $chosen_shipping_id, 'zones' ) ) {
+                $amount = self::gls_zones_free_shipping_threshold( $chosen_shipping_id );
+            } else {
+                $settings = get_option( 'woocommerce_' . $chosen_shipping_id . '_settings', [] );
+                $amount = null;
+                if ( isset( $settings['free_shipping_threshold'] ) ) {
+                    $value = (float) $settings['free_shipping_threshold'];
+                    if ( $value > 0 ) {
+                        $amount = $value;
+                    }
+                }
+            }
+        }
         return $amount;
     }
 
@@ -50,7 +68,7 @@ class Compatibility {
      * @package     Advanced Free Shipping
      */
     public static function wafs_threshold( $amount ) {
-        if ( !function_exists( 'wafs_get_rates' ) && !function_exists( 'wpc_match_conditions' ) ) {
+        if ( !function_exists( 'wafs_get_rates' ) || !function_exists( 'wpc_match_conditions' ) ) {
             return $amount;
         }
         $methods = wafs_get_rates();
@@ -86,6 +104,30 @@ class Compatibility {
             $amount = $thresholds[$matched_methods];
         }
         return $amount;
+    }
+
+    /**
+     * Check free shipping threshold set in GLS plugin.
+     * 
+     * @package     GLS Shipping for WooCommerce
+     */
+    public static function gls_zones_free_shipping_threshold( $chosen_shipping_id ) {
+        $cart = WC()->cart;
+        if ( $cart ) {
+            $packages = $cart->get_shipping_packages();
+            $package = reset( $packages );
+            $zone = wc_get_shipping_zone( $package );
+            foreach ( $zone->get_shipping_methods() as $key => $method ) {
+                if ( $method->id !== $chosen_shipping_id ) {
+                    continue;
+                }
+                $instance = ( isset( $method->instance_settings ) ? $method->instance_settings : null );
+                $amount = $instance['free_shipping_threshold'] ?? null;
+                if ( !empty( $amount ) ) {
+                    return $amount;
+                }
+            }
+        }
     }
 
 }

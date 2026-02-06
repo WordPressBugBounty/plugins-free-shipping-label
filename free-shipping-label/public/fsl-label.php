@@ -111,6 +111,23 @@ class FSL_Label {
                 $price = PHP_INT_MAX;
             }
         }
+        // Prevent duplicate label on single product when parent already qualifies
+        if ( is_product() && 'variation' === $type ) {
+            if ( $show_on_single_variable_product ) {
+                $parent = wc_get_product( $product->get_parent_id() );
+                if ( $parent && $parent->is_type( 'variable' ) ) {
+                    // Parent "qualifies" if its min variation price (sale if active, else regular) meets the threshold
+                    $_p_reg = $parent->get_variation_regular_price( 'min', true );
+                    $_p_sale = $parent->get_variation_sale_price( 'min', true );
+                    $parent_effective_min = ( $_p_sale ? $_p_sale : $_p_reg );
+                    // Respect the same free-shipping threshold used elsewhere
+                    if ( $this->free_shipping_min_amount && $parent_effective_min >= $this->free_shipping_min_amount ) {
+                        // Parent already shows label → don't add it again for the selected variation
+                        return '';
+                    }
+                }
+            }
+        }
         $price = apply_filters( 'fsl_product_price', $price, $product );
         $label_html = '';
         if ( is_product() ) {
@@ -174,9 +191,6 @@ class FSL_Label {
         // if it is enabled, show it only on the single product page,
         // but avoid any other products on the page (sliders, sidebars, etc.).
         // on single product page - page_id/queried_object_id must match with the product_id.
-        // if (!$label_over_image || ($label_over_image && is_product() && $product->get_id() === get_queried_object_id())) {
-        //     $price_html = $price_html . $this->product_label_output($product);
-        // }
         if ( !$label_over_image || $label_over_image && is_product() && ($product->get_id() === get_queried_object_id() || $product->is_type( 'variation' ) && $product->get_parent_id() === get_queried_object_id()) ) {
             $price_html .= $this->product_label_output( $product );
         }

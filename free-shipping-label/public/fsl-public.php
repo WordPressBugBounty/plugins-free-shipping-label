@@ -20,7 +20,13 @@ class FSL_Public
 
 	public function __construct($plugin_name, $version)
 	{
-		if (is_admin() && !wp_doing_ajax()) {
+		// Don’t run during cron/CLI/most admin screens/REST
+		if (
+			wp_doing_cron()
+			|| (defined('WP_CLI') && WP_CLI)
+			|| (defined('REST_REQUEST') && REST_REQUEST)
+			|| (is_admin() && ! wp_doing_ajax())
+		) {
 			return;
 		}
 

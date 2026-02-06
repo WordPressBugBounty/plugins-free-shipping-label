@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
 /**
  * Settings API wrapper class.
  * 
- * @updated    25.09.2025.
+ * @updated    2026-01-12
  */
 
 class Settings_API
@@ -670,9 +670,10 @@ class Settings_API
         echo '<input type="button" class="button dvnt-f-browse" value="' . esc_attr($label) . '" />';
 
         // to check if is an image.  
-        if ($value && $maybe_image = getimagesize($value)) {
-            $mime_type = $maybe_image['mime'];
-            if (strpos($mime_type, 'image/') === 0) {
+        if ($value && filter_var($value, FILTER_VALIDATE_URL) && strpos($value, 'http') === 0) {
+            $maybe_image = @getimagesize($value);
+            if ($maybe_image && strpos($maybe_image['mime'], 'image/') === 0) {
+                // phpcs:ignore PluginCheck.CodeAnalysis.ImageFunctions.NonEnqueuedImage -- Using external image URL.
                 echo '<img src="' . esc_attr($value) . '" class="dvnt-f-preview" width="75" height="75"/>';
             }
         }

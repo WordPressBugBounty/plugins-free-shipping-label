@@ -29,6 +29,17 @@ class Helper {
     }
 
     /**
+     * Check if a string ends with a given suffix.
+     *
+     */
+    static function ends_with( string $haystack, string $needle ) {
+        if ( $needle === '' ) {
+            return true;
+        }
+        return substr( $haystack, -strlen( $needle ) ) === $needle;
+    }
+
+    /**
      * Get chosen shipping method.
      *
      * @since    2.1.0
@@ -91,16 +102,13 @@ class Helper {
             $package = reset( $packages );
             $zone = wc_get_shipping_zone( $package );
             $known_customer = self::destination_info_exists( $package );
-            if ( !$known_customer && $initial_zone || $initial_zone == 0 ) {
+            if ( !$known_customer && ($initial_zone !== null || $initial_zone == 0) ) {
                 $init_zone = \WC_Shipping_Zones::get_zone_by( 'zone_id', $initial_zone );
                 // Check if initial zone still exists.
                 $zone = ( $init_zone ? $init_zone : $zone );
             }
-            // $cache_key = 'fsl_min_amount_zone_' . $zone->get_id();
-            // $amount = get_transient($cache_key);
-            // if (false === $amount) {
             foreach ( $zone->get_shipping_methods() as $key => $method ) {
-                if ( $method->id === 'free_shipping' ) {
+                if ( $method->id === 'free_shipping' && $method->enabled === 'yes' ) {
                     $instance = ( isset( $method->instance_settings ) ? $method->instance_settings : null );
                     self::$free_shipping_instance = $instance;
                     $min_amount_key = apply_filters( 'fsl_free_shipping_instance_key', 'min_amount' );
@@ -113,9 +121,10 @@ class Helper {
                 }
                 // Run compatibility checks
                 $amount = Compatibility::get_custom_shipping_min_amount( $method->id, $method );
+                if ( $amount ) {
+                    break;
+                }
             }
-            //     set_transient($cache_key, $amount, HOUR_IN_SECONDS);
-            // }
         }
         if ( $only_virtual_products_in_cart ) {
             $amount = null;

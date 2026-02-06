@@ -3,8 +3,8 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, amount left, progress bar, gift bar, woocommerce
 Requires PHP: 7.4
 Requires at least: 6.4
-Stable tag: 3.4.2
-Tested up to: 6.8
+Stable tag: 3.4.3
+Tested up to: 6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,53 +36,75 @@ Give your customers a smooth shopping journey and increase your average order va
 - Anyone trying to increase shop performance
 - Anyone trying to add more dynamism to the shop
 
-### Features
+## ✅ Features (Free Version)
 
-- Animated Gift bar
-- Animated progress bar
-- Customize progress bar
-- Display on the cart page and checkout pages
-- Hide shipping rates when free shipping is available
-- Message after free shipping threshold is reached
-- Show to all users or only for logged ones
-- Product Label for simple and variable products
-- Customize Product Label
-- Translation ready
-- Easy to use, no coding required
-- Compatible with: 
-    - Table Rate Shipping Method for WooCommerce by Flexible Shipping
-    - WooCommerce Advanced Free Shipping
+- Animated Gift Bar  
+- Animated progress bar  
+- Progress bar customization  
+- Display on Cart & Checkout pages  
+- Hide shipping rates when free shipping is available  
+- Message after free shipping threshold is reached  
+- Show to all users or only logged-in users  
+- Product Label for simple & variable products  
+- Customizable Product Label  
+- Translation ready  
+- Easy to use – no coding required  
 
-### Get More Options in Free Shipping Label Pro
+**Shipping plugin compatibility (Free):**
+- Table Rate Shipping Method for WooCommerce (Flexible Shipping)
+- WooCommerce Advanced Free Shipping
+- [GLS Shipping for WooCommerce](https://wordpress.org/plugins/gls-shipping-for-woocommerce/)
 
-With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), you get a lot more features, including:
+---
 
-- Threshold Icon indicator
-- More display options
-- Animated Circular progress bar
-- Customizable Circular progress bar
-- Image label
-- Label position
-- Exclude label on selected categories or products
-- Currency switcher plugins compatibility 
-    - FOX (former name is WOOCS)
-    - CURCY - Multi Currency for WooCommerce 
-    - WooCommerce Multilingual by OnTheGoSystems (WPML)
+## 🚀 Get More with Free Shipping Label Pro
+
+With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), you unlock advanced visual controls, flexible placement options, and extended compatibility with popular WooCommerce plugins.
+
+### 🔧 Advanced Features
+
+- Threshold icon indicator  
+- Multiple display modes  
+- Animated circular progress bar  
+- Fully customizable circular progress bar  
+- Image-based product labels  
+- Flexible label positioning  
+- Exclude labels by product or category  
 - [Animated notice bar](https://devnet.hr/docs/free-shipping-label/notice-bar/)
-- Advanced customization of notice bar
-- Advanced progress bar customization	
-- Progress bar cart positions
-- Progress bar checkout positions
-- Progress bar shortcode
-- Progress bar gutenberg block
-- Progress bar widget
-- Progress bar compatible with: 
-    - [WooCommerce Cart and Checkout blocks](https://woocommerce.com/checkout-blocks/)
-    - Elementor
-    - FunnelKit
-    - WPC Fly Cart
-    - Side Cart
-- and more!
+- Advanced customization of notice bar  
+- Advanced progress bar styling  
+- Cart & checkout position controls  
+- Shortcode support  
+- Gutenberg block  
+- Widget support 
+
+---
+
+## 🔌 Third-Party Plugin Compatibility (Pro)
+
+Free Shipping Label Pro is built to work seamlessly with real-world WooCommerce setups.
+
+### 💱 Currency & Multilingual Plugins
+- FOX (formerly WOOCS)
+- CURCY – Multi Currency for WooCommerce
+- WooCommerce Multilingual (WPML)
+
+### 🛒 Cart, Checkout & UX Plugins
+- [WooCommerce Cart & Checkout Blocks](https://woocommerce.com/checkout-blocks/)
+- Elementor
+- FunnelKit
+- WPC Fly Cart
+- Side Cart
+
+### 🚚 Shipping Plugins
+- [Table Rate Shipping Method for WooCommerce (Flexible Shipping)](https://wordpress.org/plugins/flexible-shipping/)
+- [WooCommerce Advanced Free Shipping](https://wordpress.org/plugins/woocommerce-advanced-free-shipping/)
+- [GLS Shipping for WooCommerce](https://wordpress.org/plugins/gls-shipping-for-woocommerce/)
+
+> The progress bar dynamically adapts to supported shipping methods and currencies, ensuring accurate thresholds and consistent messaging across the entire shopping flow.
+
+---
+
 
 ### Add Additional Steps/Levels with FSL Discount Add-On
 
@@ -116,13 +138,14 @@ If you like this plugin, feel free to leave a [review](https://wordpress.org/sup
 
 Here are some other plugins we have developed that you might find useful:
 
+- [Free Shipping Label](https://wordpress.org/plugins/free-shipping-label/) - Increase order revenue by showing your customers just how close they are to your free shipping threshold.
 - [Product Price History](https://wordpress.org/plugins/product-price-history/) - Track product price history with customizable charts and graphs on your WooCommerce store. Show lowest price and increase customer trust.
-- [Easy Subscribe](https://wordpress.org/plugins/easy-subscribe/) - Effortlessly integrate customizable subscription forms on your WordPress site with a simple shortcode.
 - [Price Alerts](https://wordpress.org/plugins/price-alerts/) - Let customers subscribe to price drops and boost sales by notifying interested buyers when product prices fall below their target.
+- [Easy Subscribe](https://wordpress.org/plugins/easy-subscribe/) - Effortlessly integrate customizable subscription forms on your WordPress site with a simple shortcode.
 - [Easy Booking Calendar](https://wordpress.org/plugins/easy-booking-calendar/) - Turn any product into a reservation-ready item. This plugin adds a customizable calendar to product pages, allowing customers to select date ranges for bookings.
 - [BizNotes](https://wordpress.org/plugins/biznotes/) - Exclusive admin notes for seamless order management among multiple admins. Effortless collaboration, powered up.
-- [Snap Blocks](https://wordpress.org/plugins/snap-blocks/) - A lightweight plugin that lets you create reusable content blocks in WordPress.
 - [PingVid](https://wordpress.org/plugins/pingvid/) - A lightweight WordPress plugin that adds a floating video widget to your site.
+- [Snap Blocks](https://wordpress.org/plugins/snap-blocks/) - A lightweight plugin that lets you create reusable content blocks in WordPress.
 
 
 == Installation ==
@@ -176,6 +199,16 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 == Changelog ==
 
+= 3.4.3 =
+
+*2026-01-13*
+
+* Fix: Prevent duplicate product label when parent already qualifies
+* Fix: Free shipping threshold is checked only for enabled shipping methods
+* Update: Freemius SDK updated
+* Compatibility: Tested up to WordPress 6.9
+* Compatibility: Tested up to WooCommerce 10.4
+
 = 3.4.2 =
 
 *2025-09-30*
@@ -192,7 +225,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Add: Layout option - Vertical list (alt) - all descriptions displayed
 * Update: Layout option - Vertical list - show only current goal description
 * Update: Freemius SDK updated to the latest version
-* Compatibility: Tested up to WooCommerce 10.1
+* Performance: Tested up to WooCommerce 10.1
 
 = 3.4.0 =
 
@@ -206,14 +239,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Minor style adjustments across front-end components  
 * Update: Improved UI of settings pages for better usability
 * Performance: Code optimizations for better plugin efficiency
-* Compatibility: Tested up to WooCommerce 9.9  
+* Performance: Tested up to WooCommerce 9.9  
 
 = 3.3.2 =
 
 *2025-04-15*
 
-* Compatibility: WP tested up to 6.8
-* Compatibility: WC tested up to 9.8
+* Performance: WP tested up to 6.8
+* Performance: WC tested up to 9.8
 * Dev: Added `fsl_gift_pass` filter hook
 
 = 3.3.1 =
@@ -222,7 +255,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: Ensure the minimum amount is always treated as a float to prevent calculation issues
 * Update: Settings pages
-* Compatibility: WC tested up to 9.7
+* Performance: WC tested up to 9.7
 
 = 3.3.0 =
 
@@ -237,14 +270,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2025-01-27*
 
 * Update: Updated Freemius SDK to the latest version
-* Compatibility: WC tested up to 9.6
+* Performance: WC tested up to 9.6
 
 = 3.2.1 = 
 
 *2025-01-17*
 
 * Add: Add-on support - Discount bar
-* Compatibility: WC tested up to: 9.5
+* Performance: WC tested up to: 9.5
 
 = 3.2.0 = 
 
@@ -257,8 +290,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Color picker
 * Update: Settings API
 * Update: Freemius WordPress SDK to latest version
-* Compatibility: WP tested up to: 6.7
-* Compatibility: WC tested up to: 9.4
+* Performance: WP tested up to: 6.7
+* Performance: WC tested up to: 9.4
 
 = 3.1.2 = 
 
@@ -268,7 +301,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: Removed subtle 1px top border shadow from the progress bar that created the appearance of padding above the inner bar
 * Update: Free Shipping text placeholder now supports both `{free_shipping_amount}` and `{threshold}` variables
 * Update: Freemius WordPress SDK to latest version
-* Compatibility: WC tested up to: 9.3
+* Performance: WC tested up to: 9.3
 
 = 3.1.1 = 
 
@@ -290,8 +323,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Language file
 * Dev: Additional `product` parameter to `fsl_product_price` filter hook
 * Dev: Additional `price` parameter to `fsl_product_label_html` filter hook
-* Compatibility: WP tested up to: 6.6
-* Compatibility: WC tested up to: 9.1
+* Performance: WP tested up to: 6.6
+* Performance: WC tested up to: 9.1
 
 = 3.0.6 = 
 
@@ -299,7 +332,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Update: settings panel - descriptions
 * Update: language file
-* Compatibility: WC tested up to: 8.9
+* Performance: WC tested up to: 8.9
 
 = 3.0.5 = 
 
@@ -312,7 +345,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2024-04-23*
 
 * Update: Freemius WordPress SDK
-* Compatibility: WC tested up to: 8.8
+* Performance: WC tested up to: 8.8
 
 = 3.0.3 = 
 
@@ -322,7 +355,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: settings panel - footer
 * Update: Freemius WordPress SDK
 * Update: language file
-* Compatibility: WC tested up to: 8.7
+* Performance: WC tested up to: 8.7
 * Dev: added new `fsl_progress_bar_setup_args` filter hook
 
 = 3.0.2 = 
@@ -330,8 +363,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2024-03-18*
 
 * Fix: Flexible shipping instance id fix
-* Compatibility: WC tested up to: 8.6
-* Compatibility: WP tested up to: 6.5
+* Performance: WC tested up to: 8.6
+* Performance: WP tested up to: 6.5
 
 = 3.0.1 = 
 
@@ -351,16 +384,16 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: Freemius WordPress SDK
 * Dev: removed unused position filter hooks
 * Dev: added new `fsl_admin_menu_user_capability` filter hook
-* Compatibility: WC tested up to: 8.3
-* Compatibility: WP tested up to: 6.4
+* Performance: WC tested up to: 8.3
+* Performance: WP tested up to: 6.4
 
 = 2.6.13 = 
 
 *2023-07-31*
 
 * Fix: error on settings page
-* Compatibility: WC tested up to: 7.9
-* Compatibility: WP tested up to: 6.3
+* Performance: WC tested up to: 7.9
+* Performance: WP tested up to: 6.3
 
 = 2.6.12 = 
 
@@ -381,7 +414,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: Progress bar not loading if local pickup selected first
 * Update: readme.txt
 * Update: Freemius WordPress SDK to 2.5.9
-* Compatibility: WC tested up to: 7.8
+* Performance: WC tested up to: 7.8
 * Dev: Added new `fsl_progress_bar_placeholder_html` filter hook
 
 = 2.6.9 = 
@@ -392,7 +425,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: free shipping requires - both, coupon
 * Fix: when allowed zero shipping and selected local pickup showing qualified message
 * Update: Freemius WordPress SDK to 2.5.8
-* Compatibility: WC tested up to: 7.7
+* Performance: WC tested up to: 7.7
 
 = 2.6.8 = 
 
@@ -408,7 +441,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: svg icons in settings section
 * Update: settings API
 * Update: freemius sdk
-* Compatibility: WC tested up to: 7.6
+* Performance: WC tested up to: 7.6
 
 = 2.6.6 = 
 
@@ -417,8 +450,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: color pickers with alpha/transparent option
 * Update: freemius sdk
 * Security - additional security layer in settings API
-* Compatibility: WC tested up to: 7.5
-* Compatibility: WP tested up to: 6.2
+* Performance: WC tested up to: 7.5
+* Performance: WP tested up to: 6.2
 
 = 2.6.5 =
 * Security - enhanced security measures taken including input sanitization, attribute escaping, and replacement of remote select2 with woocommerce select2
@@ -436,7 +469,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: Error related to contributors when viewing details of a plugin
 * Update: readme.txt
-* Compatibility: WC tested up to: 7.4
+* Performance: WC tested up to: 7.4
 
 = 2.6.2 = 
 
@@ -466,7 +499,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: Deactivate free version when PRO activated
 * Update: language .pot file
 * Update: Freemius sdk
-* Compatibility: WC tested up to: 7.3
+* Performance: WC tested up to: 7.3
 
 = 2.5.1 = 
 
@@ -479,8 +512,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 *2022-11-22*
 
-* Compatibility: WC tested up to: 7.1
-* Compatibility: WP tested up to: 6.1
+* Performance: WC tested up to: 7.1
+* Performance: WP tested up to: 6.1
 * Enhancement: Freemius integration
 * Update: HPOS compatibility
 * Update: product label filter priority
@@ -497,7 +530,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2022-10-14*
 
 * Fix: Don't show Progress Bar if only virtual products are in the cart
-* Compatibility: WC tested up to: 7.0
+* Performance: WC tested up to: 7.0
 * Update: Ignore coupon option deprecated
 * Update: language .pot file
 
@@ -515,8 +548,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: typos
 * Update: language .pot file
 * Enhancement: Security
-* Compatibility: WC tested up to: 6.5
-* Compatibility: WP tested up to: 6.0
+* Performance: WC tested up to: 6.5
+* Performance: WP tested up to: 6.0
 * Performance: Code optimization
 * Dev: Added new `fsl_settings_sections` filter hook
 * Dev: Added new `fsl_settings_fields` filter hook
@@ -533,7 +566,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: Error when deleted initial shipping zone
 * Fix: Fatal Error related to shipping packages
-* Compatibility: WC tested up to: 6.3
+* Performance: WC tested up to: 6.3
 
 = 2.3.0 = 
 
@@ -543,8 +576,8 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: issues with showing labels before shipping method are chosen
 * Fix: single product page: labels on variable products not showing up
 * Fix: typos
-* Compatibility: WP tested up to: 5.9
-* Compatibility: WC tested up to: 6.1
+* Performance: WP tested up to: 5.9
+* Performance: WC tested up to: 6.1
 
 = 2.2.3 = 
 
@@ -552,7 +585,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Dev: Added new `fsl_progress_bar_html` filter hook
 * Dev: Added new `fsl_checkout_progress_bar_position` filter hook
-* Compatibility: WC tested up to: 6.0
+* Performance: WC tested up to: 6.0
 * Performance: Code optimization
 
 = 2.2.2 = 
@@ -567,7 +600,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 * Fix: PHP Warning related to `fsl_flexible_shipping_min_amount` hook
 * Dev: Added new `fsl_product_price` filter hook
-* Compatibility: WC tested up to: 5.7
+* Performance: WC tested up to: 5.7
 
 = 2.2.0 = 
 
@@ -576,7 +609,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Tweak - Added additional classes to progress bar
 * Fix: Gutenberg error
 * Enhancement: Hide shipping rates when free shipping is available
-* Compatibility: WC tested up to: 5.6
+* Performance: WC tested up to: 5.6
 * Dev: Added new `fsl_min_amount` filter hook
 * Dev: Added new `fsl_free_shipping_instance_key` filter hook
 * Dev: Added new `fsl_shipping_method_min_amount` filter hook
@@ -596,7 +629,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix – minor style issues
 * Enhancement: Disable for logged out users
 * Enhancement: Message after free shipping threshold is reached
-* Compatibility: WC tested up to: 5.2
+* Performance: WC tested up to: 5.2
 * Update: pot file
 
 = 2.0.3 = 
@@ -604,14 +637,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 *2021-01-22*
 
 * Fix – minor style issues
-* Compatibility: WC tested up to: 4.9
+* Performance: WC tested up to: 4.9
 
 = 2.0.2 = 
 
 *2020-12-19*
 
 * Fix – Syntax error
-* Compatibility: WC tested up to: 4.8
+* Performance: WC tested up to: 4.8
 
 = 2.0.1 = 
 
@@ -621,7 +654,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Update: pot file
 * Fix: Minor bug fixes
 * Performance: Code optimization
-* Compatibility: Tested with latest WooCommerce version (4.6.1)
+* Performance: Tested with latest WooCommerce version (4.6.1)
 
 = 2.0.0 = 
 

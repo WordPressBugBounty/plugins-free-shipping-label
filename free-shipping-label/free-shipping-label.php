@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Plugin Name:          Free Shipping Label
+ * Plugin Name: 		 Free Shipping Label
  * Plugin URI:           https://devnet.hr/plugins/free-shipping-label/
  * Description:          Increase order revenue in WooCommerce store by showing your customers just how close they are to your free shipping threshold.
- * Version:              3.4.2
+ * Version:              3.4.3
  * Requires at least: 	 6.4
  * Requires PHP:         7.4
  * Author:               Devnet
@@ -13,7 +13,7 @@
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:          /languages
  * Requires Plugins:     woocommerce
- * WC tested up to:      10.2
+ * WC tested up to:      10.4
  *
  */
 use Devnet\FSL\Includes\Activator;
@@ -109,7 +109,7 @@ if ( function_exists( 'fsl_fs' ) ) {
         fsl_fs()->add_action( 'after_uninstall', 'fsl_fs_uninstall_cleanup' );
         fsl_fs()->add_filter( 'plugin_icon', 'fsl_fs_custom_icon' );
     }
-    define( 'DEVNET_FSL_VERSION', '3.4.2' );
+    define( 'DEVNET_FSL_VERSION', '3.4.3' );
     define( 'DEVNET_FSL_NAME', 'free-shipping-label' );
     define( 'DEVNET_FSL_PATH', plugin_basename( __FILE__ ) );
     define( 'DEVNET_FSL_OPTIONS', [
@@ -119,7 +119,6 @@ if ( function_exists( 'fsl_fs' ) ) {
         'notice_bar'   => get_option( 'devnet_fsl_notice_bar' ),
         'label'        => get_option( 'devnet_fsl_label' ),
     ] );
-    require plugin_dir_path( __FILE__ ) . 'includes/fsl-plugin.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/fsl-defaults.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/fsl-activator.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/fsl-deactivator.php';
@@ -136,21 +135,9 @@ if ( function_exists( 'fsl_fs' ) ) {
 
     register_activation_hook( __FILE__, 'activate_devnet_fsl' );
     register_deactivation_hook( __FILE__, 'deactivate_devnet_fsl' );
-    function run_devnet_fsl() {
+    add_action( 'plugins_loaded', function () {
+        require plugin_dir_path( __FILE__ ) . 'includes/fsl-plugin.php';
         $plugin = new FSL_PLUGIN();
         $plugin->run();
-    }
-
-    add_action( 'plugins_loaded', function () {
-        if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-            run_devnet_fsl();
-        } else {
-            add_action( 'admin_notices', function () {
-                $class = 'notice notice-error';
-                $message = esc_html__( 'The “Free Shipping Label” plugin cannot run without WooCommerce. Please install and activate WooCommerce plugin.', 'free-shipping-label' );
-                printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
-            } );
-            return;
-        }
     } );
 }
