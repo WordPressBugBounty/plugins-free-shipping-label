@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
 /**
  * Settings API wrapper class.
  * 
- * @updated    2026-01-12
+ * @updated    2026-03-12
  */
 
 class Settings_API
@@ -312,7 +312,7 @@ class Settings_API
         $size         = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
         $type         = isset($args['type']) ? $args['type'] : 'number';
         $placeholder  = empty($args['placeholder']) ? '' : $args['placeholder'];
-        $min          = empty($args['min']) ? '' : $args['min'];
+        $min          = $args['min'] ?? '';
         $max          = empty($args['max']) ? '' : $args['max'];
         $step         = empty($args['step']) ? '' : $args['step'];
         $has_unit_box = !empty($args['unit']) ? 'has-unit-box' : '';
@@ -464,6 +464,7 @@ class Settings_API
                 esc_attr($key),
                 checked(esc_attr($value), esc_attr($key), false)
             );
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $label is a controlled internal option value (not user input).
             printf('<span class="img">%1$s</span></label><br>', $label);
         }
 
@@ -987,7 +988,7 @@ class Settings_API
             $classes = 'group' . ($has_tabs ? ' has-tabs' : '');
             $form_id = esc_attr($form['id']);
 
-            echo '<div id="' . $form_id . '" class="' . esc_attr($classes) . '" style="display: none;">';
+            echo '<div id="' . esc_attr($form_id) . '" class="' . esc_attr($classes) . '" style="display: none;">';
 
             $this->inner_navigation($form);
 

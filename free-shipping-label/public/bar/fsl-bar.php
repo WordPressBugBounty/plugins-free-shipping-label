@@ -51,22 +51,29 @@ class FSL_Bar {
         }
         $options = DEVNET_FSL_OPTIONS['progress_bar'] ?? [];
         $enable = $options['enable_bar'] ?? false;
-        $show_on_cart = $options['show_on_cart'] ?? false;
-        $show_on_minicart = $options['show_on_minicart'] ?? false;
-        $show_on_checkout = $options['show_on_checkout'] ?? false;
-        $cart_hook = 'woocommerce_proceed_to_checkout';
-        $checkout_hook = 'woocommerce_review_order_before_submit';
-        $minicart_hook = 'woocommerce_widget_shopping_cart_before_buttons';
+        $cart_hook = $options['cart_position'] ?? Defaults::bar( 'cart_position' );
+        $checkout_hook = $options['checkout_position'] ?? Defaults::bar( 'checkout_position' );
+        $minicart_hook = $options['minicart_position'] ?? Defaults::bar( 'minicart_position' );
+        $product_hook = '';
+        if ( !empty( $cart_hook ) ) {
+            $cart_hook = 'woocommerce_proceed_to_checkout';
+        }
+        if ( !empty( $minicart_hook ) ) {
+            $checkout_hook = 'woocommerce_review_order_before_submit';
+        }
+        if ( !empty( $checkout_hook ) ) {
+            $minicart_hook = 'woocommerce_widget_shopping_cart_before_buttons';
+        }
         if ( !$enable ) {
             return;
         }
-        if ( $show_on_cart ) {
+        if ( !empty( $cart_hook ) ) {
             add_action( $cart_hook, [$this, 'fsl_bar_cart'], 10 );
         }
-        if ( $show_on_minicart ) {
+        if ( !empty( $minicart_hook ) ) {
             add_action( $minicart_hook, [$this, 'fsl_bar_minicart'] );
         }
-        if ( $show_on_checkout ) {
+        if ( !empty( $checkout_hook ) ) {
             add_action( $checkout_hook, [$this, 'fsl_bar_checkout'], 10 );
         }
     }
@@ -102,6 +109,19 @@ class FSL_Bar {
      */
     public function fsl_bar_minicart() {
         $this->progress_bar();
+    }
+
+    /**
+     * Output Progress Bar on the product page.
+     *
+     * @since    3.5.0
+     */
+    public function fsl_bar_product() {
+        if ( function_exists( 'is_product' ) && is_product() ) {
+            $this->progress_bar( [
+                'updatable' => true,
+            ] );
+        }
     }
 
     public function get_progress_bar_options( $args = [], $only_inheritable = false ) {
@@ -186,7 +206,7 @@ class FSL_Bar {
      * 
      * @since   3.1.0
      */
-    public function get_cart_subtotal() {
+    public function get_cart_subtotal( $ignore_discounts = false ) {
         $cart = WC()->cart;
         if ( !$cart ) {
             return;
@@ -196,12 +216,33 @@ class FSL_Bar {
         $discount_tax = $cart->get_discount_tax();
         $price_including_tax = $cart->display_prices_including_tax();
         $price_decimal = wc_get_price_decimals();
+        if ( $ignore_discounts ) {
+            $discount = 0;
+            $discount_tax = 0;
+        }
         if ( $price_including_tax ) {
             $cart_subtotal = round( $cart_subtotal - ($discount + $discount_tax), $price_decimal );
         } else {
             $cart_subtotal = round( $cart_subtotal - $discount, $price_decimal );
         }
         return apply_filters( 'fsl_get_cart_subtotal', $cart_subtotal, $cart );
+    }
+
+    public function get_discount() {
+        $cart = WC()->cart;
+        if ( !$cart ) {
+            return;
+        }
+        $discount = $cart->get_discount_total();
+        $discount_tax = $cart->get_discount_tax();
+        $price_including_tax = $cart->display_prices_including_tax();
+        $price_decimal = wc_get_price_decimals();
+        if ( $price_including_tax ) {
+            $discount = round( $discount + $discount_tax, $price_decimal );
+        } else {
+            $discount = round( $discount, $price_decimal );
+        }
+        return (float) $discount;
     }
 
     /**
@@ -214,15 +255,23 @@ class FSL_Bar {
         $opt = $args['options'] ?? [];
         // Set module name
         $opt['module_name'] = 'free-shipping';
+        // Is allowed zero `0` shipping cost – means free shipping.
+        $zero_shipping = $opt['zero_shipping'];
         $amount_for_free_shipping = Helper::get_free_shipping_min_amount();
-        // Replace comma with a dot
+        // Normalize decimal separator
         if ( is_string( $amount_for_free_shipping ) ) {
             $amount_for_free_shipping = str_replace( ',', '.', $amount_for_free_shipping );
         }
-        if ( !$amount_for_free_shipping || !is_numeric( $amount_for_free_shipping ) ) {
+        // Must be numeric
+        if ( !is_numeric( $amount_for_free_shipping ) ) {
             return;
         }
         $amount_for_free_shipping = (float) $amount_for_free_shipping;
+        // If zero shipping is not allowed, stop
+        if ( !$zero_shipping && $amount_for_free_shipping <= 0 ) {
+            return;
+        }
+        $threshold = $amount_for_free_shipping;
         // show_shipping_before_address
         if ( !WC()->cart->show_shipping() ) {
             return;
@@ -230,7 +279,8 @@ class FSL_Bar {
         $chosen_shipping_method = Helper::chosen_shipping_method();
         $is_local_pickup = Helper::starts_with( $chosen_shipping_method, 'local_pickup' );
         $fs_instance = Helper::$free_shipping_instance;
-        $fs_requires = ( isset( $fs_instance['requires'] ) ? $fs_instance['requires'] : '' );
+        $fs_requires = $fs_instance['requires'] ?? '';
+        $ignore_discounts = ($fs_instance['ignore_discounts'] ?? 'no') === 'yes';
         if ( $is_local_pickup && !$opt['local_pickup'] ) {
             return [
                 'placeholder' => true,
@@ -239,18 +289,21 @@ class FSL_Bar {
         if ( !$opt['enable_bar'] ) {
             return;
         }
+        if ( $ignore_discounts ) {
+            $cart_subtotal = $this->get_cart_subtotal( $ignore_discounts );
+            $threshold = $amount_for_free_shipping - $this->get_discount();
+        }
         $calc = Helper::calculate_percentage( $amount_for_free_shipping, $cart_subtotal );
         $percent = $calc['percent'];
         $remaining = $calc['remaining'];
         $cart_reached_threshold = $percent === 100;
         $free_shipping_pass = $cart_reached_threshold;
         /**
-         * Check shipping cost only if Zero Shipping Cost is allowed.
-         * In most cases we don't care about shipping cost, 
-         * but some shipping classes use 0,00 shipping value for free shipping.
-         * Skip if currently chosen local pickup as shipping method.
+         * Allow free shipping when shipping cost is 0 and the option is enabled.
+         * Some shipping methods return 0.00 as the shipping total when free shipping is applied.
+         * Skip if the selected method is local pickup.
          */
-        if ( $chosen_shipping_method && $opt['zero_shipping'] && WC()->cart->get_shipping_total() == 0 && !$is_local_pickup ) {
+        if ( $zero_shipping && !$is_local_pickup && $chosen_shipping_method && (float) WC()->cart->get_shipping_total() <= 0 ) {
             $free_shipping_pass = true;
         }
         if ( Helper::is_free_shipping_coupon_applied() ) {
@@ -278,7 +331,7 @@ class FSL_Bar {
             'options'          => $opt,
             'percent'          => $percent,
             'reached'          => [],
-            'threshold'        => $amount_for_free_shipping,
+            'threshold'        => $threshold,
             'placeholder_args' => [
                 'remaining' => $remaining,
                 'threshold' => $amount_for_free_shipping,
@@ -316,8 +369,6 @@ class FSL_Bar {
         $fs_data = $this->setup_data_for_free_shipping_bar( $args );
         $fs_placeholder = $fs_data['placeholder'] ?? false;
         if ( !$fs_placeholder ) {
-            // $this->fsl_bar_placeholder(true);
-            // return;
             $setup_data['modules']['free-shipping'] = $fs_data;
         }
         $setup_data = apply_filters( 'fsl_progress_bar_setup_data', $setup_data );
@@ -337,6 +388,7 @@ class FSL_Bar {
         }
         echo '<div class="fsl-wrapper" data-updatable="' . esc_attr( $is_updatable ) . '">';
         foreach ( $setup_data['modules'] as $module => $module_data ) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is fully escaped inside fsl_progress_bar_html().
             echo $this->fsl_progress_bar_html( $module_data );
         }
         echo '</div>';
@@ -660,7 +712,7 @@ class FSL_Bar {
         $placeholder = '<div class="fsl-wrapper" data-updatable="' . esc_attr( $updatable ) . '"><div class="devnet_fsl-free-shipping fsl-placeholder fsl-flat"></div></div>';
         $output = apply_filters( 'fsl_progress_bar_placeholder_html', $placeholder );
         if ( $should_echo ) {
-            echo $output;
+            echo wp_kses_post( $output );
         } else {
             return $output;
         }

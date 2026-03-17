@@ -106,7 +106,7 @@ class FSL_Admin {
         $footer_text = '';
         $footer_text .= '<div class="fsl-admin-footer">';
         $footer_text .= '<div class="fsl-footer-message">';
-        $footer_text .= 'Please rate <strong>Free Shipping Label</strong> <a href="https://wordpress.org/support/plugin/free-shipping-label/reviews/?rate=5#new-post" target="_blank">★★★★★</a> on <a href="https://wordpress.org/support/plugin/free-shipping-label/reviews/?rate=5#new-post" target="_blank">WordPress.org</a> to help us spread the word. Thank you from the <a href="https://devnet.hr/" target="_blank">Devnet</a> team!';
+        $footer_text .= 'Please rate <strong>Free Shipping Label</strong> <a href="https://wordpress.org/support/plugin/free-shipping-label/reviews/" target="_blank">★★★★★</a> on <a href="https://wordpress.org/support/plugin/free-shipping-label/reviews/" target="_blank">WordPress.org</a> to help us spread the word. Thank you from the <a href="https://devnet.hr/" target="_blank">Devnet</a> team!';
         $footer_text .= '</div>';
         $footer_text .= '<div class="fsl-donation">';
         $footer_text .= '<a href="https://devnet.hr/plugins/free-shipping-label/" target="_blank">Go PRO: More Features, More Power!</a>';

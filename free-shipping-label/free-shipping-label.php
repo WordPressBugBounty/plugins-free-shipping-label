@@ -4,7 +4,7 @@
  * Plugin Name: 		 Free Shipping Label
  * Plugin URI:           https://devnet.hr/plugins/free-shipping-label/
  * Description:          Increase order revenue in WooCommerce store by showing your customers just how close they are to your free shipping threshold.
- * Version:              3.4.3
+ * Version:              3.5.0
  * Requires at least: 	 6.4
  * Requires PHP:         7.4
  * Author:               Devnet
@@ -13,11 +13,12 @@
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:          /languages
  * Requires Plugins:     woocommerce
- * WC tested up to:      10.4
+ * WC tested up to:      10.6
  *
  */
 use Devnet\FSL\Includes\Activator;
 use Devnet\FSL\Includes\Deactivator;
+use Devnet\FSL\Includes\Uninstaller;
 use Devnet\FSL\Includes\FSL_PLUGIN;
 // If this file is called directly, abort.
 if ( !defined( 'ABSPATH' ) ) {
@@ -34,26 +35,27 @@ if ( function_exists( 'fsl_fs' ) ) {
                 // Include Freemius SDK.
                 require_once dirname( __FILE__ ) . '/vendor/freemius/wordpress-sdk/start.php';
                 $fsl_fs = fs_dynamic_init( [
-                    'id'             => '11160',
-                    'slug'           => 'free-shipping-label',
-                    'premium_slug'   => 'free-shipping-label-pro',
-                    'type'           => 'plugin',
-                    'public_key'     => 'pk_87b72065d40019ae11ff0dab36c7b',
-                    'is_premium'     => false,
-                    'premium_suffix' => '(Pro)',
-                    'has_addons'     => true,
-                    'has_paid_plans' => true,
-                    'trial'          => [
+                    'id'               => '11160',
+                    'slug'             => 'free-shipping-label',
+                    'premium_slug'     => 'free-shipping-label-pro',
+                    'type'             => 'plugin',
+                    'public_key'       => 'pk_87b72065d40019ae11ff0dab36c7b',
+                    'is_premium'       => false,
+                    'premium_suffix'   => '(Pro)',
+                    'has_addons'       => true,
+                    'has_paid_plans'   => true,
+                    'trial'            => [
                         'days'               => 7,
                         'is_require_payment' => true,
                     ],
-                    'menu'           => [
+                    'menu'             => [
                         'slug'   => 'free-shipping-label-settings',
                         'parent' => [
                             'slug' => 'woocommerce',
                         ],
                     ],
-                    'is_live'        => true,
+                    'is_live'          => true,
+                    'is_org_compliant' => true,
                 ] );
             }
             return $fsl_fs;
@@ -86,6 +88,8 @@ if ( function_exists( 'fsl_fs' ) ) {
      */
     if ( !function_exists( 'fsl_fs_uninstall_cleanup' ) ) {
         function fsl_fs_uninstall_cleanup() {
+            require_once plugin_dir_path( __FILE__ ) . 'includes/fsl-uninstaller.php';
+            Uninstaller::cleanup();
         }
 
     }
@@ -109,7 +113,7 @@ if ( function_exists( 'fsl_fs' ) ) {
         fsl_fs()->add_action( 'after_uninstall', 'fsl_fs_uninstall_cleanup' );
         fsl_fs()->add_filter( 'plugin_icon', 'fsl_fs_custom_icon' );
     }
-    define( 'DEVNET_FSL_VERSION', '3.4.3' );
+    define( 'DEVNET_FSL_VERSION', '3.5.0' );
     define( 'DEVNET_FSL_NAME', 'free-shipping-label' );
     define( 'DEVNET_FSL_PATH', plugin_basename( __FILE__ ) );
     define( 'DEVNET_FSL_OPTIONS', [

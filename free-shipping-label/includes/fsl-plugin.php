@@ -28,8 +28,6 @@ class FSL_PLUGIN {
     }
 
     private function load_dependencies() {
-        // require_once plugin_dir_path(dirname(__FILE__)) . 'includes/fsl-loader.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-i18n.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-compatibility.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-helper.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-icons.php';

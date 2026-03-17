@@ -42,6 +42,7 @@ class Activator
 	{
 		//self::multilingual_check();
 		self::migrate_layout_option();
+		self::migrate_pb_and_gift_bar_options();
 	}
 
 	/**
@@ -151,5 +152,132 @@ class Activator
 		usort($target, fn($a, $b) => $b['threshold'] <=> $a['threshold']);
 
 		return $target[0]['layout'];
+	}
+
+	/**
+	 * 
+	 * @since	3.5.0
+	 */
+	public static function migrate_disabled_position_options()
+	{
+
+		$progress_bar_options = DEVNET_FSL_OPTIONS['progress_bar'] ?? [];
+
+		// Fresh install
+		if (empty($progress_bar_options)) {
+			return;
+		}
+
+		$show_on_cart     = $progress_bar_options['show_on_cart'] ?? null;
+		$show_on_checkout = $progress_bar_options['show_on_checkout'] ?? null;
+		$show_on_minicart = $progress_bar_options['show_on_minicart'] ?? null;
+
+		if (empty($show_on_cart)) {
+			$progress_bar_options['cart_position'] = '';
+		}
+
+		if (empty($show_on_checkout)) {
+			$progress_bar_options['checkout_position'] = '';
+		}
+
+		if (empty($show_on_minicart)) {
+			$progress_bar_options['minicart_position'] = '';
+		}
+
+		unset($progress_bar_options['show_on_cart']);
+		unset($progress_bar_options['show_on_checkout']);
+		unset($progress_bar_options['show_on_minicart']);
+
+		update_option('devnet_fsl_bar', $progress_bar_options);
+	}
+
+	/**
+	 * 
+	 * @since	3.5.0
+	 */
+	public static function migrate_gift_bar_styles()
+	{
+		$progress_bar_options = DEVNET_FSL_OPTIONS['progress_bar'] ?? [];
+		$gift_bar_options     = DEVNET_FSL_OPTIONS['gift_bar'] ?? [];
+
+		// Fresh install or not set
+		if (empty($gift_bar_options)) {
+			return;
+		}
+
+		$inherit_progress_bar_settings = $gift_bar_options['inherit_progress_bar_settings'] ?? true;
+
+		// Skip if settings are inherited
+		if ($inherit_progress_bar_settings) {
+			return;
+		}
+
+		$inheritable = [
+			'hide_border_shadow',
+			'disable_animation',
+			'disabled_animations',
+			'bar_border_color',
+			'bar_bg_color',
+			'bar_inner_color',
+			'bar_height',
+			'bar_type',
+			// 'indicator_icon',
+			// 'indicator_icon_size',
+			// 'indicator_icon_shape',
+			// 'indicator_icon_bg_color',
+			'circle_size',
+			'inside_circle',
+			// 'icon',
+			// 'icon_color',
+			'circle_bg_color',
+			'text_color',
+			'box_bg_color',
+			'box_max_width',
+			'box_alignment',
+			'center_text',
+			'bar_radius',
+			'remove_bar_stripes',
+		];
+
+		foreach ($inheritable as $opt) {
+			// Save current
+			$_pb_option = $progress_bar_options[$opt];
+
+			$progress_bar_options[$opt] = $gift_bar_options[$opt] ?? $_pb_option;
+
+			unset($gift_bar_options[$opt]);
+		}
+
+		update_option('devnet_fsl_gift_bar', $gift_bar_options);
+
+		$gift_bar_display = $gift_bar_options['display'] ?? '';
+		$gift_bar_enabled = $gift_bar_options['enable_bar'] ?? false;
+
+		if (
+			$gift_bar_enabled &&
+			in_array($gift_bar_display, ['extend', 'only'], true)
+		) {
+			update_option('devnet_fsl_bar', $progress_bar_options);
+		}
+	}
+
+	/**
+	 * Migrate disabled positions inside position select.
+	 * Migrate GiftBar styles back into progress bar styles (only pro users with enabled gift bar and custom styles).
+	 * 
+	 * @since	3.5.0
+	 */
+	public static function migrate_pb_and_gift_bar_options()
+	{
+		$migration_350 = get_option('devnet_fsl_migration_350');
+
+		if ($migration_350 || !defined('DEVNET_FSL_OPTIONS')) {
+			return;
+		}
+
+		self::migrate_disabled_position_options();
+		self::migrate_gift_bar_styles();
+
+		update_option('devnet_fsl_migration_350', true);
 	}
 }

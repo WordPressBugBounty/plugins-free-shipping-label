@@ -215,7 +215,7 @@ class Options {
                 'type'    => 'radio_image',
                 'name'    => 'icon' . $is_disabled,
                 'label'   => esc_html__( 'Select icon', 'free-shipping-label' ),
-                'options' => [],
+                'options' => Icons::get_all(),
                 'default' => Defaults::bar( 'radio_image' ),
             ],
             'icon_color'               => [
@@ -355,12 +355,6 @@ class Options {
                 'label'   => esc_html__( 'Multilingual', 'free-shipping-label' ),
                 'desc'    => esc_html__( 'Use your own translated strings.', 'free-shipping-label' ),
                 'default' => Defaults::general( 'multilingual' ),
-            ],
-            [
-                'type'    => 'checkbox',
-                'name'    => 'delete_options',
-                'label'   => esc_html__( 'Delete plugin data on deactivation', 'free-shipping-label' ),
-                'default' => Defaults::general( 'delete_options' ),
             ]
         ];
         return apply_filters( 'fsl_settings_general', $general );
@@ -451,16 +445,11 @@ class Options {
                 'desc'  => self::progress_bar_position_notice(),
             ],
             [
-                'type'    => 'checkbox',
-                'name'    => 'show_on_cart',
-                'label'   => esc_html__( 'Display on the cart page', 'free-shipping-label' ),
-                'default' => Defaults::bar( 'show_on_cart' ),
-            ],
-            [
                 'type'    => 'select',
                 'name'    => 'cart_position',
                 'label'   => esc_html__( 'Cart position', 'free-shipping-label' ),
                 'options' => [
+                    ''                                => esc_html__( '— Do not display —', 'free-shipping-label' ),
                     '_disabled_1'                     => esc_html__( 'Before cart total', 'free-shipping-label' ),
                     'woocommerce_proceed_to_checkout' => esc_html__( 'Before button', 'free-shipping-label' ),
                     '_disabled_2'                     => esc_html__( 'After button', 'free-shipping-label' ),
@@ -470,16 +459,11 @@ class Options {
                 'default' => Defaults::bar( 'cart_position' ),
             ],
             [
-                'type'    => 'checkbox',
-                'name'    => 'show_on_checkout',
-                'label'   => esc_html__( 'Display on the checkout page', 'free-shipping-label' ),
-                'default' => Defaults::bar( 'show_on_checkout' ),
-            ],
-            [
                 'type'    => 'select',
                 'name'    => 'checkout_position',
                 'label'   => esc_html__( 'Checkout position', 'free-shipping-label' ),
                 'options' => [
+                    ''                                       => esc_html__( '— Do not display —', 'free-shipping-label' ),
                     '_disabled_1'                            => esc_html__( 'Before checkout form', 'free-shipping-label' ),
                     '_disabled_2'                            => esc_html__( 'After checkout form', 'free-shipping-label' ),
                     '_disabled_3'                            => esc_html__( 'Before order review', 'free-shipping-label' ),
@@ -490,17 +474,11 @@ class Options {
                 'default' => Defaults::bar( 'checkout_position' ),
             ],
             [
-                'type'    => 'checkbox',
-                'name'    => 'show_on_minicart',
-                'label'   => esc_html__( 'Display in the mini cart widget', 'free-shipping-label' ),
-                'desc'    => esc_html__( 'Note: This option may not work if the mini-cart/side-cart lacks specific WooCommerce hook required for proper functionality, especially if customized by your theme or a third-party plugin.', 'free-shipping-label' ),
-                'default' => Defaults::bar( 'show_on_minicart' ),
-            ],
-            [
                 'type'     => 'select',
                 'name'     => 'minicart_position',
                 'label'    => esc_html__( 'Minicart position', 'free-shipping-label' ),
                 'options'  => [
+                    ''                                                => esc_html__( '— Do not display —', 'free-shipping-label' ),
                     '_disabled_1'                                     => esc_html__( 'Before minicart', 'free-shipping-label' ),
                     '_disabled_2'                                     => esc_html__( 'Before content', 'free-shipping-label' ),
                     '_disabled_3'                                     => esc_html__( 'After content', 'free-shipping-label' ),
@@ -509,6 +487,26 @@ class Options {
                 ],
                 'optgroup' => $minicart_optgroup,
                 'default'  => Defaults::bar( 'cart_position' ),
+            ],
+            [
+                'type'    => 'select',
+                'name'    => 'product_position',
+                'label'   => esc_html__( 'Product page position', 'free-shipping-label' ),
+                'options' => [
+                    ''             => esc_html__( '— Do not display —', 'free-shipping-label' ),
+                    '_disabled_1'  => esc_html__( 'Before product', 'free-shipping-label' ),
+                    '_disabled_2'  => esc_html__( 'After product', 'free-shipping-label' ),
+                    '_disabled_3'  => esc_html__( 'Before product summary (image)', 'free-shipping-label' ),
+                    '_disabled_4'  => esc_html__( 'Inside product summary', 'free-shipping-label' ),
+                    '_disabled_5'  => esc_html__( 'After product summary', 'free-shipping-label' ),
+                    '_disabled_6'  => esc_html__( 'Before add to cart form', 'free-shipping-label' ),
+                    '_disabled_7'  => esc_html__( 'After add to cart form', 'free-shipping-label' ),
+                    '_disabled_8'  => esc_html__( 'Before add to cart button', 'free-shipping-label' ),
+                    '_disabled_9'  => esc_html__( 'After add to cart button', 'free-shipping-label' ),
+                    '_disabled_10' => esc_html__( 'Before product meta (SKU, Category, Tag)', 'free-shipping-label' ),
+                    '_disabled_11' => esc_html__( 'After product meta (SKU, Category, Tag)', 'free-shipping-label' ),
+                ],
+                'default' => Defaults::bar( 'product_position' ),
             ],
             [
                 'type'  => 'text',
@@ -737,38 +735,29 @@ class Options {
             self::common_options( 'title', false, 'gift_bar' ),
             self::common_options( 'description', false, 'gift_bar' ),
             self::common_options( 'qualified_message', false, 'gift_bar' ),
-            self::common_options( 'info-bar-design', true ),
             [
-                'type'    => 'checkbox',
-                'name'    => 'inherit_progress_bar_settings__disabled',
-                'label'   => esc_html__( 'Inherit Progress Bar Settings', 'free-shipping-label' ),
-                'desc'    => esc_html__( 'Turn off for additional customization.', 'free-shipping-label' ),
-                'default' => Defaults::gift_bar( 'inherit_progress_bar_settings' ),
+                'type'  => 'info',
+                'name'  => 'info-bar-icon',
+                'label' => '',
+                'class' => 'info',
+                'desc'  => '',
             ],
-            self::common_options( 'bar_type', true ),
+            // [
+            //     'type'    => 'select',
+            //     'name'    => 'bar_type',
+            //     'label'   => esc_html__('Bar type', 'free-shipping-label'),
+            //     'options' => [
+            //         'linear' => esc_html__('Linear', 'free-shipping-label')
+            //     ],
+            //     'default' => 'linear',
+            //     'class'   => 'bar_type hide-option-row'
+            // ],
             self::common_options( 'indicator_icon', true ),
             self::common_options( 'indicator_icon_size', true ),
             self::common_options( 'indicator_icon_shape', true ),
             self::common_options( 'indicator_icon_bg_color', true ),
-            self::common_options( 'circle_size', true ),
-            self::common_options( 'inside_circle', true ),
             self::common_options( 'icon', true ),
             self::common_options( 'icon_color', true ),
-            self::common_options( 'circle_bg_color', true ),
-            self::common_options( 'bar_inner_color', true ),
-            self::common_options( 'bar_bg_color', true ),
-            self::common_options( 'bar_border_color', true ),
-            self::common_options( 'text_color', true ),
-            self::common_options( 'box_bg_color', true ),
-            self::common_options( 'box_max_width', true ),
-            self::common_options( 'box_alignment', true ),
-            self::common_options( 'bar_height', true ),
-            self::common_options( 'bar_radius', true ),
-            self::common_options( 'center_text', true ),
-            self::common_options( 'disable_animation', true ),
-            self::common_options( 'disabled_animations', true ),
-            self::common_options( 'remove_bar_stripes', true ),
-            self::common_options( 'hide_border_shadow', true )
         ];
         return apply_filters( 'fsl_settings_gift_bar', $gift_bar );
     }
@@ -1007,9 +996,13 @@ class Options {
     }
 
     private static function shipping_classes_option_list() {
-        $shipping_classes = get_terms( 'product_shipping_class', array(
+        $shipping_classes = get_terms( [
+            'taxonomy'   => 'product_shipping_class',
             'hide_empty' => false,
-        ) );
+        ] );
+        if ( is_wp_error( $shipping_classes ) ) {
+            $shipping_classes = [];
+        }
         $options = [
             '' => esc_html__( '-- None --', 'free-shipping-label' ),
         ];
@@ -1021,7 +1014,7 @@ class Options {
         return $options;
     }
 
-    private static function progress_bar_position_notice() {
+    private static function progress_bar_position_notice_for_blocks() {
         $wc_page_type = Helper::detect_wc_cart_checkout_type();
         $is_pro_active = false;
         $doc_url_block = 'https://devnet.hr/docs/free-shipping-label/adding-the-progress-bar-block/';
@@ -1073,6 +1066,15 @@ class Options {
         $html .= '<p>' . wp_kses_post( $message ) . '</p>';
         $html .= '</div>';
         return $html;
+    }
+
+    private static function progress_bar_position_notice() {
+        $blocks_notice = self::progress_bar_position_notice_for_blocks();
+        $general_notice = '<div class="devnet-plugin-option-notice--info">';
+        $general_notice .= '<p>' . __( '<strong>Note:</strong> Positions use WooCommerce hooks. If your theme or a third-party plugin replaces the default cart, checkout, mini-cart, or product templates, some positions may not work. You can place the bar manually using the shortcode.', 'free-shipping-label' ) . '</p>';
+        $general_notice .= '</div>';
+        $notice = $general_notice . $blocks_notice;
+        return $notice;
     }
 
 }

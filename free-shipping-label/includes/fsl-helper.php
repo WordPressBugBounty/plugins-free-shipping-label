@@ -20,7 +20,7 @@ class Helper {
      * @since    1.0.0
      * @return   boolean
      */
-    static function starts_with( $string, $start_string ) {
+    public static function starts_with( $string, $start_string ) {
         if ( !$string ) {
             return;
         }
@@ -32,7 +32,7 @@ class Helper {
      * Check if a string ends with a given suffix.
      *
      */
-    static function ends_with( string $haystack, string $needle ) {
+    public static function ends_with( string $haystack, string $needle ) {
         if ( $needle === '' ) {
             return true;
         }
@@ -44,7 +44,7 @@ class Helper {
      *
      * @since    2.1.0
      */
-    static function chosen_shipping_method() {
+    public static function chosen_shipping_method() {
         $wc_session = ( isset( WC()->session ) ? WC()->session : null );
         if ( !$wc_session ) {
             return;
@@ -57,13 +57,21 @@ class Helper {
         return $chosen_shipping_id;
     }
 
+    public static function normalize_shipping_method_id( string $chosen ) : array {
+        $parts = explode( ':', $chosen, 2 );
+        return [
+            'method_id'   => $parts[0],
+            'instance_id' => $parts[1] ?? null,
+        ];
+    }
+
     /**
      * Get minimal amount for free shipping.
      *
      * @since    1.0.0
-     * @return   number  
+     * @return   number
      */
-    static function get_free_shipping_min_amount() {
+    public static function get_free_shipping_min_amount() {
         $amount = null;
         $only_virtual_products_in_cart = self::only_virtual_products();
         $general_options = DEVNET_FSL_OPTIONS['general'] ?? [];
@@ -71,16 +79,16 @@ class Helper {
         $enable_custom_threshold = $general_options['enable_custom_threshold'] ?? false;
         $custom_threshold = $general_options['custom_threshold'] ?? $amount;
         $custom_threshold_per_method = $general_options['custom_threshold_per_method'] ?? [];
-        $chosen_shipping_id = self::chosen_shipping_method();
-        /**
+        $chosen_shipping_id = (string) self::chosen_shipping_method();
+        /*
          * Custom threshold check.
-         * 
+         *
          */
         if ( $enable_custom_threshold && !$only_virtual_products_in_cart ) {
             $amount = $custom_threshold;
             return apply_filters( 'fsl_min_amount', $amount );
         }
-        /**
+        /*
          * Third-part shipping methods check.
          * First check by chosen shipping method.
          */
@@ -91,9 +99,9 @@ class Helper {
             }
             return apply_filters( 'fsl_min_amount', $amount );
         }
-        /**
+        /*
          * Standard WooCommerce Shipping methods check.
-         * 
+         *
          */
         $amount = null;
         $cart = WC()->cart;
@@ -134,11 +142,11 @@ class Helper {
 
     /**
      * Check if only a virtual product is in the cart.
-     * 
-     * @since   2.6.0 
-     * 
+     *
+     * @since   2.6.0
+     *
      */
-    static function only_virtual_products() {
+    public static function only_virtual_products() {
         $only_virtual = false;
         $cart = WC()->cart;
         if ( $cart ) {
@@ -159,10 +167,10 @@ class Helper {
 
     /**
      * Check package to determine if is a returning customer.
-     * 
+     *
      * TODO: better check on more parameters.
      */
-    static function destination_info_exists( $package = [] ) {
+    public static function destination_info_exists( $package = [] ) {
         $country = ( isset( $package['destination']['country'] ) ? $package['destination']['country'] : null );
         $state = ( isset( $package['destination']['state'] ) ? $package['destination']['state'] : null );
         $postcode = ( isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : null );
@@ -182,10 +190,10 @@ class Helper {
     }
 
     /**
-     * 
+     *
      * @since   2.4.0
      */
-    static function is_free_shipping_coupon_applied() {
+    public static function is_free_shipping_coupon_applied() {
         $is_applied = false;
         $applied_coupons = WC()->cart->get_applied_coupons();
         foreach ( $applied_coupons as $coupon_code ) {
@@ -199,26 +207,28 @@ class Helper {
 
     /**
      * Search products by title only.
-     * 
+     *
      * @since    2.6.0
      */
-    static function search_product_titles( $find = '', $variations = false ) {
+    public static function search_product_titles( $find = '', $variations = false ) {
         global $wpdb;
-        $wild = '%';
-        $like = $wild . $wpdb->esc_like( $find ) . $wild;
-        // Determine post types to include
-        $post_types = ( $variations ? "('product', 'product_variation')" : "('product')" );
-        // Build and prepare SQL
-        $sql = $wpdb->prepare( "SELECT ID, post_title FROM {$wpdb->posts}\n             WHERE post_type IN {$post_types}\n             AND post_status = 'publish'\n             AND post_title LIKE %s", $like );
-        return $wpdb->get_results( $sql );
+        $find = ( is_string( $find ) ? wp_unslash( $find ) : '' );
+        $find = sanitize_text_field( $find );
+        $like = '%' . $wpdb->esc_like( $find ) . '%';
+        $types = ( $variations ? ['product', 'product_variation'] : ['product'] );
+        $placeholders = implode( ',', array_fill( 0, count( $types ), '%s' ) );
+        $sql = "\n        SELECT ID, post_title\n        FROM {$wpdb->posts}\n        WHERE post_type IN ({$placeholders})\n          AND post_status = 'publish'\n          AND post_title LIKE %s\n    ";
+        $params = array_merge( $types, [$like] );
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Prepared via $wpdb->prepare() with dynamic placeholders.
+        return $wpdb->get_results( $wpdb->prepare( $sql, $params ) );
     }
 
     /**
      * Search through products and product categories
-     * 
+     *
      * @since    2.6.0
      */
-    static function fsl_search() {
+    public static function fsl_search() {
         $search_term = ( isset( $_GET['q'] ) ? sanitize_text_field( $_GET['q'] ) : '' );
         $search_in = map_deep( $_GET['searchIn'], 'sanitize_text_field' );
         // we will pass post IDs and titles to this array
@@ -256,7 +266,7 @@ class Helper {
         wp_die();
     }
 
-    static function label_excluded( $output ) {
+    public static function label_excluded( $output ) {
         $label_options = DEVNET_FSL_OPTIONS['label'] ?? [];
         $excluded = ( isset( $label_options['exclude'] ) ? $label_options['exclude'] : [] );
         $options = [];
@@ -279,7 +289,7 @@ class Helper {
      *
      * @since    3.0.0
      */
-    static function convert_placeholders_array( $input = [] ) {
+    public static function convert_placeholders_array( $input = [] ) {
         $output = [];
         foreach ( $input as $module => $sections ) {
             $placeholder_args = $sections['placeholder_args'] ?? [];
@@ -299,7 +309,7 @@ class Helper {
      *
      * @since    2.1.0
      */
-    static function convert_placeholders( $input_string = '', $args = [] ) {
+    public static function convert_placeholders( $input_string = '', $args = [] ) {
         $remaining = $args['remaining'] ?? '';
         $threshold = $args['threshold'] ?? '';
         $free_shipping_amount = $args['free_shipping_amount'] ?? '';
@@ -319,7 +329,7 @@ class Helper {
      *
      * @since    3.0.0
      */
-    static function calculate_percentage( $threshold, $cart_subtotal ) {
+    public static function calculate_percentage( $threshold, $cart_subtotal ) {
         $reached_threshold = $cart_subtotal >= $threshold;
         if ( $reached_threshold ) {
             $percent = 100;

@@ -1,9 +1,9 @@
 === Free Shipping Label and Progress Bar for WooCommerce ===
 Contributors: devnethr, MarinMatosevic
-Tags: free shipping, amount left, progress bar, gift bar, woocommerce
+Tags: free shipping, progress bar, woocommerce, aov, order bump
 Requires PHP: 7.4
 Requires at least: 6.4
-Stable tag: 3.4.3
+Stable tag: 3.5.0
 Tested up to: 6.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -74,6 +74,7 @@ With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), 
 - Advanced customization of notice bar  
 - Advanced progress bar styling  
 - Cart & checkout position controls  
+- Display the progress bar on the product page
 - Shortcode support  
 - Gutenberg block  
 - Widget support 
@@ -138,14 +139,15 @@ If you like this plugin, feel free to leave a [review](https://wordpress.org/sup
 
 Here are some other plugins we have developed that you might find useful:
 
-- [Free Shipping Label](https://wordpress.org/plugins/free-shipping-label/) - Increase order revenue by showing your customers just how close they are to your free shipping threshold.
+- [Free Shipping Label](https://wordpress.org/plugins/snap-blocks/) - Increase order revenue by showing your customers just how close they are to your free shipping threshold.
+    - [FSL Discount Add-On](https://devnet.hr/plugins/snap-blocks/#fsl-discount) - By setting customizable thresholds for single, double, or triple-step discounts, you’ll motivate shoppers to add more to their carts.
 - [Product Price History](https://wordpress.org/plugins/product-price-history/) - Track product price history with customizable charts and graphs on your WooCommerce store. Show lowest price and increase customer trust.
-- [Price Alerts](https://wordpress.org/plugins/price-alerts/) - Let customers subscribe to price drops and boost sales by notifying interested buyers when product prices fall below their target.
 - [Easy Subscribe](https://wordpress.org/plugins/easy-subscribe/) - Effortlessly integrate customizable subscription forms on your WordPress site with a simple shortcode.
+    - [Easy Subscribe – WooCommerce Add-On](https://devnet.hr/plugins/easy-subscribe/#woocommerce-add-on) lets you place a subscription form directly on product pages to capture leads at the moment of interest and grow targeted subscriber lists based on customer preferences.
 - [Easy Booking Calendar](https://wordpress.org/plugins/easy-booking-calendar/) - Turn any product into a reservation-ready item. This plugin adds a customizable calendar to product pages, allowing customers to select date ranges for bookings.
 - [BizNotes](https://wordpress.org/plugins/biznotes/) - Exclusive admin notes for seamless order management among multiple admins. Effortless collaboration, powered up.
-- [PingVid](https://wordpress.org/plugins/pingvid/) - A lightweight WordPress plugin that adds a floating video widget to your site.
 - [Snap Blocks](https://wordpress.org/plugins/snap-blocks/) - A lightweight plugin that lets you create reusable content blocks in WordPress.
+- [PingVid](https://wordpress.org/plugins/pingvid/) - A lightweight WordPress plugin that adds a floating video widget to your site.
 
 
 == Installation ==
@@ -198,6 +200,15 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.5.0 =
+
+*2026-03-17*
+
+* Fix: Free shipping calculation when ignoring discounts
+* Fix: Custom threshold detection in some shipping configurations
+* Improve: Progress bar position handling and settings migration
+* Compatibility: Tested up to WooCommerce 10.6
 
 = 3.4.3 =
 

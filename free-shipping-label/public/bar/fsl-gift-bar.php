@@ -30,10 +30,10 @@ class Gift_Bar extends FSL_Bar {
         $gift_opt = DEVNET_FSL_OPTIONS['gift_bar'] ?? [];
         $gift_opt = ( $gift_opt ? $gift_opt : [] );
         // if is empty string, ensure it is array.
+        $gift_opt['name'] = 'gift_bar';
         $enable = $gift_opt['enable_bar'] ?? false;
         $threshold = $gift_opt['threshold'] ?? 0;
         $display = $gift_opt['display'] ?? 'after';
-        $inherit_pb = $gift_opt['inherit_progress_bar_settings'] ?? true;
         if ( !$enable || !$threshold ) {
             return $data;
         }
@@ -45,32 +45,33 @@ class Gift_Bar extends FSL_Bar {
         $free_shipping_percent = $free_shipping_data['percent'] ?? 0;
         $free_shipping_reached = $free_shipping_options['qualified_message'] ?? '';
         $layout = $free_shipping_options['layout'] ?? 'list';
-        $options = [
-            'show_fsl_title'       => true,
-            'show_fsl_description' => true,
-        ];
-        if ( $inherit_pb ) {
-            $options = $free_shipping_options;
-            $options['title'] = $gift_opt['title'] ?? '';
-            $options['description'] = $gift_opt['description'] ?? '';
-            $options['qualified_message'] = $gift_opt['qualified_message'] ?? '';
-        } else {
-            $gift_opt['name'] = 'gift_bar';
-            $only_inheritable = true;
-            $custom_options = $this->get_progress_bar_options( $gift_opt, $only_inheritable );
-            // Override inheritable options with custom Gift Bar options.
-            $options = array_replace( $free_shipping_options, $custom_options );
-        }
-        if ( empty( $free_shipping_data ) ) {
-            $display = 'only';
-            $options = $this->get_progress_bar_options( $gift_opt );
-        }
+        // $options = [
+        //     'show_fsl_title'       => true,
+        //     'show_fsl_description' => true
+        // ];
+        // $options = $free_shipping_options;
+        // $options['title']            = $gift_opt['title'] ?? '';
+        // $options['description']      = $gift_opt['description'] ?? '';
+        // $options['qualified_message'] = $gift_opt['qualified_message'] ?? '';
+        // $only_inheritable = true;
+        // $custom_options = $this->get_progress_bar_options($gift_opt, $only_inheritable);
+        // // Override inheritable options with custom Gift Bar options.
+        // $options = array_replace($free_shipping_options, $custom_options);
+        // if (empty($free_shipping_data)) {
+        //     $display = 'only';
+        //     $options = $this->get_progress_bar_options($gift_opt);
+        // }
+        $options = $this->get_progress_bar_options( $gift_opt );
         $options['label'] = $gift_opt['label'] ?? Defaults::gift_bar( 'label' );
         if ( $this->is_multilingual ) {
             $options['label'] = Defaults::gift_bar( 'label' );
             $options['title'] = Defaults::gift_bar( 'title' );
             $options['description'] = Defaults::gift_bar( 'description' );
             $options['qualified_message'] = Defaults::gift_bar( 'qualified_message' );
+        }
+        $bar_type = $options['bar_type'] ?? 'linear';
+        if ( $bar_type === 'circular' && $free_shipping_percent < 100 ) {
+            $options['icon'] = $free_shipping_options['icon'];
         }
         $calc = Helper::calculate_percentage( $threshold, $cart_subtotal );
         $percent = $calc['percent'];

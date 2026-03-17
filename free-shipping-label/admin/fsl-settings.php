@@ -212,6 +212,6 @@ class Settings
             $html = $alert_html . $html;
         }
 
-        echo $html;
+        echo wp_kses_post($html);
     }
 }

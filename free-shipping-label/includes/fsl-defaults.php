@@ -33,7 +33,7 @@ class Defaults
             'only_logged_users'       => 0,
             'hide_shipping_rates'     => 0,
             'multilingual'            => 0,
-            'delete_options'          => 0
+            //'delete_options'          => 0
         ];
 
         return self::format_output($options, $option_name);
@@ -48,12 +48,10 @@ class Defaults
             'enable_bar'             => 0,
             'local_pickup'           => 0,
             'zero_shipping'          => 0,
-            'show_on_cart'           => 1,
             'cart_position'          => 'woocommerce_proceed_to_checkout',
-            'show_on_checkout'       => 1,
             'checkout_position'      => 'woocommerce_review_order_before_submit',
-            'show_on_minicart'       => 1,
             'minicart_position'      => 'woocommerce_widget_shopping_cart_before_buttons',
+            'product_position'       => '',
             'show_qualified_message'  => 1,
             'show_full_progress_bar' => 0,
             'title'                  => esc_html__('Free delivery on orders over {free_shipping_amount}', 'free-shipping-label'),
@@ -97,9 +95,6 @@ class Defaults
         $options = self::bar();
 
         unset($options['local_pickup']);
-        unset($options['show_on_cart']);
-        unset($options['show_on_checkout']);
-        unset($options['show_on_minicart']);
         unset($options['title']);
         unset($options['description']);
         unset($options['qualified_message']);
@@ -115,7 +110,6 @@ class Defaults
             'title'                         => esc_html__('Free Gift on orders over {threshold}', 'free-shipping-label'),
             'description'                   => esc_html__('Add at least {remaining} more to get a free gift!', 'free-shipping-label'),
             'qualified_message'              => esc_html__("You've earned a free gift!", 'free-shipping-label'),
-            'inherit_progress_bar_settings' => 1
         ];
 
         return self::format_output($options, $option_name);
@@ -129,9 +123,6 @@ class Defaults
         $options = self::bar();
 
         unset($options['local_pickup']);
-        unset($options['show_on_cart']);
-        unset($options['show_on_checkout']);
-        unset($options['show_on_minicart']);
 
         $options += [
             'enable_bar'                    => 0,
