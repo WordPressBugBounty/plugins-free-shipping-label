@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Plugin Name: 		 Free Shipping Label
+ * Plugin Name:          Free Shipping Label
  * Plugin URI:           https://devnet.hr/plugins/free-shipping-label/
  * Description:          Increase order revenue in WooCommerce store by showing your customers just how close they are to your free shipping threshold.
- * Version:              3.5.0
- * Requires at least: 	 6.4
+ * Version:              3.5.1
+ * Requires at least:    6.4
  * Requires PHP:         7.4
  * Author:               Devnet
  * Author URI:           https://devnet.hr
@@ -13,13 +13,13 @@
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path:          /languages
  * Requires Plugins:     woocommerce
- * WC tested up to:      10.6
+ * WC tested up to:      10.7
  *
  */
 use Devnet\FSL\Includes\Activator;
 use Devnet\FSL\Includes\Deactivator;
-use Devnet\FSL\Includes\Uninstaller;
 use Devnet\FSL\Includes\FSL_PLUGIN;
+use Devnet\FSL\Includes\Uninstaller;
 // If this file is called directly, abort.
 if ( !defined( 'ABSPATH' ) ) {
     exit;
@@ -44,6 +44,7 @@ if ( function_exists( 'fsl_fs' ) ) {
                     'premium_suffix'   => '(Pro)',
                     'has_addons'       => true,
                     'has_paid_plans'   => true,
+                    'is_org_compliant' => true,
                     'trial'            => [
                         'days'               => 7,
                         'is_require_payment' => true,
@@ -55,7 +56,6 @@ if ( function_exists( 'fsl_fs' ) ) {
                         ],
                     ],
                     'is_live'          => true,
-                    'is_org_compliant' => true,
                 ] );
             }
             return $fsl_fs;
@@ -66,7 +66,7 @@ if ( function_exists( 'fsl_fs' ) ) {
         // Signal that SDK was initiated.
         do_action( 'fsl_fs_loaded' );
     }
-    /**
+    /*
      * Show the contact submenu item only when the user have a valid non-expired license.
      *
      * @param $is_visible The filtered value. Whether the submenu item should be visible or not.
@@ -83,7 +83,7 @@ if ( function_exists( 'fsl_fs' ) ) {
         }
 
     }
-    /**
+    /*
      * TODO: do uninstall logic.
      */
     if ( !function_exists( 'fsl_fs_uninstall_cleanup' ) ) {
@@ -99,9 +99,9 @@ if ( function_exists( 'fsl_fs' ) ) {
         }
 
     }
-    /**
+    /*
      * Run Freemius actions and filters.
-     * 
+     *
      */
     if ( function_exists( 'fsl_fs' ) ) {
         fsl_fs()->add_filter(
@@ -113,7 +113,7 @@ if ( function_exists( 'fsl_fs' ) ) {
         fsl_fs()->add_action( 'after_uninstall', 'fsl_fs_uninstall_cleanup' );
         fsl_fs()->add_filter( 'plugin_icon', 'fsl_fs_custom_icon' );
     }
-    define( 'DEVNET_FSL_VERSION', '3.5.0' );
+    define( 'DEVNET_FSL_VERSION', '3.5.1' );
     define( 'DEVNET_FSL_NAME', 'free-shipping-label' );
     define( 'DEVNET_FSL_PATH', plugin_basename( __FILE__ ) );
     define( 'DEVNET_FSL_OPTIONS', [

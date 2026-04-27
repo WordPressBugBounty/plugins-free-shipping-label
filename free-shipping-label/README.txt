@@ -3,8 +3,8 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, progress bar, woocommerce, aov, order bump
 Requires PHP: 7.4
 Requires at least: 6.4
-Stable tag: 3.5.0
-Tested up to: 6.9
+Stable tag: 3.5.1
+Tested up to: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,21 +12,24 @@ Increase order revenue by showing your customers just how close they are to your
 
 == Description ==
 
-With our progress bar notification, you can give your customers a clear picture of just how close they are to qualifying for free shipping. This not only stops shoppers from leaving, but also encourages them to add more items to their cart and increase their order value - boosting your revenue in the process. 
+Turn your free shipping threshold into a powerful conversion tool.
 
-Now, introducing the exciting Gift Bar module, adding a touch of delight to the shopping journey. Motivate your customers to go the extra mile, qualifying for a free gift. This strategic move not only enhances order values but adds an element of excitement to the entire purchasing process.
+This WooCommerce plugin adds a dynamic free shipping progress bar that shows customers exactly how much more they need to spend to unlock free shipping. Instead of guessing, shoppers see clear, real-time feedback directly in the cart, checkout, or mini-cart.
 
-Not only that, but our progress bar notification also provides a sense of urgency for your customers to reach the free shipping threshold. This can drive impulse purchases and increase the likelihood of your customers completing their purchase. By keeping the progress bar front and center, your customers will always be aware of how close they are to qualifying for free shipping, making them more likely to add that one extra item to reach the threshold.
+By making the goal visible, you naturally encourage customers to add one more item — increasing average order value and reducing cart abandonment.
 
-Additionally, our progress bar notification is fully customizable to fit the look and feel of your brand. You can choose from a range of colors and styles to match your website's aesthetic, ensuring a seamless integration with your existing design.
+The plugin goes beyond a simple progress bar. You can display fully customizable messages, highlight eligible products, or trigger notifications when customers are close to the threshold. Everything is designed to guide users toward completing their purchase.
 
-Give your customers a smooth shopping journey and increase your average order value with our progress bar notification.
+With the built-in Gift Bar module, you can offer a free gift once a certain cart value is reached. This adds an extra incentive layer and turns a simple discount strategy into a more engaging shopping experience.
+
+Everything is built to be lightweight, flexible, and easy to integrate into any WooCommerce store.
+Instead of hiding your free shipping rule in settings, make it visible — and turn it into a conversion driver.
 
 ### [DOCUMENTATION](https://devnet.hr/docs/free-shipping-label/) | [FREE SHIPPING LABEL PRO](https://devnet.hr/plugins/free-shipping-label/)
 
-🎉 **Make the Most of the Gift Bar Module!** 🎁✨ Boost sales and delight your customers by offering free gifts as they shop. The **Gift Bar** module seamlessly integrates into your progress bar, encouraging shoppers to add more to their cart to unlock a reward. It’s the perfect way to enhance engagement and increase average order value. [Learn more about how it works.](https://devnet.hr/docs/free-shipping-label/gift-bar/)
+🎉 **Make the Most of the Gift Bar Module!** Boost sales and delight your customers by offering free gifts as they shop. The **Gift Bar** module seamlessly integrates into your progress bar, encouraging shoppers to add more to their cart to unlock a reward. It’s the perfect way to enhance engagement and increase average order value. [Learn more about how it works.](https://devnet.hr/docs/free-shipping-label/gift-bar/)
 
-🎉 **Looking to Add More Goals to Your Progress Bar?** 🛒💸 The [Discount Bar Add-On](https://devnet.hr/plugins/free-shipping-label/fsl-discount) lets you introduce up to three additional steps, encouraging customers to unlock exciting discounts as they shop. It’s a powerful way to boost cart values, engage shoppers, and drive more sales. [Learn more about it here.](https://devnet.hr/docs/free-shipping-label/discount-bar/)
+🎉 **Looking to Add More Goals to Your Progress Bar?** The [Discount Bar Add-On](https://devnet.hr/plugins/free-shipping-label/fsl-discount) lets you introduce up to three additional steps, encouraging customers to unlock exciting discounts as they shop. It’s a powerful way to boost cart values, engage shoppers, and drive more sales. [Learn more about it here.](https://devnet.hr/docs/free-shipping-label/discount-bar/)
 
 ## Who is plugin for?
 
@@ -200,6 +203,18 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.5.1 =
+
+*2026-04-27*
+
+* Fix: Edge-case error in logs when using WAFS plugin
+* Fix: Removed extra spacing on some themes
+* Fix: “Remove bar stripes” option not working
+* Update: Removed inheritable options from Notice Bar
+* Update: Freemius SDK updated to the latest version
+* Compatibility: Tested up to WordPress 6.5
+* Compatibility: Tested up to WooCommerce 10.7
 
 = 3.5.0 =
 

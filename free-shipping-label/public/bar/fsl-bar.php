@@ -11,39 +11,6 @@ if ( !defined( 'ABSPATH' ) ) {
 class FSL_Bar {
     public $is_multilingual = false;
 
-    private $inheritable = [
-        'zero_shipping',
-        'title',
-        'description',
-        'qualified_message',
-        'show_qualified_message',
-        'show_full_progress_bar',
-        'hide_border_shadow',
-        'disable_animation',
-        'disabled_animations',
-        'bar_border_color',
-        'bar_bg_color',
-        'bar_inner_color',
-        'bar_height',
-        'bar_type',
-        'indicator_icon',
-        'indicator_icon_size',
-        'indicator_icon_shape',
-        'indicator_icon_bg_color',
-        'circle_size',
-        'inside_circle',
-        'icon',
-        'icon_color',
-        'circle_bg_color',
-        'text_color',
-        'box_bg_color',
-        'box_max_width',
-        'box_alignment',
-        'center_text',
-        'bar_radius',
-        'remove_bar_stripes'
-    ];
-
     public function __construct( $skip_hooks = false ) {
         $this->is_multilingual = DEVNET_FSL_OPTIONS['general']['multilingual'] ?? false;
         if ( $skip_hooks ) {
@@ -97,8 +64,10 @@ class FSL_Bar {
      */
     public function fsl_bar_cart() {
         $is_updatable = false;
+        $in_table = false;
         $this->progress_bar( [
             'updatable' => $is_updatable,
+            'in_table'  => $in_table,
         ] );
     }
 
@@ -124,7 +93,7 @@ class FSL_Bar {
         }
     }
 
-    public function get_progress_bar_options( $args = [], $only_inheritable = false ) {
+    public function get_progress_bar_options( $args = [] ) {
         $options = (DEVNET_FSL_OPTIONS['progress_bar'] ?? []) + Defaults::bar();
         $opt = [];
         foreach ( $options as $name => $value ) {
@@ -158,14 +127,6 @@ class FSL_Bar {
         $layout = $opt['layout'] ?? Defaults::bar( 'layout' );
         if ( !in_array( $layout, ['list', 'list_alt'], true ) ) {
             $opt['layout'] = Defaults::bar( 'layout' );
-        }
-        if ( $only_inheritable ) {
-            // Filter out non-inheritable options.
-            foreach ( $opt as $key => $value ) {
-                if ( !in_array( $key, $this->inheritable ) ) {
-                    unset($opt[$key]);
-                }
-            }
         }
         return $opt;
     }
@@ -351,6 +312,8 @@ class FSL_Bar {
         }
         $cart_subtotal = $this->get_cart_subtotal();
         $is_updatable = $args['updatable'] ?? false;
+        $in_table = $args['in_table'] ?? false;
+        $wrappers = $args['wrappers'] ?? [];
         if ( WC()->cart->get_cart_contents_count() === 0 ) {
             $this->fsl_bar_placeholder( true );
             return;
@@ -386,12 +349,21 @@ class FSL_Bar {
             uasort( $stand_alone_modules, $sort_by_threshold );
             $setup_data['modules'] = $stand_alone_modules;
         }
+        if ( $in_table ) {
+            echo '<tr><td colspan="10">';
+        }
         echo '<div class="fsl-wrapper" data-updatable="' . esc_attr( $is_updatable ) . '">';
         foreach ( $setup_data['modules'] as $module => $module_data ) {
+            if ( !empty( $wrappers ) ) {
+                $module_data['options'] += $wrappers;
+            }
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is fully escaped inside fsl_progress_bar_html().
             echo $this->fsl_progress_bar_html( $module_data );
         }
         echo '</div>';
+        if ( $in_table ) {
+            echo '</tr></td>';
+        }
     }
 
     /**

@@ -71,6 +71,10 @@ class Compatibility {
         if ( !function_exists( 'wafs_get_rates' ) || !function_exists( 'wpc_match_conditions' ) ) {
             return $amount;
         }
+        $customer = WC()->customer;
+        if ( !$customer || !method_exists( $customer, 'get_shipping_country' ) ) {
+            return $amount;
+        }
         $methods = wafs_get_rates();
         $matched_methods = false;
         $thresholds = [];

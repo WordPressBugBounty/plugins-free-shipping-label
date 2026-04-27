@@ -45,22 +45,6 @@ class Gift_Bar extends FSL_Bar {
         $free_shipping_percent = $free_shipping_data['percent'] ?? 0;
         $free_shipping_reached = $free_shipping_options['qualified_message'] ?? '';
         $layout = $free_shipping_options['layout'] ?? 'list';
-        // $options = [
-        //     'show_fsl_title'       => true,
-        //     'show_fsl_description' => true
-        // ];
-        // $options = $free_shipping_options;
-        // $options['title']            = $gift_opt['title'] ?? '';
-        // $options['description']      = $gift_opt['description'] ?? '';
-        // $options['qualified_message'] = $gift_opt['qualified_message'] ?? '';
-        // $only_inheritable = true;
-        // $custom_options = $this->get_progress_bar_options($gift_opt, $only_inheritable);
-        // // Override inheritable options with custom Gift Bar options.
-        // $options = array_replace($free_shipping_options, $custom_options);
-        // if (empty($free_shipping_data)) {
-        //     $display = 'only';
-        //     $options = $this->get_progress_bar_options($gift_opt);
-        // }
         $options = $this->get_progress_bar_options( $gift_opt );
         $options['label'] = $gift_opt['label'] ?? Defaults::gift_bar( 'label' );
         if ( $this->is_multilingual ) {
