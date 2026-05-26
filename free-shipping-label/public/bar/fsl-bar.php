@@ -433,6 +433,14 @@ class FSL_Bar {
             $description_html = $this->get_fsl_description_html( $opt['description'], $placeholder_args );
         }
         if ( 'linear' === $bar_type ) {
+            /**
+             * Adjust bar width if icon indicator is set.
+             */
+            $indicator_icon = $opt['indicator_icon'] ?? false;
+            if ( $indicator_icon ) {
+                $indicator_icon_size = ( isset( $opt['indicator_icon_size'] ) && (int) $opt['indicator_icon_size'] ? (int) $opt['indicator_icon_size'] : 1 );
+                $opt['bar_width_adjust'] = $indicator_icon_size / 2;
+            }
             $progress_bar_html = $this->linear_bar_html( $percent, $opt );
         }
         if ( 'circular' === $bar_type ) {

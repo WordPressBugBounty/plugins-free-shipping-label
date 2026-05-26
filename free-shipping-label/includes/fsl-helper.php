@@ -66,6 +66,17 @@ class Helper {
     }
 
     /**
+     * Extract shipping instance ID from shipping method string.
+     *
+     */
+    public static function get_shipping_instance_id( $string ) {
+        if ( preg_match( '/:(\\d+)_/', $string, $matches ) ) {
+            return (int) $matches[1];
+        }
+        return null;
+    }
+
+    /**
      * Get minimal amount for free shipping.
      *
      * @since    1.0.0

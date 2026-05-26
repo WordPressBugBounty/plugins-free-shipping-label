@@ -3,7 +3,7 @@ Contributors: devnethr, MarinMatosevic
 Tags: free shipping, progress bar, woocommerce, aov, order bump
 Requires PHP: 7.4
 Requires at least: 6.4
-Stable tag: 3.5.1
+Stable tag: 3.5.2
 Tested up to: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,15 +31,8 @@ Instead of hiding your free shipping rule in settings, make it visible — and t
 
 🎉 **Looking to Add More Goals to Your Progress Bar?** The [Discount Bar Add-On](https://devnet.hr/plugins/free-shipping-label/fsl-discount) lets you introduce up to three additional steps, encouraging customers to unlock exciting discounts as they shop. It’s a powerful way to boost cart values, engage shoppers, and drive more sales. [Learn more about it here.](https://devnet.hr/docs/free-shipping-label/discount-bar/)
 
-## Who is plugin for?
 
-- eCommerce Store Owners
-- Agencies building shops for clients
-- Anyone trying to create a better user experience
-- Anyone trying to increase shop performance
-- Anyone trying to add more dynamism to the shop
-
-## ✅ Features (Free Version)
+## Features (Free Version)
 
 - Animated Gift Bar  
 - Animated progress bar  
@@ -64,7 +57,7 @@ Instead of hiding your free shipping rule in settings, make it visible — and t
 
 With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), you unlock advanced visual controls, flexible placement options, and extended compatibility with popular WooCommerce plugins.
 
-### 🔧 Advanced Features
+### Advanced Features
 
 - Threshold icon indicator  
 - Multiple display modes  
@@ -88,22 +81,23 @@ With [Free Shipping Label Pro](https://devnet.hr/plugins/free-shipping-label/), 
 
 Free Shipping Label Pro is built to work seamlessly with real-world WooCommerce setups.
 
-### 💱 Currency & Multilingual Plugins
+### Currency & Multilingual Plugins
 - FOX (formerly WOOCS)
 - CURCY – Multi Currency for WooCommerce
 - WooCommerce Multilingual (WPML)
 
-### 🛒 Cart, Checkout & UX Plugins
+### Cart, Checkout & UX Plugins
 - [WooCommerce Cart & Checkout Blocks](https://woocommerce.com/checkout-blocks/)
 - Elementor
 - FunnelKit
 - WPC Fly Cart
 - Side Cart
 
-### 🚚 Shipping Plugins
+### Shipping Plugins
 - [Table Rate Shipping Method for WooCommerce (Flexible Shipping)](https://wordpress.org/plugins/flexible-shipping/)
 - [WooCommerce Advanced Free Shipping](https://wordpress.org/plugins/woocommerce-advanced-free-shipping/)
 - [GLS Shipping for WooCommerce](https://wordpress.org/plugins/gls-shipping-for-woocommerce/)
+- [EuroParcel Integration for WooCommerce](https://wordpress.org/plugins/europarcel-com/)
 
 > The progress bar dynamically adapts to supported shipping methods and currencies, ensuring accurate thresholds and consistent messaging across the entire shopping flow.
 
@@ -204,6 +198,14 @@ Checkout hook: `woocommerce_review_order_before_submit`
 
 == Changelog ==
 
+= 3.5.2 =
+
+*2026-05-26*
+
+* Fix: Missing textdomain in plugin header
+* Fix: RTL currency formatting issues
+* Add: Support for EuroParcel shipping methods
+
 = 3.5.1 =
 
 *2026-04-27*
@@ -213,7 +215,7 @@ Checkout hook: `woocommerce_review_order_before_submit`
 * Fix: “Remove bar stripes” option not working
 * Update: Removed inheritable options from Notice Bar
 * Update: Freemius SDK updated to the latest version
-* Compatibility: Tested up to WordPress 6.5
+* Compatibility: Tested up to WordPress 7.0
 * Compatibility: Tested up to WooCommerce 10.7
 
 = 3.5.0 =

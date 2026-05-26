@@ -490,7 +490,7 @@ class Options {
                     '_disabled_4'                                     => esc_html__( 'After minicart', 'free-shipping-label' ),
                 ],
                 'optgroup' => $minicart_optgroup,
-                'default'  => Defaults::bar( 'cart_position' ),
+                'default'  => Defaults::bar( 'minicart_position' ),
             ],
             [
                 'type'    => 'select',
