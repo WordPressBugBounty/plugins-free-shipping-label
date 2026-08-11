@@ -362,7 +362,7 @@ class FSL_Bar {
         }
         echo '</div>';
         if ( $in_table ) {
-            echo '</tr></td>';
+            echo '</td></tr>';
         }
     }
 

@@ -1,9 +1,9 @@
 === Free Shipping Label and Progress Bar for WooCommerce ===
 Contributors: devnethr, MarinMatosevic
-Tags: free shipping, progress bar, woocommerce, aov, order bump
+Tags: free shipping, progress bar, woocommerce, free shipping bar, free gift
 Requires PHP: 7.4
 Requires at least: 6.4
-Stable tag: 3.5.2
+Stable tag: 3.5.3
 Tested up to: 7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -24,6 +24,8 @@ With the built-in Gift Bar module, you can offer a free gift once a certain cart
 
 Everything is built to be lightweight, flexible, and easy to integrate into any WooCommerce store.
 Instead of hiding your free shipping rule in settings, make it visible — and turn it into a conversion driver.
+
+https://www.youtube.com/watch?v=6rqPlgkA26w
 
 ### [DOCUMENTATION](https://devnet.hr/docs/free-shipping-label/) | [FREE SHIPPING LABEL PRO](https://devnet.hr/plugins/free-shipping-label/)
 
@@ -136,8 +138,8 @@ If you like this plugin, feel free to leave a [review](https://wordpress.org/sup
 
 Here are some other plugins we have developed that you might find useful:
 
-- [Free Shipping Label](https://wordpress.org/plugins/snap-blocks/) - Increase order revenue by showing your customers just how close they are to your free shipping threshold.
-    - [FSL Discount Add-On](https://devnet.hr/plugins/snap-blocks/#fsl-discount) - By setting customizable thresholds for single, double, or triple-step discounts, you’ll motivate shoppers to add more to their carts.
+- [Free Shipping Label](https://wordpress.org/plugins/free-shipping-label/) - Increase order revenue by showing your customers just how close they are to your free shipping threshold.
+    - [FSL Discount Add-On](https://devnet.hr/plugins/free-shipping-label/fsl-discount) - By setting customizable thresholds for single, double, or triple-step discounts, you’ll motivate shoppers to add more to their carts.
 - [Product Price History](https://wordpress.org/plugins/product-price-history/) - Track product price history with customizable charts and graphs on your WooCommerce store. Show lowest price and increase customer trust.
 - [Easy Subscribe](https://wordpress.org/plugins/easy-subscribe/) - Effortlessly integrate customizable subscription forms on your WordPress site with a simple shortcode.
     - [Easy Subscribe – WooCommerce Add-On](https://devnet.hr/plugins/easy-subscribe/#woocommerce-add-on) lets you place a subscription form directly on product pages to capture leads at the moment of interest and grow targeted subscriber lists based on customer preferences.
@@ -197,6 +199,15 @@ Checkout hook: `woocommerce_review_order_before_submit`
 7. Settings panel 2
 
 == Changelog ==
+
+= 3.5.3 =
+
+*2026-08-11*
+
+* Fix: Fixed several settings defaults, markup issues, and minor UI bugs
+* Update: Optimized frontend asset loading and update requests
+* Update: Freemius SDK updated to the latest version
+* Compatibility: Tested up to WooCommerce 11.0
 
 = 3.5.2 =
 

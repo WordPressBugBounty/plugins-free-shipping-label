@@ -71,7 +71,7 @@ class FSL_Public
 	public function enqueue_scripts()
 	{
 
-		$script_asset_path = plugin_dir_url(__DIR__) . 'assets/build/fsl-public.asset.php';
+		$script_asset_path = plugin_dir_path(__DIR__) . 'assets/build/fsl-public.asset.php';
 		$script_info       = file_exists($script_asset_path)
 			? include $script_asset_path
 			: ['dependencies' => ['jquery', 'wp-data'], 'version' => $this->version];

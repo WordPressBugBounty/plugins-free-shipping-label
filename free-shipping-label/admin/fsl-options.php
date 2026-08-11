@@ -386,12 +386,12 @@ class Options {
                 'options'  => [
                     '1' => esc_html__( 'Above area', 'free-shipping-label' ),
                     '2' => esc_html__( 'Above cart items', 'free-shipping-label' ),
-                    '3' => esc_html__( 'Bellow cart items', 'free-shipping-label' ),
+                    '3' => esc_html__( 'Below cart items', 'free-shipping-label' ),
                     '4' => esc_html__( 'Above bottom', 'free-shipping-label' ),
                     '5' => esc_html__( 'Above buttons', 'free-shipping-label' ),
-                    '6' => esc_html__( 'Bellow buttons', 'free-shipping-label' ),
-                    '7' => esc_html__( 'Bellow bottom', 'free-shipping-label' ),
-                    '8' => esc_html__( 'Bellow area', 'free-shipping-label' ),
+                    '6' => esc_html__( 'Below buttons', 'free-shipping-label' ),
+                    '7' => esc_html__( 'Below bottom', 'free-shipping-label' ),
+                    '8' => esc_html__( 'Below area', 'free-shipping-label' ),
                 ],
                 'disabled' => true,
             ]];
@@ -516,7 +516,7 @@ class Options {
                 'type'  => 'text',
                 'name'  => 'shortcode_info__disabled',
                 'label' => esc_html__( 'Shortcode', 'free-shipping-label' ),
-                'desc'  => esc_html( 'Copy the shortcode and integrate it into your site using your preferred editor.', 'free-shipping-label' ),
+                'desc'  => esc_html__( 'Copy the shortcode and integrate it into your site using your preferred editor.', 'free-shipping-label' ),
             ],
             self::common_options( 'info-bar-after-threshold' ),
             self::common_options( 'show_qualified_message' ),
@@ -641,7 +641,7 @@ class Options {
                     'after'       => esc_html__( 'After free shipping reached', 'free-shipping-label' ),
                     '_disabled_1' => esc_html__( 'Extend free shipping progress bar', 'free-shipping-label' ),
                     '_disabled_2' => esc_html__( 'Only Gift Bar', 'free-shipping-label' ),
-                    '_disabled_2' => esc_html__( 'Standalone', 'free-shipping-label' ),
+                    '_disabled_3' => esc_html__( 'Standalone', 'free-shipping-label' ),
                 ],
                 'default' => Defaults::gift_bar( 'display' ),
             ],
@@ -706,22 +706,12 @@ class Options {
                 'class' => 'info',
                 'desc'  => '',
             ],
-            // [
-            //     'type'    => 'select',
-            //     'name'    => 'bar_type',
-            //     'label'   => esc_html__('Bar type', 'free-shipping-label'),
-            //     'options' => [
-            //         'linear' => esc_html__('Linear', 'free-shipping-label')
-            //     ],
-            //     'default' => 'linear',
-            //     'class'   => 'bar_type hide-option-row'
-            // ],
             self::common_options( 'indicator_icon', true ),
             self::common_options( 'indicator_icon_size', true ),
             self::common_options( 'indicator_icon_shape', true ),
             self::common_options( 'indicator_icon_bg_color', true ),
             self::common_options( 'icon', true ),
-            self::common_options( 'icon_color', true ),
+            self::common_options( 'icon_color', true )
         ];
         return apply_filters( 'fsl_settings_gift_bar', $gift_bar );
     }

@@ -155,8 +155,8 @@ class FSL_Label {
             $text_color = $opt['text_color'] ?? Defaults::label( 'text_color' );
             $bg_color = $opt['bg_color'] ?? Defaults::label( 'bg_color' );
             $hide_border_shadow = $opt['hide_border_shadow'] ?? Defaults::label( 'hide_border_shadow' );
-            $multilingual = $opt['multilingual'] ?? Defaults::label( 'multilingual' );
             $text = $opt['text'] ?? Defaults::label( 'text' );
+            $multilingual = $opt['multilingual'] ?? Defaults::general( 'multilingual' );
             if ( $multilingual ) {
                 $text = Defaults::label( 'text' );
             }
@@ -178,7 +178,7 @@ class FSL_Label {
     }
 
     /**
-     * Add sufix (free shipping label) to product after the price.
+     * Add suffix (free shipping label) to product after the price.
      *
      * @since    2.0.0
      */
@@ -187,7 +187,7 @@ class FSL_Label {
             return $price_html;
         }
         $label_over_image = $this->fsl_label_options['label_over_image'] ?? false;
-        // Show label as price sufix if not enabled label over image,
+        // Show label as price suffix if not enabled label over image,
         // if it is enabled, show it only on the single product page,
         // but avoid any other products on the page (sliders, sidebars, etc.).
         // on single product page - page_id/queried_object_id must match with the product_id.

@@ -20,6 +20,9 @@ class FSL_Admin {
             add_filter( 'admin_footer_text', [$this, 'admin_credits'] );
         }
         add_action( 'admin_menu', [$this, 'admin_menu'], 100 );
+        if ( is_admin() ) {
+            add_action( 'init', [$this, 'more_free_plugins_submenu'] );
+        }
         add_filter( 'plugin_action_links_' . DEVNET_FSL_PATH, [$this, 'plugin_action_links'] );
         add_action( 'before_woocommerce_init', [$this, 'cot_compatible'] );
     }
@@ -57,7 +60,7 @@ class FSL_Admin {
         if ( isset( $_GET['page'] ) && sanitize_text_field( $_GET['page'] ) === 'free-shipping-label-settings' ) {
             wp_enqueue_script( 'wp-color-picker-alpha' );
         }
-        $script_asset_path = plugin_dir_url( __DIR__ ) . 'assets/build/fsl-admin.asset.php';
+        $script_asset_path = plugin_dir_path( __DIR__ ) . 'assets/build/fsl-admin.asset.php';
         $script_info = ( file_exists( $script_asset_path ) ? include $script_asset_path : [
             'dependencies' => ['jquery'],
             'version'      => $this->version,
@@ -83,6 +86,26 @@ class FSL_Admin {
             apply_filters( 'fsl_admin_menu_user_capability', 'manage_options' ),
             'free-shipping-label-settings',
             [$plugin_settings, 'plugin_page']
+        );
+    }
+
+    /**
+     * Add the "More Free Plugins" submenu after Freemius adds its submenu items.
+     *
+     */
+    public function more_free_plugins_submenu() {
+        $url = add_query_arg( [
+            'tab'      => 'favorites',
+            'user'     => 'devnethr',
+            'save'     => 0,
+            '_wpnonce' => wp_create_nonce( 'save_wporg_username_' . get_current_user_id() ),
+        ], self_admin_url( 'plugin-install.php' ) );
+        fsl_fs()->add_submenu_link_item(
+            esc_html__( 'More Free Plugins', 'free-shipping-label' ),
+            $url,
+            'devnet-plugins',
+            'install_plugins',
+            PHP_INT_MAX
         );
     }
 
