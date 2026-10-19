@@ -4,8 +4,8 @@
  * Plugin Name:          Free Shipping Label
  * Plugin URI:           https://devnet.hr/plugins/free-shipping-label/
  * Description:          Increase order revenue in WooCommerce store by showing your customers just how close they are to your free shipping threshold.
- * Version:              3.5.3
- * Requires at least:    6.4
+ * Version:              4.0.0
+ * Requires at least:    6.8
  * Requires PHP:         7.4
  * Author:               Devnet
  * Author URI:           https://devnet.hr
@@ -14,11 +14,10 @@
  * Text Domain:       	 free-shipping-label
  * Domain Path:          /languages
  * Requires Plugins:     woocommerce
- * WC tested up to:      11.0
+ * WC tested up to:      11.2
  *
  */
 use Devnet\FSL\Includes\Activator;
-use Devnet\FSL\Includes\Deactivator;
 use Devnet\FSL\Includes\FSL_PLUGIN;
 use Devnet\FSL\Includes\Uninstaller;
 // If this file is called directly, abort.
@@ -68,7 +67,7 @@ if ( function_exists( 'fsl_fs' ) ) {
         do_action( 'fsl_fs_loaded' );
     }
     /*
-     * Show the contact submenu item only when the user have a valid non-expired license.
+     * Show the contact submenu item only when the user has a valid non-expired license.
      *
      * @param $is_visible The filtered value. Whether the submenu item should be visible or not.
      * @param $menu_id    The ID of the submenu item.
@@ -85,7 +84,7 @@ if ( function_exists( 'fsl_fs' ) ) {
 
     }
     /*
-     * TODO: do uninstall logic.
+     * Delete plugin data on uninstall (kept while both Free and Pro are installed).
      */
     if ( !function_exists( 'fsl_fs_uninstall_cleanup' ) ) {
         function fsl_fs_uninstall_cleanup() {
@@ -114,33 +113,39 @@ if ( function_exists( 'fsl_fs' ) ) {
         fsl_fs()->add_action( 'after_uninstall', 'fsl_fs_uninstall_cleanup' );
         fsl_fs()->add_filter( 'plugin_icon', 'fsl_fs_custom_icon' );
     }
-    define( 'DEVNET_FSL_VERSION', '3.5.3' );
+    define( 'DEVNET_FSL_VERSION', '4.0.0' );
     define( 'DEVNET_FSL_NAME', 'free-shipping-label' );
     define( 'DEVNET_FSL_PATH', plugin_basename( __FILE__ ) );
-    define( 'DEVNET_FSL_OPTIONS', [
-        'general'      => get_option( 'devnet_fsl_general' ),
-        'progress_bar' => get_option( 'devnet_fsl_bar' ),
-        'gift_bar'     => get_option( 'devnet_fsl_gift_bar' ),
-        'notice_bar'   => get_option( 'devnet_fsl_notice_bar' ),
-        'label'        => get_option( 'devnet_fsl_label' ),
-    ] );
+    define( 'DEVNET_FSL_OPTIONS', array_map( function ( $name ) {
+        $value = get_option( $name );
+        // '' (old Settings API add_option) and false (never saved) must not reach `+ Defaults::*()`.
+        return ( is_array( $value ) ? $value : [] );
+    }, [
+        'general'      => 'devnet_fsl_general',
+        'progress_bar' => 'devnet_fsl_bar',
+        'gift_bar'     => 'devnet_fsl_gift_bar',
+        'notice_bar'   => 'devnet_fsl_notice_bar',
+        'label'        => 'devnet_fsl_label',
+    ] ) );
     require_once plugin_dir_path( __FILE__ ) . 'includes/fsl-defaults.php';
     require_once plugin_dir_path( __FILE__ ) . 'includes/fsl-activator.php';
-    require_once plugin_dir_path( __FILE__ ) . 'includes/fsl-deactivator.php';
     add_action( 'init', function () {
-        Activator::check_and_format_options();
+        // Not without WooCommerce: FSL's code isn't loaded then (below), and the repairs use it. They run once it's back.
+        if ( function_exists( 'WC' ) ) {
+            Activator::check_and_format_options();
+        }
     } );
     function activate_devnet_fsl() {
         Activator::activate();
     }
 
-    function deactivate_devnet_fsl() {
-        Deactivator::deactivate();
-    }
-
     register_activation_hook( __FILE__, 'activate_devnet_fsl' );
-    register_deactivation_hook( __FILE__, 'deactivate_devnet_fsl' );
     add_action( 'plugins_loaded', function () {
+        // WooCommerce inactive (WP-CLI, a missing folder, a host's tool): FSL calls WC() on every request, which was a
+        // fatal error on every page, wp-login.php included. WordPress's plugin screen shows that FSL requires it.
+        if ( !function_exists( 'WC' ) ) {
+            return;
+        }
         require plugin_dir_path( __FILE__ ) . 'includes/fsl-plugin.php';
         $plugin = new FSL_PLUGIN();
         $plugin->run();

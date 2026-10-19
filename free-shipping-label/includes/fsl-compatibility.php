@@ -96,6 +96,8 @@ class Compatibility {
                     }
                 }
             }
+            unset($inner_array);
+            // Break the reference left by the by-reference foreach.
             $thresholds[$method->ID] = $subtotal_value;
             // Check if conditions match
             if ( wpc_match_conditions( $condition_groups, [

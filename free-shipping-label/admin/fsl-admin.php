@@ -13,13 +13,14 @@ class FSL_Admin {
     public function __construct( $plugin_name, $version ) {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        $page = ( isset( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : null );
+        $page = ( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : null );
         if ( $page === 'free-shipping-label-settings' ) {
             add_action( 'admin_enqueue_scripts', [$this, 'enqueue_styles'] );
             add_action( 'admin_enqueue_scripts', [$this, 'enqueue_scripts'] );
             add_filter( 'admin_footer_text', [$this, 'admin_credits'] );
         }
         add_action( 'admin_menu', [$this, 'admin_menu'], 100 );
+        add_action( 'wp_ajax_devnet_fsl_bar_preview', [$this, 'bar_preview'] );
         if ( is_admin() ) {
             add_action( 'init', [$this, 'more_free_plugins_submenu'] );
         }
@@ -41,6 +42,15 @@ class FSL_Admin {
             $this->version,
             'all'
         );
+        // The design previews are real bars, with the theme's palette variables for Theme Match, as on the storefront.
+        wp_enqueue_style(
+            'free-shipping-label-public',
+            plugin_dir_url( __DIR__ ) . 'assets/build/fsl-public.css',
+            [],
+            $this->version,
+            'all'
+        );
+        wp_add_inline_style( 'free-shipping-label-public', wp_get_global_stylesheet( ['variables'] ) );
     }
 
     /**
@@ -57,7 +67,7 @@ class FSL_Admin {
             $this->version,
             true
         );
-        if ( isset( $_GET['page'] ) && sanitize_text_field( $_GET['page'] ) === 'free-shipping-label-settings' ) {
+        if ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] ) ) === 'free-shipping-label-settings' ) {
             wp_enqueue_script( 'wp-color-picker-alpha' );
         }
         $script_asset_path = plugin_dir_path( __DIR__ ) . 'assets/build/fsl-admin.asset.php';
@@ -72,12 +82,22 @@ class FSL_Admin {
             $script_info['version'],
             true
         );
+        // Outside the array: Freemius's build drops comments on array items, and the translators comment must stay.
+        /* translators: 1: the number of characters that fit on one line, 2: the text's number of characters. */
+        $length_tip = __( '%2$d characters: may wrap to two lines in a narrow mini-cart (about %1$d fit).', 'free-shipping-label' );
         wp_localize_script( 'fsl-admin', 'devnet_fsl_admin_ajax', [
-            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+            'ajaxurl'   => admin_url( 'admin-ajax.php' ),
+            'nonce'     => wp_create_nonce( 'devnet_fsl_search' ),
+            'lengthTip' => $length_tip,
         ] );
     }
 
     public function admin_menu() {
+        // Loaded here instead of on every request; add-ons use Options only in their `fsl_settings_fields` callbacks.
+        require_once plugin_dir_path( __FILE__ ) . 'fsl-settings-api.php';
+        require_once plugin_dir_path( __FILE__ ) . 'fsl-options.php';
+        require_once plugin_dir_path( __FILE__ ) . 'fsl-settings.php';
+        require_once plugin_dir_path( __FILE__ ) . 'fsl-threshold-status.php';
         $plugin_settings = new Settings();
         add_submenu_page(
             'woocommerce',
@@ -85,8 +105,38 @@ class FSL_Admin {
             'Free Shipping Label',
             apply_filters( 'fsl_admin_menu_user_capability', 'manage_options' ),
             'free-shipping-label-settings',
-            [$plugin_settings, 'plugin_page']
+            [$plugin_settings, 'settings_page']
         );
+    }
+
+    /**
+     * The Progress Bar live preview and the layout cards: the form's values, sanitized as a save sanitizes them, at
+     * the cart total of the preview's slider.
+     *
+     * @since	4.0.0
+     */
+    public function bar_preview() {
+        check_ajax_referer( 'devnet_fsl_bar_preview' );
+        if ( !current_user_can( apply_filters( 'fsl_admin_menu_user_capability', 'manage_options' ) ) ) {
+            wp_send_json_error( null, 403 );
+        }
+        require_once plugin_dir_path( __FILE__ ) . 'fsl-settings-api.php';
+        require_once plugin_dir_path( __FILE__ ) . 'fsl-options.php';
+        $settings_api = new Settings_API('devnet_fsl');
+        $settings_api->set_fields( [
+            'devnet_fsl_bar' => Options::progress_bar(),
+        ] );
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each field's own sanitize callback, as on save.
+        $values = $settings_api->sanitize_options( (array) wp_unslash( $_POST['devnet_fsl_bar'] ?? [] ) );
+        // The preview slider's progress, 0 to 100%. fsl-admin.js sends it as fsl_preview_cart and shows `cart` next to it.
+        $percent = ( isset( $_POST['fsl_preview_cart'] ) ? min( 100, absint( wp_unslash( $_POST['fsl_preview_cart'] ) ) ) : Options::PREVIEW_PERCENT );
+        // The goals the preview's buttons show (Options::preview_goals() names); none sent, all of them.
+        $shown = ( isset( $_POST['fsl_preview_goals'] ) ? array_filter( explode( ',', sanitize_text_field( wp_unslash( $_POST['fsl_preview_goals'] ) ) ) ) : [] );
+        wp_send_json_success( [
+            'bar'     => Options::bar_preview_html( $values, $percent, $shown ),
+            'layouts' => Options::layout_previews( $values, $percent ),
+            'cart'    => esc_html( $percent . '%' ),
+        ] );
     }
 
     /**
@@ -139,7 +189,7 @@ class FSL_Admin {
     }
 
     /**
-     * Declare that plugin is COT compatible.
+     * Declare that plugin is COT (HPOS) and Cart & Checkout blocks compatible.
      * 
      * @since	2.6.0
      */
@@ -147,6 +197,7 @@ class FSL_Admin {
         if ( class_exists( '\\Automattic\\WooCommerce\\Utilities\\FeaturesUtil' ) ) {
             $plugin_file = plugin_dir_path( dirname( __FILE__ ) ) . 'free-shipping-label.php';
             \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', $plugin_file, true );
+            \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'cart_checkout_blocks', $plugin_file, true );
         }
     }
 

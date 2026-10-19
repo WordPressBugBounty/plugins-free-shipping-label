@@ -20,11 +20,11 @@ class FSL_Public
 
 	public function __construct($plugin_name, $version)
 	{
-		// Don’t run during cron/CLI/most admin screens/REST
+		// Don’t run during cron/CLI/most admin screens.
+		// REST requests do run: the Store API (block cart and checkout) needs these hooks.
 		if (
 			wp_doing_cron()
 			|| (defined('WP_CLI') && WP_CLI)
-			|| (defined('REST_REQUEST') && REST_REQUEST)
 			|| (is_admin() && ! wp_doing_ajax())
 		) {
 			return;
@@ -33,6 +33,9 @@ class FSL_Public
 		$this->plugin_name = $plugin_name;
 		$this->version     = $version;
 
+		// A shipping rule, not display: guests get it too when the bar is shown only to logged in users.
+		add_filter('woocommerce_package_rates', [$this, 'maybe_hide_shipping'], 10, 2);
+
 		$options     		 = DEVNET_FSL_OPTIONS['general'] ?? [];
 		$only_logged_users   = $options['only_logged_users'] ?? false;
 
@@ -40,17 +43,20 @@ class FSL_Public
 
 		add_action('wp_enqueue_scripts', [$this, 'enqueue_styles']);
 		add_action('wp_enqueue_scripts', [$this, 'enqueue_scripts']);
-		add_filter('woocommerce_package_rates', [$this, 'maybe_hide_shipping'], 10, 2);
 
 		/**
 		 * Initialize modules.
 		 * 
 		 */
+		add_action('init', [$this, 'initialize_modules'], 0);
+	}
+
+	public function initialize_modules()
+	{
 		new FSL_Label();
 		new FSL_Bar();
 		new Gift_Bar();
 	}
-
 
 	/**
 	 * Register the stylesheets for the public-facing side of the site.
@@ -79,7 +85,8 @@ class FSL_Public
 		wp_enqueue_script(
 			'fsl-public',
 			plugin_dir_url(__DIR__) . 'assets/build/fsl-public.js',
-			$script_info['dependencies'],
+			// The script uses the jQuery global, which the build doesn't list as a dependency.
+			array_unique(array_merge($script_info['dependencies'], ['jquery'])),
 			$script_info['version'],
 			true
 		);
@@ -88,6 +95,7 @@ class FSL_Public
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'options' => DEVNET_FSL_OPTIONS,
 			'placeholder_html' => FSL_Bar::fsl_bar_placeholder(),
+			'close_label' => __('Close', 'free-shipping-label'),
 		]);
 	}
 

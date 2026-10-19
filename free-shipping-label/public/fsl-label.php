@@ -4,6 +4,8 @@ namespace Devnet\FSL\Frontend;
 
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Helper;
+use Devnet\FSL\Includes\Icons;
+use Devnet\FSL\Includes\Presets;
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -94,15 +96,12 @@ class FSL_Label {
         $show_on_list_variable_products = $opt['show_on_list_variable_products'] ?? false;
         $show_on_list_simple_products = $opt['show_on_list_simple_products'] ?? false;
         $type = $product->get_type();
+        // The price the customer sees (tax display, active sale only, price filters), like the cart subtotal
+        // the threshold is compared with. ponytail: shop tax display; differs if the cart shows tax differently.
         if ( 'variable' === $type ) {
-            $min_or_max = 'min';
-            $_var_reg_price = $product->get_variation_regular_price( $min_or_max, true );
-            $_var_sale_price = $product->get_variation_sale_price( $min_or_max, true );
-            $price = ( $_var_sale_price ? $_var_sale_price : $_var_reg_price );
+            $price = $product->get_variation_price( 'min', true );
         } else {
-            $regular_price = $product->get_regular_price();
-            $sale_price = $product->get_sale_price();
-            $price = ( $sale_price ? $sale_price : $regular_price );
+            $price = wc_get_price_to_display( $product );
         }
         if ( !empty( $this->include_shipping_class ) ) {
             $shipping_class_id = (int) $product->get_shipping_class_id();
@@ -116,10 +115,8 @@ class FSL_Label {
             if ( $show_on_single_variable_product ) {
                 $parent = wc_get_product( $product->get_parent_id() );
                 if ( $parent && $parent->is_type( 'variable' ) ) {
-                    // Parent "qualifies" if its min variation price (sale if active, else regular) meets the threshold
-                    $_p_reg = $parent->get_variation_regular_price( 'min', true );
-                    $_p_sale = $parent->get_variation_sale_price( 'min', true );
-                    $parent_effective_min = ( $_p_sale ? $_p_sale : $_p_reg );
+                    // Parent "qualifies" if its min variation price meets the threshold (same price as for the parent's label)
+                    $parent_effective_min = $parent->get_variation_price( 'min', true );
                     // Respect the same free-shipping threshold used elsewhere
                     if ( $this->free_shipping_min_amount && $parent_effective_min >= $this->free_shipping_min_amount ) {
                         // Parent already shows label → don't add it again for the selected variation
@@ -152,14 +149,29 @@ class FSL_Label {
         $fsl = '';
         if ( $price && $amount_for_free_shipping && $price >= $amount_for_free_shipping ) {
             $opt = $this->fsl_label_options;
-            $text_color = $opt['text_color'] ?? Defaults::label( 'text_color' );
-            $bg_color = $opt['bg_color'] ?? Defaults::label( 'bg_color' );
-            $hide_border_shadow = $opt['hide_border_shadow'] ?? Defaults::label( 'hide_border_shadow' );
-            $text = $opt['text'] ?? Defaults::label( 'text' );
-            $multilingual = $opt['multilingual'] ?? Defaults::general( 'multilingual' );
-            if ( $multilingual ) {
-                $text = Defaults::label( 'text' );
-            }
+            $fsl = self::text_label_html( $opt, Presets::sanitize_label( $opt['label_preset'] ?? '' ) );
+        }
+        return apply_filters( 'fsl_product_label_html', $fsl, $price );
+    }
+
+    /**
+     * The text label in this preset ('' is Classic, the label as before 4.0.0), with the icon in Pro. A preset's badge
+     * sits in the label's row and takes the colors as variables (assets/src/label-presets/). Also the settings
+     * page's previews.
+     *
+     * @since    4.0.0
+     */
+    public static function text_label_html( $opt, $preset ) {
+        $text_color = $opt['text_color'] ?? Defaults::label( 'text_color' );
+        $bg_color = $opt['bg_color'] ?? Defaults::label( 'bg_color' );
+        $hide_border_shadow = $opt['hide_border_shadow'] ?? Defaults::label( 'hide_border_shadow' );
+        $text = $opt['text'] ?? '';
+        $icon = '';
+        // An empty text shows the translated default.
+        if ( $text === '' ) {
+            $text = Defaults::label( 'text' );
+        }
+        if ( !$preset ) {
             $styles = '';
             if ( $text_color ) {
                 $styles .= 'color:' . $text_color . ';';
@@ -170,11 +182,31 @@ class FSL_Label {
             if ( $hide_border_shadow ) {
                 $styles .= 'box-shadow:none;';
             }
-            $fsl .= '<span class="devnet_fsl-label" style="' . esc_attr( $styles ) . '">';
-            $fsl .= esc_html( $text );
-            $fsl .= '</span>';
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $icon is the plugin's own SVG.
+            return '<span class="devnet_fsl-label" style="' . esc_attr( $styles ) . '">' . $icon . esc_html( $text ) . '</span>';
         }
-        return apply_filters( 'fsl_product_label_html', $fsl, $price );
+        $styles = '';
+        if ( $text_color ) {
+            $styles .= '--fsl-label-color:' . $text_color . ';';
+        }
+        if ( $bg_color ) {
+            $styles .= '--fsl-label-bg:' . $bg_color . ';';
+        }
+        $class = array_filter( [
+            'devnet_fsl-label',
+            'fsl-label-preset',
+            'fsl-label-preset-' . $preset,
+            ( $icon ? 'fsl-label-has-icon' : '' ),
+            ( $hide_border_shadow ? 'fsl-label-no-shadow' : '' )
+        ] );
+        return sprintf(
+            '<span class="%1$s" style="%2$s"><span class="fsl-label-badge">%3$s<span class="fsl-label-text">%4$s</span></span></span>',
+            esc_attr( implode( ' ', $class ) ),
+            esc_attr( $styles ),
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The plugin's own SVG.
+            $icon,
+            esc_html( $text )
+        );
     }
 
     /**

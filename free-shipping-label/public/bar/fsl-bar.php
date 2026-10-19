@@ -5,10 +5,75 @@ namespace Devnet\FSL\Frontend\Bar;
 use Devnet\FSL\Includes\Defaults;
 use Devnet\FSL\Includes\Helper;
 use Devnet\FSL\Includes\Icons;
+use Devnet\FSL\Includes\Presets;
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 class FSL_Bar {
+    /**
+     * Multiple goals layouts in the Free version; the others are Pro.
+     *
+     * @since	4.0.0
+     */
+    const FREE_LAYOUTS = [
+        'list',
+        'list_alt',
+        'checklist',
+        'timeline'
+    ];
+
+    /**
+     * Multiple goals layouts built from each goal's label and status (goals_layout_html()). Linear bar only.
+     *
+     * @since	4.0.0
+     */
+    const GOAL_LAYOUTS = [
+        'checklist',
+        'timeline',
+        'milestones',
+        'stepper',
+        'segments',
+        'next_goal',
+        'split',
+        'headline',
+        'tiles',
+        'stacked',
+        'spotlight',
+        'rewards_count'
+    ];
+
+    /**
+     * Multiple goals layouts for the circular bar, on its ring (ring_layout_html__premium_only()). Pro.
+     *
+     * @since	4.0.0
+     */
+    const RING_LAYOUTS = [
+        'ring_markers',
+        'ring_activity',
+        'ring_arcs',
+        'ring_next',
+        'ring_checklist',
+        'ring_mini',
+        'ring_gauge',
+        'ring_stepper'
+    ];
+
+    /**
+     * The settings for the look of a bar's threshold indicator icons, not the icon itself.
+     *
+     * @since	4.0.0
+     */
+    const ICON_LOOK = [
+        'indicator_icon',
+        'indicator_icon_size',
+        'indicator_icon_shape',
+        'indicator_icon_bg_color',
+        'icon_color'
+    ];
+
+    /**
+     * The old Multilingual setting (until 3.5.x). Not used by FSL since 4.0.0; FSL Discount 1.0.8 and older read it.
+     */
     public $is_multilingual = false;
 
     public function __construct( $skip_hooks = false ) {
@@ -25,10 +90,10 @@ class FSL_Bar {
         if ( !empty( $cart_hook ) ) {
             $cart_hook = 'woocommerce_proceed_to_checkout';
         }
-        if ( !empty( $minicart_hook ) ) {
+        if ( !empty( $checkout_hook ) ) {
             $checkout_hook = 'woocommerce_review_order_before_submit';
         }
-        if ( !empty( $checkout_hook ) ) {
+        if ( !empty( $minicart_hook ) ) {
             $minicart_hook = 'woocommerce_widget_shopping_cart_before_buttons';
         }
         if ( !$enable ) {
@@ -102,7 +167,6 @@ class FSL_Bar {
         $opt['name'] = 'progress_bar';
         $opt['show_fsl_title'] = true;
         $opt['show_fsl_description'] = true;
-        $opt['label'] = esc_html__( 'Free Shipping', 'free-shipping-label' );
         $bar_type = $opt['bar_type'] ?? Defaults::bar( 'bar_type' );
         if ( $bar_type === 'circular' ) {
             if ( $opt['inside_circle'] === 'title' ) {
@@ -118,17 +182,55 @@ class FSL_Bar {
                 $opt[$name] = $value;
             }
         }
-        if ( $this->is_multilingual ) {
-            $opt['title'] = Defaults::bar( 'title' );
-            $opt['description'] = Defaults::bar( 'description' );
-            $opt['qualified_message'] = Defaults::bar( 'qualified_message' );
+        // Bars with their own texts (Gift Bar, Discount bars) have their own switches: not inherited, shown when missing.
+        if ( array_key_exists( 'title', $args ) ) {
+            $opt['show_title'] = $args['show_title'] ?? 1;
+            $opt['show_description'] = $args['show_description'] ?? 1;
+        }
+        // A switched-off title or description stays hidden in every layout.
+        if ( empty( $opt['show_title'] ) ) {
+            $opt['show_fsl_title'] = false;
+        }
+        if ( empty( $opt['show_description'] ) ) {
+            $opt['show_fsl_description'] = false;
+        }
+        // An empty text shows the translated default. Bars with their own texts (Gift Bar, Discount bars) fill in
+        // their own defaults; the live preview passes the Progress Bar's texts.
+        if ( !array_key_exists( 'title', $args ) || ($args['module_name'] ?? '') === 'free-shipping' ) {
+            foreach ( [
+                'label',
+                'title',
+                'description',
+                'qualified_message',
+                'close_message'
+            ] as $text ) {
+                if ( ($opt[$text] ?? '') === '' ) {
+                    $opt[$text] = Defaults::bar( $text );
+                }
+            }
         }
         // Save Layout to variable.
         $layout = $opt['layout'] ?? Defaults::bar( 'layout' );
-        if ( !in_array( $layout, ['list', 'list_alt'], true ) ) {
+        if ( !in_array( $layout, self::FREE_LAYOUTS, true ) ) {
             $opt['layout'] = Defaults::bar( 'layout' );
         }
+        // The ring layouts are for the circular bar, the others for the linear one; the Vertical list for both, and on
+        // the other bar type instead.
+        $is_ring = in_array( $opt['layout'], self::RING_LAYOUTS, true );
+        if ( ( 'circular' === ($opt['bar_type'] ?? '') ? !$is_ring && 'list' !== $opt['layout'] : $is_ring ) ) {
+            $opt['layout'] = 'list';
+        }
         return $opt;
+    }
+
+    /**
+     * A bar's own settings without its icons' look while "Same as Progress Bar" is on (Gift Bar, on by default;
+     * Discount bars from FSL Discount 1.1.0): its icons then look like the Progress Bar's, only the icon is its own.
+     *
+     * @since	4.0.0
+     */
+    public static function inherit_icon_settings( $options, $default = 1 ) {
+        return ( empty( $options['inherit_icon_settings'] ?? $default ) ? $options : array_diff_key( $options, array_flip( self::ICON_LOOK ) ) );
     }
 
     private function fsl_wrapper( $opt = [], $wrapper = '', $for = '' ) {
@@ -142,6 +244,10 @@ class FSL_Bar {
         $center_text_class = 'fsl-center-text';
         // Add center text class if not set otherwise in the pro version.
         $wrapper_class[] = $center_text_class;
+        // A set text size instead of the theme's ("Theme default" adds nothing).
+        if ( !empty( $opt['text_size'] ) ) {
+            $wrapper_class[] = 'fsl-text-' . sanitize_html_class( $opt['text_size'] );
+        }
         if ( $opt['hide_border_shadow'] ) {
             $wrapper_class[] = 'devnet_fsl-no-shadow';
         }
@@ -240,7 +346,8 @@ class FSL_Bar {
         $chosen_shipping_method = Helper::chosen_shipping_method();
         $is_local_pickup = Helper::starts_with( $chosen_shipping_method, 'local_pickup' );
         $fs_instance = Helper::$free_shipping_instance;
-        $fs_requires = $fs_instance['requires'] ?? '';
+        // Custom and third-party thresholds have no WooCommerce instance: a free shipping coupon still counts.
+        $fs_requires = ( $fs_instance ? $fs_instance['requires'] ?? '' : 'either' );
         $ignore_discounts = ($fs_instance['ignore_discounts'] ?? 'no') === 'yes';
         if ( $is_local_pickup && !$opt['local_pickup'] ) {
             return [
@@ -258,7 +365,31 @@ class FSL_Bar {
         $percent = $calc['percent'];
         $remaining = $calc['remaining'];
         $cart_reached_threshold = $percent === 100;
-        $free_shipping_pass = $cart_reached_threshold;
+        $has_coupon = Helper::is_free_shipping_coupon_applied();
+        // Same rules as WC_Shipping_Free_Shipping::is_available().
+        switch ( $fs_requires ) {
+            case '':
+                // N/A: free shipping is always available, nothing to reach.
+                return;
+            case 'coupon':
+                if ( !$has_coupon ) {
+                    return;
+                }
+                $free_shipping_pass = true;
+                break;
+            case 'min_amount':
+                $free_shipping_pass = $cart_reached_threshold;
+                break;
+            case 'both':
+                $free_shipping_pass = $has_coupon && $cart_reached_threshold;
+                if ( !$has_coupon && $cart_reached_threshold ) {
+                    $opt['description'] = esc_html__( 'Waiting for Free Shipping coupon', 'free-shipping-label' );
+                }
+                break;
+            default:
+                // 'either'
+                $free_shipping_pass = $has_coupon || $cart_reached_threshold;
+        }
         /**
          * Allow free shipping when shipping cost is 0 and the option is enabled.
          * Some shipping methods return 0.00 as the shipping total when free shipping is applied.
@@ -266,26 +397,6 @@ class FSL_Bar {
          */
         if ( $zero_shipping && !$is_local_pickup && $chosen_shipping_method && (float) WC()->cart->get_shipping_total() <= 0 ) {
             $free_shipping_pass = true;
-        }
-        if ( Helper::is_free_shipping_coupon_applied() ) {
-            $free_shipping_pass = true;
-            if ( $fs_requires === 'coupon' ) {
-                $free_shipping_pass = true;
-            }
-            if ( $fs_requires === 'both' && $cart_reached_threshold ) {
-                $free_shipping_pass = true;
-            }
-        } else {
-            if ( $fs_requires === 'coupon' ) {
-                return;
-            }
-            if ( $fs_requires === 'both' ) {
-                $free_shipping_pass = false;
-                if ( $cart_reached_threshold ) {
-                    $percent = 100;
-                    $opt['description'] = esc_html__( 'Waiting for Free Shipping coupon', 'free-shipping-label' );
-                }
-            }
         }
         return [
             'pass'             => $free_shipping_pass,
@@ -299,6 +410,15 @@ class FSL_Bar {
             ],
             'cart_subtotal'    => $cart_subtotal,
         ];
+    }
+
+    /**
+     * Where the close message starts, in percent of the free shipping threshold.
+     *
+     * @since	4.0.0
+     */
+    public static function close_message_percent() {
+        return (float) apply_filters( 'fsl_close_message_percent', 75 );
     }
 
     /**
@@ -352,9 +472,10 @@ class FSL_Bar {
         if ( $in_table ) {
             echo '<tr><td colspan="10">';
         }
-        echo '<div class="fsl-wrapper" data-updatable="' . esc_attr( $is_updatable ) . '">';
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- cart_hash_attribute() escapes its value.
+        echo '<div class="fsl-wrapper" data-updatable="' . esc_attr( $is_updatable ) . '"' . self::cart_hash_attribute( $is_updatable ) . '>';
         foreach ( $setup_data['modules'] as $module => $module_data ) {
-            if ( !empty( $wrappers ) ) {
+            if ( !empty( $wrappers ) && isset( $module_data['options'] ) ) {
                 $module_data['options'] += $wrappers;
             }
             // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Output is fully escaped inside fsl_progress_bar_html().
@@ -373,6 +494,7 @@ class FSL_Bar {
      */
     public function fsl_progress_bar_html( $args ) {
         $args = apply_filters( 'fsl_progress_bar_args', $args );
+        $args = self::single_goal_group( $args );
         $opt = $args['options'] ?? [];
         $pass = $args['pass'] ?? false;
         $layout = $args['layout'] ?? 'default';
@@ -410,6 +532,34 @@ class FSL_Bar {
     }
 
     /**
+     * One goal in a goals layout (GOAL_LAYOUTS, RING_LAYOUTS; the bar's layout after get_progress_bar_options()'s
+     * fallbacks): a group of one, which the layout shows as it shows several goals. Once the goal is reached, only with
+     * "Show full progress bar": else the reached message replaces the bar, as before. The Classic layouts keep the
+     * single bar.
+     *
+     * @since	4.0.0
+     */
+    private static function single_goal_group( $args ) {
+        $opt = $args['options'] ?? [];
+        $layout = $opt['layout'] ?? '';
+        $pass = !empty( $args['pass'] );
+        if ( !empty( $args['grouped_modules'] ) || !in_array( $layout, array_merge( self::GOAL_LAYOUTS, self::RING_LAYOUTS ), true ) || $pass && empty( $opt['show_full_progress_bar'] ) ) {
+            return $args;
+        }
+        if ( $pass ) {
+            $args['reached']['qualified_message'] = $opt['qualified_message'] ?? '';
+        }
+        return [
+            'layout'          => $layout,
+            'options'         => $opt,
+            'grouped_modules' => [
+                $opt['module_name'] ?? 'free-shipping' => $args,
+            ],
+            'percent'         => $args['percent'] ?? 0,
+        ];
+    }
+
+    /**
      * 
      * 
      * @since	3.0.0
@@ -441,6 +591,8 @@ class FSL_Bar {
                 $indicator_icon_size = ( isset( $opt['indicator_icon_size'] ) && (int) $opt['indicator_icon_size'] ? (int) $opt['indicator_icon_size'] : 1 );
                 $opt['bar_width_adjust'] = $indicator_icon_size / 2;
             }
+            // One goal: a design preset can show a marker at the progress (with more goals it would hit their icons).
+            $opt['progress_marker'] = !empty( $opt['bar_preset'] ) && (Presets::all()[$opt['bar_preset']]['marker'] ?? false);
             $progress_bar_html = $this->linear_bar_html( $percent, $opt );
         }
         if ( 'circular' === $bar_type ) {
@@ -461,6 +613,8 @@ class FSL_Bar {
         // Pass layout value to options.
         $opt['layout'] = $layout;
         $is_threshold_bubbles_layout = $layout === 'threshold_bubbles';
+        $is_ring_layout = 'circular' === $bar_type && in_array( $layout, self::RING_LAYOUTS, true );
+        $is_goal_layout = in_array( $layout, self::GOAL_LAYOUTS, true ) || $is_ring_layout;
         $thresholds = [];
         $focused_module = '';
         $higher_percentage = -1;
@@ -488,17 +642,46 @@ class FSL_Bar {
             $reached = $module['reached']['qualified_message'] ?? '';
             $percent = $module['percent'] ?? null;
             $is_reached = $percent === 100;
-            $title = $options['title'] ?? '';
-            $description = $options['description'] ?? '';
+            $title = ( !empty( $options['show_title'] ?? 1 ) ? $options['title'] ?? '' : '' );
+            $description = ( !empty( $options['show_description'] ?? 1 ) ? $options['description'] ?? '' : '' );
             $label = $options['label'] ?? '';
             $show_qualified_message = $options['show_qualified_message'] ?? false;
             $indicator_icon = $options['indicator_icon'] ?? false;
-            $threshold_percentage = $threshold / $highest_threshold * 100;
+            // Cast as PHP arithmetic does ('' or null = 0), minus its TypeError for '' thresholds from
+            // fsl_progress_bar_setup_data modules. No highest threshold above 0: every threshold is at the end.
+            $threshold_percentage = ( (float) $highest_threshold > 0 ? (float) $threshold / (float) $highest_threshold * 100 : 100 );
             $text = [
                 'qualified_message' => $this->get_fsl_qualified_message_html( $reached, $placeholder_args ),
                 'title'             => $this->get_fsl_title_html( $title, $placeholder_args ),
                 'description'       => $this->get_fsl_description_html( $description, $placeholder_args ),
             ];
+            // The goal layouts show a goal's label and status, and its threshold until it's reached.
+            if ( $is_goal_layout ) {
+                if ( $is_reached ) {
+                    $status = esc_html__( 'Unlocked', 'free-shipping-label' );
+                } else {
+                    /* translators: {remaining}: the amount left to reach this goal. */
+                    $status = Helper::convert_placeholders( esc_html__( '{remaining} to go', 'free-shipping-label' ), $placeholder_args );
+                }
+                $goal = [
+                    'name'    => $label,
+                    'label'   => esc_html( $label ),
+                    'status'  => $status,
+                    'amount'  => ( $is_reached ? '' : Helper::convert_placeholders( '{threshold}', $placeholder_args ) ),
+                    'at'      => $threshold_percentage,
+                    'percent' => $percent,
+                    'args'    => $placeholder_args,
+                ];
+                // The layouts with each goal's icon: a gift box or a package for a goal without one.
+                if ( $is_ring_layout || in_array( $layout, [
+                    'tiles',
+                    'stacked',
+                    'spotlight',
+                    'rewards_count'
+                ], true ) ) {
+                    $goal['icon'] = Icons::get_svg( ( !empty( $options['icon'] ) ? $options['icon'] : (( 'gift-bar' === $module_name ? 'gift-box-1' : 'package-1' )) ), 20 );
+                }
+            }
             if ( $is_threshold_bubbles_layout ) {
                 if ( $is_reached ) {
                     $combined_text = $text['qualified_message'];
@@ -524,10 +707,11 @@ class FSL_Bar {
                     'focused'                 => $focused_module === $module_name,
                     'text'                    => $text,
                 ];
-                if ( $threshold_percentage === 100 ) {
+                // The highest threshold, at the end of the bar (a float, so not === 100).
+                if ( $threshold_percentage >= 100 ) {
                     $opt['bar_width_adjust'] = $indicator_icon_size / 2;
                 }
-            } elseif ( $is_threshold_bubbles_layout ) {
+            } elseif ( $is_threshold_bubbles_layout || in_array( $layout, ['milestones', 'stepper'], true ) ) {
                 $opt['threshold_indicators'][$module_name] = [
                     'threshold'            => $threshold,
                     'highest_threshold'    => $highest_threshold,
@@ -537,7 +721,7 @@ class FSL_Bar {
                 ];
             }
             $show_full_progress_bar = $options['show_full_progress_bar'] ?? false;
-            if ( $bar_type === 'linear' && !in_array( $layout, ['list', 'list_alt'], true ) ) {
+            if ( $bar_type === 'linear' && !in_array( $layout, ['list', 'list_alt', 'timeline'], true ) ) {
                 $title = null;
                 $description = null;
                 if ( $layout === 'horizontal_1' || $layout === 'horizontal_2' ) {
@@ -555,6 +739,22 @@ class FSL_Bar {
                 'focused'                   => $focused_module === $module_name,
                 'layout'                    => $layout,
             ];
+            if ( $is_goal_layout ) {
+                $display_data[$module_name]['goal'] = $goal;
+            }
+        }
+        if ( $is_ring_layout ) {
+            return '';
+        }
+        if ( $is_goal_layout ) {
+            return $this->goals_layout_html(
+                $layout,
+                $display_data,
+                $opt,
+                $percent,
+                $focused_module,
+                $reached && !$show_full_progress_bar
+            );
         }
         // Start building HTML
         $html = '';
@@ -616,7 +816,231 @@ class FSL_Bar {
     }
 
     /**
-     * Build vertical list.
+     * The goal layouts (GOAL_LAYOUTS): each goal's label and status, the next goal's description as a headline.
+     *
+     * @since	4.0.0
+     */
+    private function goals_layout_html(
+        $layout,
+        $display_data,
+        $opt,
+        $percent,
+        $focused_module,
+        $hide_bar
+    ) {
+        if ( 'stepper' === $layout ) {
+            return $this->stepper_html( $display_data, $opt, $percent );
+        }
+        if ( 'segments' === $layout ) {
+            return $this->segments_html( $display_data, $opt, $percent );
+        }
+        $last = end( $display_data );
+        // The next goal's description; once every goal is reached, the last one's message.
+        if ( $focused_module ) {
+            $headline = $display_data[$focused_module]['text']['description'] ?? '';
+        } else {
+            $headline = ( !empty( $last['display_qualified_message'] ) ? $last['text']['qualified_message'] : '' );
+        }
+        // Milestones and Split header hang on the bar, so it stays.
+        $bar = ( $hide_bar && !in_array( $layout, ['milestones', 'split'], true ) ? '' : $this->linear_bar_html( $percent, $opt ) );
+        switch ( $layout ) {
+            case 'checklist':
+                return $this->goals_list_html( $display_data, ['label', 'status'] ) . $bar;
+            case 'timeline':
+                return $this->build_vertical_list_html( $display_data );
+            case 'next_goal':
+                return $headline . $bar . $this->goals_list_html( $display_data, ['label'] );
+            case 'split':
+                return $this->goals_list_html( $display_data, ['label', 'amount'] ) . $bar;
+            case 'headline':
+                return $headline . $bar;
+            case 'tiles':
+                return $this->goals_list_html( $display_data, ['icon', 'label', 'status'] ) . $bar;
+            case 'stacked':
+                // Each goal's own bar, without indicators.
+                unset($opt['threshold_indicators'], $opt['bar_width_adjust']);
+                $opt['indicator_icon'] = 0;
+                return $this->goals_list_html(
+                    $display_data,
+                    [
+                        'icon',
+                        'label',
+                        'status',
+                        'bar'
+                    ],
+                    '',
+                    $opt
+                );
+            case 'spotlight':
+                return $this->spotlight_html( $display_data ) . $bar;
+            case 'rewards_count':
+                return $this->rewards_count_html( $display_data ) . $bar . $headline;
+            default:
+                // Milestones: the labels under the bar, each ending at its goal.
+                // As wide as the bar, which leaves room for the last icon.
+                $width = ( empty( $opt['bar_width_adjust'] ) ? '' : 'width:calc(100% - ' . (float) $opt['bar_width_adjust'] . 'px);' );
+                return $bar . $this->goals_list_html( $display_data, ['label', 'status'], $this->goal_columns( $display_data ) . $width );
+        }
+    }
+
+    /**
+     * Grid columns for the goals: one per goal, from the goal before it to this one.
+     *
+     * @since	4.0.0
+     */
+    private function goal_columns( $display_data ) {
+        $columns = [];
+        $from = 0;
+        foreach ( $display_data as $module ) {
+            $columns[] = 'minmax(0,' . round( max( 1, $module['goal']['at'] - $from ), 3 ) . 'fr)';
+            $from = $module['goal']['at'];
+        }
+        return 'grid-template-columns:' . implode( ' ', $columns ) . ';';
+    }
+
+    /**
+     * Stepper: the steps evenly spaced, each in the middle of its share of the bar, and the fill running from step
+     * to step; each step's label and threshold under it.
+     *
+     * @since	4.0.0
+     */
+    private function stepper_html( $display_data, $opt, $percent ) {
+        $count = count( $display_data );
+        $ats = array_column( array_column( $display_data, 'goal' ), 'at' );
+        $step = function ( $i ) use($count) {
+            return ($i + 0.5) * 100 / $count;
+        };
+        // The fill: between the steps around the progress, as far as it is between their thresholds.
+        $fill = 100;
+        foreach ( $ats as $i => $at ) {
+            if ( $percent < $at ) {
+                $from_at = ( $i ? $ats[$i - 1] : 0 );
+                $from_step = ( $i ? $step( $i - 1 ) : 0 );
+                $fill = $from_step + ($percent - $from_at) / ($at - $from_at) * ($step( $i ) - $from_step);
+                break;
+            }
+        }
+        foreach ( array_keys( $display_data ) as $i => $module ) {
+            if ( isset( $opt['threshold_indicators'][$module] ) ) {
+                $opt['threshold_indicators'][$module]['threshold_percentage'] = $step( $i );
+            }
+        }
+        // No step at the end of the bar to leave room for.
+        unset($opt['bar_width_adjust']);
+        return $this->linear_bar_html( $fill, $opt ) . $this->goals_list_html( $display_data, ['label', 'amount'], 'grid-template-columns:repeat(' . $count . ',minmax(0,1fr));' );
+    }
+
+    /**
+     * Tier segments: a bar per goal, from the goal before it to this one, and each goal's label under its bar.
+     *
+     * @since	4.0.0
+     */
+    private function segments_html( $display_data, $opt, $percent ) {
+        // Each part is its own bar: no indicators on them.
+        unset($opt['threshold_indicators'], $opt['bar_width_adjust']);
+        $opt['indicator_icon'] = 0;
+        $columns = $this->goal_columns( $display_data );
+        $bars = '';
+        $from = 0;
+        foreach ( $display_data as $module ) {
+            $at = $module['goal']['at'];
+            $fill = ( $at > $from ? max( 0, min( 100, ($percent - $from) / ($at - $from) * 100 ) ) : 100 );
+            $bars .= $this->linear_bar_html( $fill, [
+                'label' => $module['goal']['name'],
+            ] + $opt );
+            $from = $at;
+        }
+        return '<div class="fsl-goal-segments" style="' . esc_attr( $columns ) . '">' . $bars . '</div>' . $this->goals_list_html( $display_data, ['label', 'status'], $columns );
+    }
+
+    /**
+     * Spotlight: a card per goal, side by side where there's room, with its icon, what's left to reach it and its
+     * label; the next goal outlined, as in Goal tiles.
+     *
+     * @since	4.0.0
+     */
+    private function spotlight_html( $display_data ) {
+        $html = '';
+        foreach ( $display_data as $data ) {
+            $goal = $data['goal'];
+            $classes = [
+                'fsl-goal',
+                'fsl-goal-spotlight',
+                $data['reached_class'],
+                ( empty( $data['focused'] ) ? '' : 'fsl-next-goal' )
+            ];
+            /* translators: {remaining}: the amount left to reach the goal. */
+            $note = ( $data['is_reached'] ? esc_html__( 'Unlocked', 'free-shipping-label' ) : Helper::convert_placeholders( esc_html__( 'Add {remaining} more to get', 'free-shipping-label' ), $goal['args'] ) );
+            $html .= '<li class="' . esc_attr( implode( ' ', array_filter( $classes ) ) ) . '">';
+            $html .= '<span class="fsl-goal-media">' . ($goal['icon'] ?? '') . '</span>';
+            $html .= '<span class="fsl-goal-text"><span class="fsl-goal-note">' . $note . '</span> <span class="fsl-goal-name">' . $goal['label'] . '</span></span>';
+            $html .= '</li>';
+        }
+        return '<ul class="fsl-goals">' . $html . '</ul>';
+    }
+
+    /**
+     * Rewards count: how many of the goals are reached, and their icons.
+     *
+     * @since	4.0.0
+     */
+    private function rewards_count_html( $display_data ) {
+        $total = count( $display_data );
+        $done = count( array_filter( array_column( $display_data, 'is_reached' ) ) );
+        if ( !$done ) {
+            /* translators: %d: the number of rewards. */
+            $count = sprintf( _n(
+                'Unlock %d reward',
+                'Unlock %d rewards',
+                $total,
+                'free-shipping-label'
+            ), $total );
+        } elseif ( $done < $total ) {
+            /* translators: 1: the rewards unlocked, 2: all the rewards. */
+            $count = sprintf( _n(
+                '%1$d of %2$d reward unlocked',
+                '%1$d of %2$d rewards unlocked',
+                $total,
+                'free-shipping-label'
+            ), $done, $total );
+        } else {
+            $count = __( 'All rewards unlocked', 'free-shipping-label' );
+        }
+        return '<div class="fsl-goal-count">' . esc_html( $count ) . '</div>' . $this->goals_list_html( $display_data, ['icon', 'label'] );
+    }
+
+    /**
+     * The goals as a list, with these parts of each: icon, label, status, amount, bar (its own, with these options).
+     *
+     * @since	4.0.0
+     */
+    private function goals_list_html(
+        $display_data,
+        $parts,
+        $style = '',
+        $opt = []
+    ) {
+        $html = '<ul class="fsl-goals"' . (( $style ? ' style="' . esc_attr( $style ) . '"' : '' )) . '>';
+        foreach ( $display_data as $module ) {
+            $goal = $module['goal'] ?? [];
+            $classes = ['fsl-goal', $module['reached_class'] ?? '', ( empty( $module['focused'] ) ? '' : 'fsl-next-goal' )];
+            $spans = [];
+            foreach ( $parts as $part ) {
+                if ( 'bar' === $part ) {
+                    $spans[] = $this->linear_bar_html( $goal['percent'], [
+                        'label' => $goal['name'],
+                    ] + $opt );
+                } elseif ( ($goal[$part] ?? '') !== '' ) {
+                    $spans[] = '<span class="fsl-goal-' . $part . '">' . $goal[$part] . '</span>';
+                }
+            }
+            $html .= '<li class="' . esc_attr( implode( ' ', array_filter( $classes ) ) ) . '">' . implode( ' ', $spans ) . '</li>';
+        }
+        return $html . '</ul>';
+    }
+
+    /**
+     * Build module text.
      * 
      * @since	3.4.0
      */
@@ -630,7 +1054,7 @@ class FSL_Bar {
         $qualified_message = $module_data['text']['qualified_message'] ?? '';
         $layout = $module_data['layout'] ?? '';
         $is_focused = $module_data['focused'] ?? false;
-        if ( $layout === 'list' && !$is_focused ) {
+        if ( in_array( $layout, ['list', 'timeline'], true ) && !$is_focused ) {
             $display_description = false;
         }
         $html = '<div class="fsl-module-block ' . esc_attr( $reached_class ) . '">';
@@ -677,10 +1101,24 @@ class FSL_Bar {
         if ( !$text ) {
             return;
         }
-        $text = Helper::convert_placeholders( $text, $placeholder_args );
-        // escape HTML
-        $text = esc_html( $text );
-        return '<h4 class="fsl-title title">' . $text . '</h4>';
+        // plain text: HTML is Pro, so drop tags saved under Pro instead of printing them
+        $html = esc_html( wp_strip_all_tags( $text ) );
+        // Placeholders last: esc_html() would show their wc_price() markup as text, and kses strips its <bdi>.
+        $html = Helper::convert_placeholders( $html, $placeholder_args );
+        return '<h4 class="fsl-title title">' . $html . '</h4>';
+    }
+
+    /**
+     * The cart an updatable bar was rendered for (WooCommerce's cart hash, '' for an empty cart).
+     * fsl-public.js compares it with the woocommerce_cart_hash cookie to skip refreshes that change nothing.
+     *
+     * @since	4.0.0
+     */
+    private static function cart_hash_attribute( $updatable ) {
+        if ( !$updatable || !function_exists( 'WC' ) || !WC()->cart ) {
+            return '';
+        }
+        return ' data-cart-hash="' . esc_attr( WC()->cart->get_cart_hash() ) . '"';
     }
 
     /**
@@ -689,13 +1127,28 @@ class FSL_Bar {
      * @since    2.6.10
      */
     public static function fsl_bar_placeholder( $should_echo = false, $updatable = true ) {
-        $placeholder = '<div class="fsl-wrapper" data-updatable="' . esc_attr( $updatable ) . '"><div class="devnet_fsl-free-shipping fsl-placeholder fsl-flat"></div></div>';
+        $placeholder = '<div class="fsl-wrapper" data-updatable="' . esc_attr( $updatable ) . '"' . self::cart_hash_attribute( $updatable ) . '><div class="devnet_fsl-free-shipping fsl-placeholder fsl-flat"></div></div>';
         $output = apply_filters( 'fsl_progress_bar_placeholder_html', $placeholder );
         if ( $should_echo ) {
             echo wp_kses_post( $output );
         } else {
             return $output;
         }
+    }
+
+    /**
+     * Progress bar semantics for screen readers ("Free Shipping, 67%"). Attributes only: no visual change.
+     * Goes on an element without text: screen readers skip what is inside a progressbar
+     * (in-circle title, threshold bubbles).
+     *
+     * @since	4.0.0
+     */
+    private static function progressbar_aria( $progress, $opt = [] ) {
+        $aria = sprintf( ' role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="%d"', max( 0, min( 100, round( (float) $progress ) ) ) );
+        if ( !empty( $opt['label'] ) ) {
+            $aria .= ' aria-label="' . esc_attr( wp_strip_all_tags( $opt['label'] ) ) . '"';
+        }
+        return $aria;
     }
 
     /**
@@ -740,7 +1193,7 @@ class FSL_Bar {
         $style_pb = array_merge( $style_pb, $threshold_data['style'] ?? [] );
         $classes_pb = array_merge( $classes_pb, $threshold_data['classes'] ?? [] );
         $html = '<div class="' . esc_attr( implode( ' ', $classes_pb ) ) . '" style="' . esc_attr( implode( ' ', $style_pb ) ) . '">';
-        $html .= '<span class="fsl-progress-amount progress-amount" style="' . esc_attr( implode( ' ', $style_pb_amount ) ) . '"></span>';
+        $html .= '<span class="fsl-progress-amount progress-amount" style="' . esc_attr( implode( ' ', $style_pb_amount ) ) . '"' . self::progressbar_aria( $progress, $opt ) . '></span>';
         $html .= $indicators_html;
         $html .= '</div>';
         return $html;
@@ -811,11 +1264,52 @@ class FSL_Bar {
                 $html .= '<span class="' . esc_attr( implode( ' ', array_filter( $indicator_classes ) ) ) . '" style="' . esc_attr( implode( ' ', $indicator_style ) ) . '">' . $indicator_inner . '</span>';
             }
         }
+        // The progress marker (Delivery Road's truck): the bar's icon at the progress, styled by the icon settings.
+        if ( !empty( $opt['progress_marker'] ) ) {
+            $marker_size = ( isset( $opt['indicator_icon_size'] ) && (int) $opt['indicator_icon_size'] ? (int) $opt['indicator_icon_size'] : 16 );
+            $marker_style = [
+                '--fsl-module-threshold:' . $progress . '%;',
+                '--fsl-bar-height:' . $bar_height . 'px;',
+                '--fsl-icon-bg-color:' . ($opt['indicator_icon_bg_color'] ?? '#ffffff') . ';',
+                '--fsl-icon-color:' . ($opt['icon_color'] ?? '#333333') . ';',
+                '--fsl-icon-size:' . $marker_size . 'px;'
+            ];
+            $marker_class = 'fsl-threshold-indicator fsl-progress-marker fsl-has-threshold-icon fsl-icon-shape-' . sanitize_html_class( $opt['indicator_icon_shape'] ?? 'round' );
+            $html .= '<span class="' . esc_attr( $marker_class ) . '" style="' . esc_attr( implode( ' ', $marker_style ) ) . '">' . Icons::get_svg( ( !empty( $opt['icon'] ) ? $opt['icon'] : Defaults::bar( 'icon' ) ), $marker_size ) . '</span>';
+        }
         return [
             'html'    => $html,
             'style'   => $style,
             'classes' => $classes,
         ];
+    }
+
+    /**
+     * The ring's width in pixels: Ring thickness, in percent of the circle size.
+     *
+     * @since	4.0.0
+     */
+    private static function ring_thickness( $opt ) {
+        return round( (float) $opt['circle_size'] * (float) ($opt['ring_thickness'] ?? Defaults::bar( 'ring_thickness' )) / 100, 2 );
+    }
+
+    /**
+     * The design preset that draws this circular bar as a ring, '' for Classic.
+     *
+     * @since	4.0.0
+     */
+    private static function circular_preset( $opt ) {
+        $preset = Presets::sanitize( $opt['bar_preset'] ?? '' );
+        return ( $preset && Presets::supports( $preset, 'circular' ) ? $preset : '' );
+    }
+
+    /**
+     * A goal in the ring's center: its icon, the amount left and its label.
+     *
+     * @since	4.0.0
+     */
+    private function ring_goal_center( $goal ) {
+        return '<span class="fsl-ring-icon">' . ($goal['icon'] ?? '') . '</span><span class="fsl-ring-big">' . Helper::convert_placeholders( '{remaining}', $goal['args'] ) . '</span><span class="fsl-ring-small">' . $goal['label'] . '</span>';
     }
 
 }

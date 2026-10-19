@@ -22,7 +22,7 @@ class Helper {
      */
     public static function starts_with( $string, $start_string ) {
         if ( !$string ) {
-            return;
+            return false;
         }
         $len = strlen( $start_string );
         return substr( $string, 0, $len ) === $start_string;
@@ -84,6 +84,8 @@ class Helper {
      */
     public static function get_free_shipping_min_amount() {
         $amount = null;
+        // Set again below only when a WooCommerce Free Shipping method provides the threshold.
+        self::$free_shipping_instance = [];
         $only_virtual_products_in_cart = self::only_virtual_products();
         $general_options = DEVNET_FSL_OPTIONS['general'] ?? [];
         $initial_zone = $general_options['initial_zone'] ?? '1';
@@ -100,7 +102,7 @@ class Helper {
             return apply_filters( 'fsl_min_amount', $amount );
         }
         /*
-         * Third-part shipping methods check.
+         * Third-party shipping methods check.
          * First check by chosen shipping method.
          */
         $amount = Compatibility::get_custom_shipping_min_amount( $chosen_shipping_id );
@@ -121,12 +123,18 @@ class Helper {
             $package = reset( $packages );
             $zone = wc_get_shipping_zone( $package );
             $known_customer = self::destination_info_exists( $package );
-            if ( !$known_customer && ($initial_zone !== null || $initial_zone == 0) ) {
-                $init_zone = \WC_Shipping_Zones::get_zone_by( 'zone_id', $initial_zone );
-                // Check if initial zone still exists.
-                $zone = ( $init_zone ? $init_zone : $zone );
+            // No address yet: use the initial zone.
+            if ( !$known_customer ) {
+                if ( $initial_zone === '' ) {
+                    // "-- None --": no threshold until the customer enters an address.
+                    $zone = null;
+                } else {
+                    $init_zone = \WC_Shipping_Zones::get_zone_by( 'zone_id', $initial_zone );
+                    // Check if initial zone still exists.
+                    $zone = ( $init_zone ? $init_zone : $zone );
+                }
             }
-            foreach ( $zone->get_shipping_methods() as $key => $method ) {
+            foreach ( ( $zone ? $zone->get_shipping_methods() : [] ) as $key => $method ) {
                 if ( $method->id === 'free_shipping' && $method->enabled === 'yes' ) {
                     $instance = ( isset( $method->instance_settings ) ? $method->instance_settings : null );
                     self::$free_shipping_instance = $instance;
@@ -161,11 +169,12 @@ class Helper {
         $only_virtual = false;
         $cart = WC()->cart;
         if ( $cart ) {
-            // Allow filtering whether downloadable products should be treated as virtual
-            $include_downloadable = apply_filters( 'fsl_treat_downloadables_as_virtual', true );
+            // Opt-in: treat downloadable products as virtual even when they ship (the default before 4.0.0).
+            $include_downloadable = apply_filters( 'fsl_treat_downloadables_as_virtual', false );
             foreach ( $cart->get_cart() as $cart_item ) {
                 $product = $cart_item['data'];
-                if ( $product->is_virtual() || $include_downloadable && $product->is_downloadable() ) {
+                // WooCommerce's rule: a downloadable product that isn't virtual still needs shipping.
+                if ( !$product->needs_shipping() || $include_downloadable && $product->is_downloadable() ) {
                     $only_virtual = true;
                 } else {
                     $only_virtual = false;
@@ -205,15 +214,13 @@ class Helper {
      * @since   2.4.0
      */
     public static function is_free_shipping_coupon_applied() {
-        $is_applied = false;
-        $applied_coupons = WC()->cart->get_applied_coupons();
-        foreach ( $applied_coupons as $coupon_code ) {
-            $coupon = new \WC_Coupon($coupon_code);
-            if ( $coupon->get_free_shipping() ) {
-                $is_applied = true;
+        foreach ( WC()->cart->get_coupons() as $coupon ) {
+            // Same check as WC_Shipping_Free_Shipping::is_available().
+            if ( $coupon->is_valid() && $coupon->get_free_shipping() ) {
+                return true;
             }
         }
-        return $is_applied;
+        return false;
     }
 
     /**
@@ -223,12 +230,10 @@ class Helper {
      */
     public static function search_product_titles( $find = '', $variations = false ) {
         global $wpdb;
-        $find = ( is_string( $find ) ? wp_unslash( $find ) : '' );
-        $find = sanitize_text_field( $find );
         $like = '%' . $wpdb->esc_like( $find ) . '%';
         $types = ( $variations ? ['product', 'product_variation'] : ['product'] );
         $placeholders = implode( ',', array_fill( 0, count( $types ), '%s' ) );
-        $sql = "\n        SELECT ID, post_title\n        FROM {$wpdb->posts}\n        WHERE post_type IN ({$placeholders})\n          AND post_status = 'publish'\n          AND post_title LIKE %s\n    ";
+        $sql = "\n        SELECT ID, post_title\n        FROM {$wpdb->posts}\n        WHERE post_type IN ({$placeholders})\n          AND post_status = 'publish'\n          AND post_title LIKE %s\n        LIMIT 50\n    ";
         $params = array_merge( $types, [$like] );
         // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- Prepared via $wpdb->prepare() with dynamic placeholders.
         return $wpdb->get_results( $wpdb->prepare( $sql, $params ) );
@@ -240,24 +245,28 @@ class Helper {
      * @since    2.6.0
      */
     public static function fsl_search() {
-        $search_term = ( isset( $_GET['q'] ) ? sanitize_text_field( $_GET['q'] ) : '' );
-        $search_in = map_deep( $_GET['searchIn'], 'sanitize_text_field' );
+        check_ajax_referer( 'devnet_fsl_search' );
+        if ( !current_user_can( apply_filters( 'fsl_admin_menu_user_capability', 'manage_options' ) ) ) {
+            wp_send_json_error( null, 403 );
+        }
+        $search_term = ( isset( $_GET['q'] ) ? sanitize_text_field( wp_unslash( $_GET['q'] ) ) : '' );
+        $search_in = map_deep( (array) wp_unslash( $_GET['searchIn'] ?? [] ), 'sanitize_text_field' );
         // we will pass post IDs and titles to this array
         $return = [];
         if ( in_array( 'category', $search_in ) ) {
+            // Find category by slug or title
             $categories = get_terms( [
                 'taxonomy'   => 'product_cat',
                 'hide_empty' => false,
+                'search'     => $search_term,
+                'number'     => 50,
             ] );
             // Prepare category array
             foreach ( $categories as $category ) {
                 $name = $category->name;
-                // Find category by slug or title
-                if ( strpos( strtolower( $name ), strtolower( $search_term ) ) !== false ) {
-                    $name = ( mb_strlen( $name ) > 50 ? mb_substr( $name, 0, 49 ) . '...' : $name );
-                    $return[] = [$category->term_id, $name, 'category'];
-                    // array( Category ID, Category Title, Type )
-                }
+                $name = ( mb_strlen( $name ) > 50 ? mb_substr( $name, 0, 49 ) . '...' : $name );
+                $return[] = [$category->term_id, $name, 'category'];
+                // array( Category ID, Category Title, Type )
             }
         }
         if ( in_array( 'product', $search_in ) ) {
@@ -273,8 +282,7 @@ class Helper {
                 }
             }
         }
-        echo wp_json_encode( $return );
-        wp_die();
+        wp_send_json( $return );
     }
 
     public static function label_excluded( $output ) {
@@ -293,26 +301,6 @@ class Helper {
             $excluded_on[$type][] = $id;
         }
         return ( $output === 'options' ? $options : $excluded_on );
-    }
-
-    /**
-     * Convert array of strings with placeholders.
-     *
-     * @since    3.0.0
-     */
-    public static function convert_placeholders_array( $input = [] ) {
-        $output = [];
-        foreach ( $input as $module => $sections ) {
-            $placeholder_args = $sections['placeholder_args'] ?? [];
-            $texts = $sections['text'] ?? [];
-            foreach ( $texts as $section => $text ) {
-                if ( $section === 'placeholder_args' ) {
-                    continue;
-                }
-                $output[$module][$section] = self::convert_placeholders( $text, $placeholder_args );
-            }
-        }
-        return $output;
     }
 
     /**
@@ -366,10 +354,17 @@ class Helper {
             return $result;
             // WooCommerce not active
         }
+        $wc_utils = 'Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils';
         foreach ( ['cart', 'checkout'] as $page ) {
             $page_id = wc_get_page_id( $page );
             if ( $page_id <= 0 ) {
                 $result[$page] = 'not_assigned';
+                continue;
+            }
+            // WooCommerce's own check also finds the Cart/Checkout block in block-theme templates.
+            $wc_check = "is_{$page}_block_default";
+            if ( method_exists( $wc_utils, $wc_check ) && $wc_utils::$wc_check() ) {
+                $result[$page] = 'block';
                 continue;
             }
             $content = (string) get_post_field( 'post_content', $page_id );
@@ -383,15 +378,13 @@ class Helper {
                 continue;
             }
             // Block detection
-            if ( function_exists( 'has_block' ) ) {
-                if ( $page === 'cart' && has_block( 'woocommerce/cart', $content ) ) {
-                    $result[$page] = 'block';
-                    continue;
-                }
-                if ( $page === 'checkout' && has_block( 'woocommerce/checkout', $content ) ) {
-                    $result[$page] = 'block';
-                    continue;
-                }
+            if ( $page === 'cart' && has_block( 'woocommerce/cart', $content ) ) {
+                $result[$page] = 'block';
+                continue;
+            }
+            if ( $page === 'checkout' && has_block( 'woocommerce/checkout', $content ) ) {
+                $result[$page] = 'block';
+                continue;
             }
             $result[$page] = 'unknown';
         }

@@ -5,6 +5,7 @@ namespace Devnet\FSL\Includes;
 use Devnet\FSL\Includes\Helper;
 use Devnet\FSL\Admin\FSL_Admin;
 use Devnet\FSL\Frontend\FSL_Public;
+use Devnet\FSL\Frontend\Bar\Gift_Bar;
 if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
@@ -31,9 +32,9 @@ class FSL_PLUGIN {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-compatibility.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-helper.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-icons.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/fsl-settings-api.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/fsl-options.php';
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/fsl-settings.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-placement.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/fsl-presets.php';
+        // Settings_API, Options and Settings load in FSL_Admin::admin_menu(), only where the settings are built.
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/fsl-admin.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/fsl-public.php';
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/fsl-label.php';

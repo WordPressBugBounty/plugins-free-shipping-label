@@ -9,17 +9,24 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 class Gift_Bar extends FSL_Bar {
-    public $is_multilingual = false;
-
     public function __construct() {
-        if ( defined( 'FSL_MODULE_GIFT_BAR' ) && FSL_MODULE_GIFT_BAR === false ) {
+        if ( !self::module_active() ) {
             return;
         }
-        $this->is_multilingual = DEVNET_FSL_OPTIONS['general']['multilingual'] ?? false;
         $options = DEVNET_FSL_OPTIONS['gift_bar'] ?? [];
         $enable = $options['enable_bar'] ?? false;
         $after_threshold = $options['after_threshold'] ?? '';
         $price_display = $options['price_display'] ?? 'label';
+        $auto_add = false;
+        // Auto-add is off (mode changed, Gift Bar disabled, no license): drop gift items left in carts.
+        if ( !$auto_add ) {
+            add_filter(
+                'woocommerce_pre_remove_cart_item_from_session',
+                [$this, 'remove_gift_from_session'],
+                10,
+                3
+            );
+        }
         if ( !$enable ) {
             return;
         }
@@ -34,7 +41,8 @@ class Gift_Bar extends FSL_Bar {
         $enable = $gift_opt['enable_bar'] ?? false;
         $threshold = $gift_opt['threshold'] ?? 0;
         $display = $gift_opt['display'] ?? 'after';
-        if ( !$enable || !$threshold ) {
+        // A non-numeric threshold saved before 4.0.0 would throw a TypeError in calculate_percentage().
+        if ( !$enable || !$threshold || !is_numeric( $threshold ) ) {
             return $data;
         }
         $cart_subtotal = $data['cart_subtotal'] ?? null;
@@ -44,18 +52,27 @@ class Gift_Bar extends FSL_Bar {
         $free_shipping_threshold = $free_shipping_data['threshold'] ?? false;
         $free_shipping_percent = $free_shipping_data['percent'] ?? 0;
         $free_shipping_reached = $free_shipping_options['qualified_message'] ?? '';
-        $layout = $free_shipping_options['layout'] ?? 'list';
-        $options = $this->get_progress_bar_options( $gift_opt );
-        $options['label'] = $gift_opt['label'] ?? Defaults::gift_bar( 'label' );
-        if ( $this->is_multilingual ) {
-            $options['label'] = Defaults::gift_bar( 'label' );
-            $options['title'] = Defaults::gift_bar( 'title' );
-            $options['description'] = Defaults::gift_bar( 'description' );
-            $options['qualified_message'] = Defaults::gift_bar( 'qualified_message' );
+        // An empty text shows the translated default.
+        foreach ( [
+            'label',
+            'title',
+            'description',
+            'qualified_message'
+        ] as $text ) {
+            if ( ($gift_opt[$text] ?? '') === '' ) {
+                $gift_opt[$text] = Defaults::gift_bar( $text );
+            }
         }
+        $options = $this->get_progress_bar_options( self::inherit_icon_settings( $gift_opt, Defaults::gift_bar( 'inherit_icon_settings' ) ) );
+        $options['label'] = $gift_opt['label'];
+        // The Progress Bar's layout, also in a zone without free shipping.
+        $layout = $free_shipping_options['layout'] ?? $options['layout'] ?? 'list';
         $bar_type = $options['bar_type'] ?? 'linear';
-        if ( $bar_type === 'circular' && $free_shipping_percent < 100 ) {
-            $options['icon'] = $free_shipping_options['icon'];
+        // Classic's one circle shows the free shipping icon until free shipping is reached; the ring layouts show each
+        // goal's own icon.
+        if ( $bar_type === 'circular' && $free_shipping_percent < 100 && !in_array( $layout, self::RING_LAYOUTS, true ) ) {
+            // No free-shipping module (no threshold, no address, local pickup): no icon, as before, without the warning.
+            $options['icon'] = $free_shipping_options['icon'] ?? '';
         }
         $calc = Helper::calculate_percentage( $threshold, $cart_subtotal );
         $percent = $calc['percent'];
@@ -88,12 +105,20 @@ class Gift_Bar extends FSL_Bar {
             ],
             'percent'         => $percent,
         ];
-        if ( $display === 'after' && $threshold >= $free_shipping_threshold ) {
-            if ( $free_shipping_pass ) {
-                unset($setup_data['modules']);
-                $group['grouped_modules']['free-shipping']['reached']['qualified_message'] = $free_shipping_reached;
-                $setup_data['modules']['group'] = $group;
-            }
+        // Free shipping as the last goal: the bar shows its progress.
+        if ( $free_shipping_threshold >= $threshold ) {
+            $group['percent'] = $free_shipping_percent;
+            $group['grouped_modules'] = array_reverse( $group['grouped_modules'] );
+        }
+        if ( $free_shipping_pass ) {
+            $group['grouped_modules']['free-shipping']['reached']['qualified_message'] = $free_shipping_reached;
+        }
+        // After the previous goal, as the Discount bars: once free shipping is reached when it comes first, else at once
+        // (the gift comes first, or the zone has no free shipping). The gift then extends the bar.
+        if ( $display === 'after' && (!$free_shipping_data || $free_shipping_threshold > $threshold || $free_shipping_pass) ) {
+            $setup_data['modules'] = [
+                'group' => $group,
+            ];
         }
         return $setup_data;
     }
@@ -116,7 +141,7 @@ class Gift_Bar extends FSL_Bar {
      *
      * @since    3.1.0
      */
-    private function get_gift_product( $return = 'id' ) {
+    public static function get_gift_product( $return = 'id' ) {
         $gift_product = self::get_gift_bar_option( 'gift_product' );
         $product_id = intval( explode( '---', explode( '___', $gift_product ?? '' )[0] )[1] ?? '' );
         if ( !$product_id ) {
@@ -149,6 +174,10 @@ class Gift_Bar extends FSL_Bar {
         }
         $cart_subtotal = $this->get_cart_subtotal();
         $threshold = self::get_gift_bar_option( 'threshold' );
+        // Empty threshold = gift not configured; 0 = gift with every order.
+        if ( !is_numeric( $threshold ) ) {
+            return apply_filters( 'fsl_gift_pass', false, $cart );
+        }
         // Calculate the percentage
         $calc = Helper::calculate_percentage( $threshold, $cart_subtotal );
         $gift_pass = $calc['percent'] === 100;
@@ -161,13 +190,10 @@ class Gift_Bar extends FSL_Bar {
      *
      * @since    3.0.0
      */
-    public function free_gift_label() {
+    public static function free_gift_label() {
         $label = self::get_gift_bar_option( 'label' );
-        if ( $this->is_multilingual ) {
-            $defaults = Defaults::gift_bar();
-            $label = $defaults['label'];
-        }
-        return $label;
+        // An empty label shows the translated default.
+        return ( $label === null || $label === '' ? Defaults::gift_bar( 'label' ) : $label );
     }
 
     /**
@@ -182,41 +208,40 @@ class Gift_Bar extends FSL_Bar {
         }
         $gift_pass = $this->gift_pass( $cart );
         $gift_product = $this->get_gift_product( 'product' );
-        $product_ids = $this->resolve_product_and_variation_id( $gift_product );
-        $product_id = $product_ids['product_id'];
-        $variation_id = $product_ids['variation_id'];
-        // If no valid product ID, return
-        if ( !$product_id ) {
-            return;
-        }
-        // Check if the product is in the cart
+        // Cart items store a variation's parent ID. The variation itself is resolved only when the gift is added:
+        // for a variable gift that loads variations, which would otherwise run on every totals calculation.
+        $product_id = ( $gift_product ? ( $gift_product->is_type( 'variation' ) ? $gift_product->get_parent_id() : $gift_product->get_id() ) : 0 );
         $product_in_cart = false;
-        $product_cart_key = null;
         foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
-            if ( $cart_item['product_id'] === $product_id && !empty( $cart_item['fsl_gift'] ) ) {
-                $product_in_cart = true;
-                $product_cart_key = $cart_item_key;
-                break;
+            if ( empty( $cart_item['fsl_gift'] ) ) {
+                continue;
             }
+            // Keep one gift of the current gift product while the cart qualifies.
+            if ( $gift_pass && $product_id && !$product_in_cart && $cart_item['product_id'] === $product_id ) {
+                $product_in_cart = true;
+                continue;
+            }
+            // Not qualified anymore, gift product changed, or a duplicate.
+            $cart->remove_cart_item( $cart_item_key );
         }
-        // Remove or add the product based on the percentage
-        if ( !$gift_pass && $product_in_cart ) {
-            $cart->remove_cart_item( $product_cart_key );
-        } elseif ( $gift_pass && !$product_in_cart ) {
+        if ( $gift_pass && $product_id && !$product_in_cart ) {
+            $variation_id = $this->resolve_product_and_variation_id( $gift_product )['variation_id'];
             $args = [
                 'price'    => 0,
                 'fsl_gift' => true,
             ];
-            /*
-             * TODO: force product in cart, no mather if it is out of stock.
-             */
-            $cart->add_to_cart(
+            // A gift WooCommerce can't add (out of stock, not purchasable, no variation) is skipped quietly:
+            // this runs on every totals calculation, and each failed add_to_cart() leaves an error notice.
+            $notices = wc_get_notices();
+            if ( !$cart->add_to_cart(
                 $product_id,
                 1,
                 $variation_id,
                 [],
                 $args
-            );
+            ) ) {
+                wc_set_notices( $notices );
+            }
         }
     }
 
@@ -255,8 +280,10 @@ class Gift_Bar extends FSL_Bar {
                     continue;
                 }
                 $match = true;
+                $attributes = $variation->get_attributes();
                 foreach ( $default_attributes as $name => $value ) {
-                    if ( sanitize_title( $variation->get_attribute( $name ) ) !== $value ) {
+                    // Stored values like the defaults (slugs for global attributes); get_attribute() returns term names.
+                    if ( ($attributes[$name] ?? '') !== $value ) {
                         $match = false;
                         break;
                     }
@@ -287,6 +314,11 @@ class Gift_Bar extends FSL_Bar {
         foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
             if ( !empty( $cart_item['fsl_gift'] ) ) {
                 $cart_item['data']->set_price( 0 );
+                // Block Cart and Checkout cross out the regular price and add a "Save" badge whenever it's
+                // higher than the price; only the "crossed" display wants that. The classic cart doesn't read it.
+                if ( 'crossed' !== self::get_gift_bar_option( 'price_display' ) ) {
+                    $cart_item['data']->set_regular_price( 0 );
+                }
                 // Set quantity to `1`, and `false` for recalculating totals to avoid infinite loop.
                 $cart->set_quantity( $cart_item_key, 1, false );
             }
@@ -294,17 +326,12 @@ class Gift_Bar extends FSL_Bar {
     }
 
     /**
-     * Prevent applying coupons on gift product.
+     * Drop gift items while auto-add is off, so they don't stay in carts at full price.
      *
-     * @since 3.1.0
+     * @since    4.0.0
      */
-    public function prevent_coupon_on_gift_product( $valid, $product, $coupon ) {
-        $product_id = $this->get_gift_product( 'id' );
-        // If the current product is the gift product, disallow coupon
-        if ( $product_id && $product->get_id() == $product_id ) {
-            return false;
-        }
-        return $valid;
+    public function remove_gift_from_session( $remove, $key, $values ) {
+        return $remove || !empty( $values['fsl_gift'] );
     }
 
     /**
@@ -317,6 +344,44 @@ class Gift_Bar extends FSL_Bar {
             $product_quantity = '';
         }
         return $product_quantity;
+    }
+
+    /**
+     * Block Cart and Mini-Cart (Store API): the gift's quantity can't be changed, as in the classic cart.
+     *
+     * @since    4.0.0
+     */
+    public function gift_store_api_quantity_editable( $editable, $product, $cart_item ) {
+        return ( empty( $cart_item['fsl_gift'] ) ? $editable : false );
+    }
+
+    /**
+     * Store API: with a maximum of 1, a read-only gift rejects any higher quantity ("cannot be changed").
+     *
+     * @since    4.0.0
+     */
+    public function gift_store_api_quantity_maximum( $maximum, $product, $cart_item ) {
+        return ( empty( $cart_item['fsl_gift'] ) ? $maximum : 1 );
+    }
+
+    /**
+     * Block Cart, Checkout and Mini-Cart: the "Free Gift" label as the item's first detail line.
+     * `hidden` keeps it out of the classic cart, which shows the label under the name (gift_cart_item_name());
+     * the Store API replaces `hidden` with `__experimental_woocommerce_blocks_hidden`.
+     *
+     * @since    4.0.0
+     */
+    public function gift_item_data_for_blocks( $item_data, $cart_item ) {
+        if ( !empty( $cart_item['fsl_gift'] ) ) {
+            array_unshift( $item_data, [
+                'key'                                      => '',
+                'value'                                    => esc_html( self::free_gift_label() ),
+                'className'                                => 'wc-block-components-product-details__fsl-gift',
+                'hidden'                                   => true,
+                '__experimental_woocommerce_blocks_hidden' => false,
+            ] );
+        }
+        return $item_data;
     }
 
     /**
@@ -367,13 +432,23 @@ class Gift_Bar extends FSL_Bar {
     }
 
     /**
+     * Whether the built-in Gift Bar runs. An add-on turns it off (storefront, orders, settings tab, preview) by
+     * defining FSL_MODULE_GIFT_BAR as false.
+     *
+     * @since    4.0.0
+     */
+    public static function module_active() {
+        return !(defined( 'FSL_MODULE_GIFT_BAR' ) && FSL_MODULE_GIFT_BAR === false);
+    }
+
+    /**
      * Gift product subtotal label - "value".
      *
      * @since    3.0.0
      */
-    public function order_gift_item( $subtotal, $item, $order ) {
-        if ( !empty( $item['_fsl_gift'] ) ) {
-            $subtotal = '<span class="amount">' . esc_html( $this->free_gift_label() ) . '</span>';
+    public static function order_gift_item( $subtotal, $item, $order ) {
+        if ( !empty( $item['_fsl_gift'] ) && self::get_gift_bar_option( 'price_display' ) !== 'zero' ) {
+            $subtotal = '<span class="amount">' . esc_html( self::free_gift_label() ) . '</span>';
             if ( self::get_gift_bar_option( 'price_display' ) === 'crossed' ) {
                 $product = $item->get_product();
                 if ( is_null( $product ) ) {
@@ -400,8 +475,9 @@ class Gift_Bar extends FSL_Bar {
         }
         if ( $this->gift_pass( $cart ) ) {
             WC()->session->set( 'fsl_gift', true );
+            // Stored as typed: WooCommerce escapes fee names on output.
             $cart->add_fee(
-                esc_html( $this->free_gift_label() ),
+                $this->free_gift_label(),
                 0,
                 false,
                 ''
@@ -427,12 +503,12 @@ class Gift_Bar extends FSL_Bar {
      *
      * @since    3.0.0
      */
-    public function add_gift_to_item_totals( $total_rows, $order ) {
+    public static function add_gift_to_item_totals( $total_rows, $order ) {
         if ( $order->get_meta( 'fsl_gift' ) ) {
             // Insert the custom fee row at the beginning
             $total_rows = [
                 'fsl_gift' => [
-                    'label' => $this->free_gift_label(),
+                    'label' => self::free_gift_label(),
                     'value' => wc_price( 0 ),
                 ],
             ] + $total_rows;

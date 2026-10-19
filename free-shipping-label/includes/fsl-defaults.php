@@ -54,9 +54,14 @@ class Defaults
             'product_position'       => '',
             'show_qualified_message'  => 1,
             'show_full_progress_bar' => 0,
+            'show_title'             => 1,
+            'show_description'       => 1,
+            'label'                  => esc_html__('Free Shipping', 'free-shipping-label'),
             'title'                  => esc_html__('Free delivery on orders over {free_shipping_amount}', 'free-shipping-label'),
             'description'            => esc_html__('Add at least {remaining} more to get free shipping!', 'free-shipping-label'),
             'qualified_message'       => esc_html__('You have free shipping! 🎉', 'free-shipping-label'),
+            'close_message'          => esc_html__('Almost there! Add {remaining} more to get free shipping.', 'free-shipping-label'),
+            'close_message_replaces' => '',
             'layout'                 => 'list',
             'bar_inner_color'        => '#672ABB',
             'bar_bg_color'           => '#E5E5E9',
@@ -72,16 +77,20 @@ class Defaults
             'indicator_icon_shape'   => 'rounded',
             'indicator_icon_bg_color' => '#ffffff',
             'circle_size'            => 150,
+            'ring_thickness'         => 10,
             'inside_circle'          => 'icon',
             'icon'                   => 'delivery-truck-5',
             'icon_color'             => '#672ABB',
             'circle_bg_color'        => '#222222',
             'text_color'             => '',
+            'text_size'              => '',
             'box_bg_color'           => '',
             'box_max_width'          => '',
             'box_alignment'          => 'center',
             'bar_radius'             => 8,
             'remove_bar_stripes'     => 0,
+            'bar_preset'             => '',
+            'bar_accent_color'       => '',
         ];
 
         return self::format_output($options, $option_name);
@@ -95,6 +104,7 @@ class Defaults
         $options = self::bar();
 
         unset($options['local_pickup']);
+        unset($options['label']);
         unset($options['title']);
         unset($options['description']);
         unset($options['qualified_message']);
@@ -110,6 +120,7 @@ class Defaults
             'title'                         => esc_html__('Free Gift on orders over {threshold}', 'free-shipping-label'),
             'description'                   => esc_html__('Add at least {remaining} more to get a free gift!', 'free-shipping-label'),
             'qualified_message'              => esc_html__("You've earned a free gift!", 'free-shipping-label'),
+            'inherit_icon_settings'         => 1,
         ];
 
         return self::format_output($options, $option_name);
@@ -151,6 +162,8 @@ class Defaults
             'show_on_list_simple_products'    => 1,
             'show_on_list_variable_products'  => 1,
             'text'                            => esc_html__('Free shipping!', 'free-shipping-label'),
+            'label_preset'                    => '',
+            'label_icon'                      => '',
             'text_color'                      => '#000000',
             'bg_color'                        => '#ffffff',
             'hide_border_shadow'              => 0,
